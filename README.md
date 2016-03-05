@@ -1,2 +1,2 @@
 # docker_rpython
-dockerfile fo datascienceschool/rpython
+dockerfile for datascienceschool/rpython

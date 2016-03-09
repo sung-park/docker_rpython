@@ -16,7 +16,7 @@ echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
 bind -f ~/.inputrc 
 
-# Ubuntu packages
+# Ubuntu repository
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
 echo 'deb http://ftp.daum.net/ubuntu/ trusty main' | tee /etc/apt/sources.list && \
 echo 'deb-src http://ftp.daum.net/ubuntu/ trusty main' | tee -a /etc/apt/sources.list && \
@@ -40,6 +40,7 @@ echo 'deb http://security.ubuntu.com/ubuntu trusty-security multiverse' | tee -a
 echo 'deb-src http://security.ubuntu.com/ubuntu trusty-security multiverse' | tee -a /etc/apt/sources.list && \
 echo
 
+# Ubuntu packages
 RUN \ 
 rm -rf /var/lib/apt/lists/* && apt-get clean && \
 apt-get update -y -q && apt-get upgrade -y -q && apt-get dist-upgrade -y -q && \
@@ -48,7 +49,7 @@ apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git htop tmux screen 
 gdebi-core make build-essential gfortran libtool autoconf automake pkg-config \
 uuid-dev libpgm-dev libpng12-dev libpng++-dev libssh2-1-dev \
 libboost-all-dev libclang1 libclang-dev swig \
-openssh-server libapparmor1 libmemcached-dev libcurl4-gnutls-dev libevent-dev \
+openssh-server apparmor libapparmor1 libmemcached-dev libcurl4-gnutls-dev libevent-dev \
 openssl libssl-dev \
 default-jre default-jdk openjdk-7-jdk \
 hdf5-tools hdf5-helpers libhdf5-dev \
@@ -61,54 +62,23 @@ texlive-lang-cjk ko.tex-base ko.tex-extra-hlfont \
 texlive-latex-extra texlive-generic-extra ko.tex-extra \
 && apt-get clean
 
+# Rebuild and istall libpam with --disable-audit option
+# RUN apt-get update -y -q && apt-get -y build-dep pam && \
+# export CONFIGURE_OPTS=--disable-audit && cd /root && \
+# apt-get -b source pam && dpkg -i libpam-doc*.deb libpam-modules*.deb libpam-runtime*.deb libpam0g*.deb
+
 # TTF Fonts
 RUN \
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
 apt-get install -y -q ttf-mscorefonts-installer
 
-# ZMQ master
+# ZMQ (master branch)
 RUN \
 mkdir -p /downloads && cd /downloads && \
 git clone https://github.com/zeromq/libzmq.git && cd libzmq && \
 ./autogen.sh && ./configure && make && make install && ldconfig 
 
-# Anaconda2 2.5.0
-RUN \
-mkdir -p /downloads && cd /downloads && \
-wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.5.0-Linux-x86_64.sh && \
-/bin/bash /downloads/Anaconda2-2.5.0-Linux-x86_64.sh -b -p /anaconda/
-ENV PATH /anaconda/bin:$PATH 
-RUN conda update conda && conda update anaconda
-
-# Additional Anaconda packages
-RUN \
-conda install -y \
-dateutil django fabric gensim ipyparallel ipython jedi jinja2 jupyter markdown \
-matplotlib notebook numpy numpydoc pandas pip psutil pymc pymongo pyzmq \
-scipy scikit-image scikit-learn seaborn setuptools simplejson sphinx sphinx_rtd_theme \
-statsmodels tornado twisted ujson virtualenv \
-&& echo
-
-# set requests version to 2.8.1
-RUN conda install -y 'requests==2.8.1'
-
-# Additional pip packages
-RUN \
-pip install \
-apscheduler django-allauth django-bootstrap3 django-cms docker-py \
-fysom JPype1 keras konlpy log4mongo nlpy pelican pudb pweave redis typogrify \
-&& \
-pip install git+git://github.com/Theano/Theano.git && \
-pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.7.1-cp27-none-linux_x86_64.whl && \
-echo
-
-# Create user dockeruser:dockeruserpass
-RUN \
-groupadd --system -r dockeruser -g 1999 && \
-adduser --system --uid=1999 --gid=1999 --home /home/dockeruser --shell /bin/bash dockeruser && \
-echo dockeruser:dockeruserpass | chpasswd
-
-# QuantLib
+# QuantLib (master branch)
 RUN \
 mkdir -p /downloads && cd /downloads && \
 git clone https://github.com/lballabio/QuantLib.git && cd QuantLib && \
@@ -122,6 +92,14 @@ autoreconf --force --install
 RUN cd /downloads/QuantLib-SWIG && ./configure 
 RUN cd /downloads/QuantLib-SWIG && make -C Python 
 RUN cd /downloads/QuantLib-SWIG && make install -C Python && ldconfig 
+
+# Anaconda2 2.5.0
+RUN \
+mkdir -p /downloads && cd /downloads && \
+wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.5.0-Linux-x86_64.sh && \
+/bin/bash /downloads/Anaconda2-2.5.0-Linux-x86_64.sh -b -p /anaconda/
+ENV PATH /anaconda/bin:$PATH 
+RUN conda update conda && conda update anaconda
 
 # R
 RUN \ 
@@ -137,7 +115,7 @@ echo
 
 # RStudio
 RUN \
-apt-get install -y -q r-base r-base-dev && \
+apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
 wget https://download2.rstudio.org/rstudio-server-0.99.891-amd64.deb && \
 gdebi --n rstudio-server-0.99.891-amd64.deb
 
@@ -145,24 +123,63 @@ gdebi --n rstudio-server-0.99.891-amd64.deb
 RUN cd /downloads/QuantLib-SWIG && make -C R && make install -C R && ldconfig 
                   
 # R packages
-RUN \
-echo 'install.packages(c(\"RMySQL\",\"RMongo\",\"rmongodb\",\"rredis\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"fImport\",\"fBasics\",\"fArma\",\"fGarch\",\"fNonlinear\",\"fUnitRoots\",\"fTrading\",\"fMultivar\",\"fRegression\",\"fExtremes\",\"fCopulae\",\"fBonds\",\"fOptions\",\"fExoticOptions\",\"fAsianOptions\",\"fAssets\",\"fPortfolio\",\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoolbox\",\"rngWELL\",\"schwartz97\",\"SkewHyperbolic\",\"VarianceGamma\",\"stabledist\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"ggplot2\",\"colorspace\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(\"RQuantLib\",\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"devtools\",\"RJSONIO\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(\"yaml\",\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e && \
-echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"devtools\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
-echo 'library("devtools");install_github(\"rCharts\",\"ramnathv\")' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"rzmq\",\"repr\",\"IRkernel\",\"IRdisplay\"),\"/usr/lib/R/library\",repos=c(\"http://irkernel.github.io\",\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \ 
-echo 'IRkernel::installspec(user=FALSE)' | xargs R --vanilla --slave -e 
+RUN echo 'install.packages(c(\"yaml\",\"devtools\",\"RJSONIO\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
+RUN echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e
+RUN echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e
+RUN echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e
+RUN echo 'install.packages(c(\"rzmq\",\"repr\",\"IRkernel\",\"IRdisplay\"),\"/usr/lib/R/library\",repos=c(\"http://irkernel.github.io\",\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e 
+RUN echo 'IRkernel::installspec(user=FALSE)' | xargs R --vanilla --slave -e
+RUN echo 'install.packages(\"RQuantLib\",\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e 
+RUN echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
+RUN echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e 
+RUN echo 'install.packages(c(\"ggplot2\",\"colorspace\",\"plyr\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
+RUN echo 'install.packages(c(\"RMySQL\",\"RMongo\",\"rmongodb\",\"rredis\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e 
+RUN echo 'install.packages(c(\"fImport\",\"fBasics\",\"fArma\",\"fGarch\",\"fNonlinear\",\"fUnitRoots\",\"fTrading\",\"fMultivar\",\"fRegression\",\"fExtremes\",\"fCopulae\",\"fBonds\",\"fOptions\",\"fExoticOptions\",\"fAsianOptions\",\"fAssets\",\"fPortfolio\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
+RUN echo 'install.packages(c(\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoolbox\",\"rngWELL\",\"schwartz97\",\"SkewHyperbolic\",\"VarianceGamma\",\"stabledist\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
 
-# rpy2
-RUN pip install rpy2 
+# Additional Anaconda packages
+RUN \
+conda install -y \
+dateutil django fabric gensim html5lib ipyparallel ipython jedi jinja2 jupyter markdown \
+matplotlib nbconvert notebook numpy numpydoc pandas pip psutil pymc pymongo pyzmq \
+scipy scikit-image scikit-learn seaborn setuptools simplejson sphinx sphinx_rtd_theme \
+statsmodels supervisor tornado twisted ujson virtualenv \
+&& echo
+
+# set requests version to 2.8.1
+RUN conda install -y 'requests==2.8.1'
+
+# Additional pip packages (including theano and tensorflow) 
+RUN \
+pip install \
+apscheduler django-allauth django-bootstrap3 django-cms docker-py \
+fysom JPype1 keras konlpy log4mongo nlpy pelican pudb pweave redis rpy2 typogrify \
+&& \
+pip install git+git://github.com/Theano/Theano.git && \
+pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.7.1-cp27-none-linux_x86_64.whl && \
+echo
+
+# clean
+RUN \
+apt-get clean && \
+apt-get autoremove && \
+conda clean -y -i -p -s && \
+rm -rf /downloads && \
+rm -rf /rstudio-server-0.99.891-amd64.deb
+
+# Create user dockeruser:dockeruserpass
+RUN \
+groupadd --system -r dockeruser -g 1999 && \
+adduser --system --uid=1999 --gid=1999 --home /home/dockeruser --shell /bin/bash dockeruser && \
+echo dockeruser:dockeruserpass | chpasswd && \
+cp /etc/skel/.bashrc /home/dockeruser/.bashrc && source /home/dockeruser/.bashrc && \
+adduser dockeruser sudo
+
+# Run RStudio-Server
+EXPOSE 8787
+RUN (adduser --disabled-password --gecos "" guest && echo "guest:guest"|chpasswd)
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisord.conf
 
 # Change user to dockeruser
 USER dockeruser
@@ -170,33 +187,30 @@ WORKDIR /home/dockeruser
 ENV HOME /home/dockeruser
 
 # Config IPython and Jupyter notebook
+EXPOSE 8888
 RUN ipython profile create
 COPY ipython_config.py /home/dockeruser/.ipython/profile_default/ipython_config.py
 COPY ipython_kernel_config.py /home/dockeruser/.ipython/profile_default/ipython_kernel_config.py
 COPY 00.py /home/dockeruser/.ipython/profile_default/startup/00.py
 RUN jupyter notebook --generate-config
 COPY ipython_notebook_config.py /home/dockeruser/.jupyter/jupyter_notebook_config.py
-COPY mycert.pem /home/dockeruser/mycert.pem
-COPY mykey.key /home/dockeruser/mykey.key
+RUN mkdir -p /home/dockeruser/.cert
+COPY mycert.pem /home/dockeruser/.cert/mycert.pem
+COPY mykey.key /home/dockeruser/.cert/mykey.key
+
+USER root
+RUN chown dockeruser:dockeruser /var/log/supervisor
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ENV TINI_VERSION v0.6.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
-USER root
 RUN chmod +x /usr/bin/tini
 
+# Set TLS certifates
+RUN mkdir -p /etc/pki/tls/certs/ && \
+cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
+
+# Run tini and supervisord
 ENTRYPOINT ["/usr/bin/tini", "--"]
-EXPOSE 8888
-VOLUME ["/host"]
+CMD ["/anaconda/bin/supervisord"]
 
-CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--notebook-dir=/host", "--certfile=mycert.pem", "--keyfile mykey.key"]
-
-# clean
-RUN chown -R dockeruser:dockeruser /home/dockeruser && \
-rm -rf /downloads && rm -rf /home/dockeruser/rstudio-server-0.99.891-amd64.deb
-
-# change user
-USER dockeruser
-
-# Run .bashrc
-RUN cp /etc/skel/.bashrc /home/dockeruser/.bashrc && source /home/dockeruser/.bashrc

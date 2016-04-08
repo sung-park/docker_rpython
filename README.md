@@ -32,5 +32,20 @@ This images has the components:
  -  jupyter notebook (port 8888)
  -  R-studio server (port 8787)
 
+ 
+* Requirements
+ - docker in Linux 
+ - docker toolbox in Windows
+
+ 
+* Install
+ - run build.sh in Linux
+ - run build.bat in Windows
+
+ 
+* user/password
+ - user id: dockeruser
+ - user password: dockeruserpass
+ 
 
 

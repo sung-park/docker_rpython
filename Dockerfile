@@ -288,6 +288,10 @@ ENV TINI_VERSION v0.6.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
 
+# Fix RStudio bug
+# see https://support.rstudio.com/hc/en-us/community/posts/202190728-install-rstudio-server-error
+RUN echo "server-app-armor-enabled=0" | tee -a /etc/rstudio/rserver.conf 
+
 USER $USER_ID
 EXPOSE 8888
 ADD ".docker-entrypoint.sh" "/home/$USER_ID/"

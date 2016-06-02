@@ -1,6 +1,7 @@
 #!/bin/bash -v
 
 if hash ufw 2>/dev/null; then
+    sudo ufw allow 8787
     sudo ufw allow 8888
 fi
 
@@ -35,6 +36,6 @@ if [ -n "$MATCHING_IDS" ]; then
 fi
 
 echo "starting $CONTAINER_NAME ..."
-sudo docker run --name "$CONTAINER_NAME" -i -t -p 8888:8888 -v ~/Code:/home/$USERNAME/Code $IMAGE_NAME
+sudo docker run --name "$CONTAINER_NAME" -i -t -p 8888:8888 -p 8787:8787 -v ~/Code:/home/$USERNAME/Code $IMAGE_NAME
 sudo docker ps -a
 

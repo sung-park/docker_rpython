@@ -1,0 +1,12 @@
+{
+  "NotebookApp": {
+    "extra_template_paths": [
+      "/home/dockeruser/.local/share/jupyter/templates"
+    ],
+    "server_extensions": [
+      "nbextensions",
+      "ipyparallel.nbextension"
+    ]
+  },
+  "version": 1
+}

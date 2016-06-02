@@ -1,0 +1,17 @@
+
+=============================================
+datascienceschool/rpython docker image build
+=============================================
+
+
+* Requirements
+ - docker in Linux 
+ - docker toolbox in Windows
+
+* Install
+ - run build.sh in Linux
+ - run build.bat in Windows
+
+* user/password
+ - user id: dockeruser
+ - user password: dockeruserpass

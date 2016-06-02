@@ -1,3 +1,10 @@
+from jupyter_core.paths import jupyter_config_dir, jupyter_data_dir
+import os.path
+import sys
+
+sys.path.append(os.path.join(jupyter_data_dir(), 'extensions'))
+# sys.path.append('/home/dockeruser/.local/share/jupyter/extensions')
+
 c = get_config()
 
 # Configuration file for jupyter-notebook.
@@ -551,4 +558,7 @@ c = get_config()
 # By default, all installed kernels are allowed.
 # c.KernelSpecManager.whitelist = set([])
 
+c.NotebookApp.extra_template_paths = [os.path.join(jupyter_data_dir(), 'templates') ]
+c.NotebookApp.server_extensions.append('nbextensions')
 c.NotebookApp.server_extensions.append('ipyparallel.nbextension')
+

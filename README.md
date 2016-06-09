@@ -14,7 +14,7 @@ This images has the components:
  - ipython, numpy, scipy, pandas, matplotlib, seaborn, pymc3 
  - jupyter qtconsole,, ipyparallel, notebook
  - scikit-learn, nlpy, gensim, theano, tensorflow, keras
- - other 
+ - other 250 packages
 
 
 * R-3.2.3

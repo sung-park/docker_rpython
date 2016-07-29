@@ -4,13 +4,12 @@ dockerfile for datascienceschool/rpython in https://hub.docker.com/r/datascience
 R and Python for Data Science School
 -----------------------------------------------------
 
-
 This images has the components:
 
 * Ubuntu 14.04
 
 
-* Python 2.7 (Anaconda2-4.0.0)
+* Python 2.7 (Anaconda2-4.1.1)
  - ipython, numpy, scipy, pandas, matplotlib, seaborn, pymc3 
  - jupyter qtconsole,, ipyparallel, notebook
  - scikit-learn, nlpy, gensim, theano, tensorflow, keras
@@ -18,20 +17,20 @@ This images has the components:
 
 
 * R-3.2.3
- - rstudio-server-0.99.902
+ - rstudio-server-0.99.903
 
 
 * Libraries
- - ZeroMQ, Boost, Open-JDK, HDF5
+ - ZeroMQ, Boost, Open-JDK, QuantLib, HDF5
 
 
 * Tools
- - git, vim, emacs, tex-live, pandoc, graphviz imagemagick
+ - git, vim, emacs, tex-live, pandoc, graphviz, imagemagick
 
 
 
 * Running Services
- -  jupyter notebook (https port 8888)
+ -  jupyter notebook (http port 8888)
  -  R-studio server (http port 8787)
 
 
@@ -41,9 +40,14 @@ Running Docker Machine
 
 
 ```
-docker-machine ssh
-docker run --name=rpython -it -p 8888:8888 -p 8787:8787 datascienceschool/rpython
+docker run --name=rpython -it -p 8888:8888 -p 8787:8787 -p 6006:6006 datascienceschool/rpython
 ```
+
+
+Boot2Docker Account
+---------------------
+* user id: docker
+* password: tcuser
 
 
 Docker Account

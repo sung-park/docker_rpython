@@ -59,45 +59,43 @@ uuid-dev libpgm-dev libpng12-dev libpng++-dev libevent-dev \
 openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
 default-jre default-jdk openjdk-7-jdk \
 hdf5-tools hdf5-helpers libhdf5-dev \
-nodejs-legacy npm \
 haskell-platform pandoc \
 graphviz imagemagick pdf2svg \ 
 fonts-nanum fonts-nanum-coding fonts-nanum-extra ttf-unfonts-core ttf-unfonts-extra \ 
 xzdec texlive texlive-latex-base texlive-latex3 texlive-xetex \
 texlive-latex-recommended texlive-fonts-recommended \
 texlive-lang-cjk ko.tex-base ko.tex-extra-hlfont ko.tex-extra \
-&& apt-get clean
-
-# Fonts
-RUN \
+xorg openbox xdm xauth x11-apps && \
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
-apt-get install -y -q ttf-mscorefonts-installer
-
-RUN \
+apt-get install -y -q ttf-mscorefonts-installer && \
 mkdir -p /downloads && cd /downloads && \
 wget -O NotoSansCJKkr-hinted.zip https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKkr-hinted.zip && \
 unzip -d NotoSansCJKkr-hinted NotoSansCJKkr-hinted.zip && \
 mkdir -p /usr/share/fonts/opentype && \
 mv -fv ./NotoSansCJKkr-hinted /usr/share/fonts/opentype/NotoSansCJKkr-hinted && \
-rm -rfv NotoSansCJKkr-hinted.zip
-
-RUN chmod a+rwx -R /usr/share/fonts/* && fc-cache -fv
+chmod a+rwx -R /usr/share/fonts/* && \
+fc-cache -fv && \
+rm -rfv NotoSansCJKkr-hinted.zip && \
+rm -rf /downloads && \
+apt-get -y -q --purge remove tex.\*-doc$ && \
+apt-get clean
 
 # ZMQ (master branch)
 RUN \
 mkdir -p /downloads && cd /downloads && \
 git clone https://github.com/zeromq/libzmq.git && cd libzmq && \
-./autogen.sh && ./configure && make && make install && ldconfig 
+./autogen.sh && ./configure && make && make install && ldconfig && \
+rm -rf /downloads
 
 # QuantLib
-
 RUN \
 mkdir -p /downloads && cd /downloads && \
 wget -O QuantLib-1.8.tar.gz http://downloads.sourceforge.net/project/quantlib/QuantLib/1.8/QuantLib-1.8.tar.gz && \
 tar xzf QuantLib-1.8.tar.gz && \
 cd QuantLib-1.8 && \
-./configure && make && make install && ldconfig && make clean 
-RUN rm -rf /downloads/QuantLib-1.8
+./configure && make && make install && ldconfig && make clean && \
+cd /usr/local/lib && strip --strip-unneeded libQuantLib.a && \
+rm -rf /downloads
 
 
 ################################################################################
@@ -110,7 +108,6 @@ gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 && \
 gpg -a --export E084DAB9 | apt-key add - && \
 echo 'deb http://cran.rstudio.com/bin/linux/ubuntu trusty/' | tee /etc/apt/sources.list.d/R.list && \
 echo 'deb http://cran.nexr.com/bin/linux/ubuntu trusty/' | tee -a /etc/apt/sources.list.d/R.list && \
-echo 'deb http://cran.biodisk.org/bin/linux/ubuntu trusty/' | tee -a /etc/apt/sources.list.d/R.list && \
 echo 'deb http://healthstat.snu.ac.kr/CRAN/bin/linux/ubuntu trusty/' | tee -a /etc/apt/sources.list.d/R.list && \
 apt-get update -y -q && \
 echo
@@ -119,7 +116,8 @@ echo
 RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
 wget https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
-gdebi --n rstudio-server-0.99.903-amd64.deb
+gdebi --n rstudio-server-0.99.903-amd64.deb && \
+rm -rf /rstudio-server-0.99.893-amd64.deb
 
 # Disable app-armor
 # see https://support.rstudio.com/hc/en-us/community/posts/202190728-install-rstudio-server-error
@@ -127,6 +125,31 @@ RUN echo "server-app-armor-enabled=0" | tee -a /etc/rstudio/rserver.conf
 
 # Settings for RStudio-Server
 EXPOSE 8787
+
+# packages
+RUN \
+echo 'install.packages(c(\"yaml\",\"crayon\",\"pbdZMQ\",\"devtools\",\"RJSONIO\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e  && \
+echo 'install.packages(c(\"ggplot2\",\"colorspace\",\"plyr\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"fImport\",\"fBasics\",\"fArma\",\"fGarch\",\"fNonlinear\",\"fUnitRoots\",\"fTrading\",\"fMultivar\",\"fRegression\",\"fExtremes\",\"fCopulae\",\"fBonds\",\"fOptions\",\"fExoticOptions\",\"fAsianOptions\",\"fAssets\",\"fPortfolio\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoolbox\",\"rngWELL\",\"schwartz97\",\"SkewHyperbolic\",\"VarianceGamma\",\"stabledist\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e && \
+echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e && \
+echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e && \
+echo
+
+################################################################################
+# Node.js
+################################################################################
+
+RUN \
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - && \
+apt-get install -y nodejs && \
+cd $(npm root -g)/npm && \
+npm install fs-extra && \
+sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js && \
+npm install -g npm
 
 ################################################################################
 # User
@@ -161,12 +184,13 @@ WORKDIR /home/$USER_ID
 ENV HOME /home/$USER_ID
 
 # Anaconda2 4.1.1
-RUN mkdir -p ~/downloads && cd ~/downloads && \ 
-wget http://repo.continuum.io/archive/Anaconda2-4.1.1-Linux-x86_64.sh
-RUN /bin/bash ~/downloads/Anaconda2-4.1.1-Linux-x86_64.sh -b
-ENV PATH /home/$USER_ID/anaconda2/bin:$PATH 
-RUN conda update conda && conda update anaconda
-RUN pip install --upgrade pip
+ENV PATH /home/$USER_ID/anaconda2/bin:$PATH  
+RUN \
+mkdir -p ~/downloads && cd ~/downloads && \ 
+wget http://repo.continuum.io/archive/Anaconda2-4.1.1-Linux-x86_64.sh && \
+/bin/bash ~/downloads/Anaconda2-4.1.1-Linux-x86_64.sh -b && \
+conda update conda && conda update anaconda && \
+pip install --upgrade pip 
 
 # Python Packages
 ################################################################################
@@ -176,19 +200,22 @@ conda install -y \
 dateutil feedparser gensim ipyparallel ipython jupyter \
 matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor unidecode \
-virtualenv \
-&& echo
+virtualenv && \
+conda clean -y -i -p -s && \
+rm -rf ~/downloads
 
 # Additional pip packages
-RUN pip install git+https://github.com/statsmodels/statsmodels.git
-RUN pip install git+https://github.com/pymc-devs/pymc3 
-RUN pip install git+https://github.com/Theano/Theano 
-RUN pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
-RUN pip install bash_kernel filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot
-RUN pip install rtree shapely fiona descartes pyproj
-RUN pip install FRB fred fredapi wbdata wbpy Quandl zipline pandasdmx
-RUN pip install hangulize regex
-RUN pip install git+https://github.com/bashtage/arch.git
+RUN \
+pip install git+https://github.com/statsmodels/statsmodels.git && \
+pip install git+https://github.com/pymc-devs/pymc3  && \
+pip install git+https://github.com/Theano/Theano  && \
+pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl && \
+pip install bash_kernel filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot && \
+pip install rtree shapely fiona descartes pyproj && \
+pip install FRB fred fredapi wbdata wbpy Quandl zipline pandasdmx && \
+pip install hangulize regex && \
+pip install git+https://github.com/bashtage/arch.git && \
+echo
 
 # QuantLib-python
 
@@ -207,8 +234,8 @@ RUN mkdir -p /downloads && cd /downloads && \
 wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
 tar xzf ta-lib-0.4.0-src.tar.gz && \
 cd ta-lib && \
-./configure --prefix=/usr && make && make install
-RUN rm -rf /downloads/ta-lib
+./configure --prefix=/usr && make && make install && \
+rm -rf /downloads/ta-lib
 
 USER $USER_ID
 
@@ -222,6 +249,16 @@ EXPOSE 8888
 
 # Bash kernel 
 RUN python -m bash_kernel.install
+
+# R kernel
+USER root
+RUN \
+echo 'install.packages(c(\"rzmq\",\"repr\",\"IRdisplay\"),\"/usr/lib/R/library\",repos=c(\"http://irkernel.github.io\",\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
+echo 'install.packages(\"IRkernel\",\"/usr/lib/R/library\",repos=c(\"http://irkernel.github.io\",\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
+echo 'library("devtools");install_github(\"IRkernel/IRkernel\")' | xargs R --vanilla --slave -e && \
+echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
+echo
+USER $USER_ID
 
 RUN ipython profile create 
 COPY ipython_config.py /home/$USER_ID/.ipython/profile_default/ipython_config.py
@@ -277,23 +314,6 @@ cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 USER $USER_ID
 
 ################################################################################
-# Clean
-################################################################################
-
-USER root
-
-RUN \
-apt-get clean && \
-apt-get autoremove && \
-rm -rf /downloads && \
-rm -rf /rstudio-server-0.99.893-amd64.deb
-
-USER $USER_ID
-
-RUN conda clean -y -i -p -s && \
-rm -rf ~/downloads
-
-################################################################################
 # User Env
 ################################################################################
 
@@ -315,62 +335,31 @@ RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01
 ################################################################################
 
 ################################################################################
-# R Packages
+# Additional R Packages
 ################################################################################
-
-USER root
-
-RUN echo 'install.packages(c(\"yaml\",\"devtools\",\"RJSONIO\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
-RUN echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e
-RUN echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e
-RUN echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e
-RUN echo 'install.packages(c(\"rzmq\",\"repr\",\"IRkernel\",\"IRdisplay\"),\"/usr/lib/R/library\",repos=c(\"http://irkernel.github.io\",\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e 
-RUN echo 'IRkernel::installspec(user=FALSE)' | xargs R --vanilla --slave -e
-RUN echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
-RUN echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e 
-RUN echo 'install.packages(c(\"ggplot2\",\"colorspace\",\"plyr\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
-RUN echo 'install.packages(c(\"fImport\",\"fBasics\",\"fArma\",\"fGarch\",\"fNonlinear\",\"fUnitRoots\",\"fTrading\",\"fMultivar\",\"fRegression\",\"fExtremes\",\"fCopulae\",\"fBonds\",\"fOptions\",\"fExoticOptions\",\"fAsianOptions\",\"fAssets\",\"fPortfolio\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
-RUN echo 'install.packages(c(\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoolbox\",\"rngWELL\",\"schwartz97\",\"SkewHyperbolic\",\"VarianceGamma\",\"stabledist\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e
-
 
 ################################################################################
 # Dataset
 ################################################################################
 
-USER $USER_ID
+COPY download_data.sh /home/$USER_ID/data/download_data.sh
 
-RUN wget http://www.stat.uiowa.edu/~kchan/TSA/Datasets.zip
-RUN mkdir -p /home/$USER_ID/data/kchan
-RUN unzip /home/$USER_ID/Datasets.zip -d /home/$USER_ID/data/kchan
-RUN rm -rf /home/$USER_ID/Datasets.zip
-
-RUN wget http://www.stat.tamu.edu/~sheather/book/docs/datasets/Data.zip
-RUN unzip /home/$USER_ID/Data.zip -d /home/$USER_ID/data/
-RUN mv /home/$USER_ID/data/Data /home/$USER_ID/data/sheather
-RUN rm -rf /home/$USER_ID/Data.zip
-
-RUN python -W ignore -c "from sklearn.datasets import *; fetch_20newsgroups()"
-RUN python -W ignore -c "from sklearn.datasets import *; fetch_20newsgroups_vectorized()"
-RUN python -W ignore -c "from sklearn.datasets import *; fetch_california_housing()"
-RUN python -W ignore -c "from sklearn.datasets import *; fetch_lfw_people()"
-RUN python -W ignore -c "from sklearn.datasets import *; fetch_lfw_pairs()"
-RUN python -W ignore -c "from sklearn.datasets import *; fetch_olivetti_faces()"
-RUN python -W ignore -c "from sklearn.datasets import *; fetch_mldata('MNIST original')"
-#RUN python -W ignore -c "import nltk; nltk.download('all')"
-
-RUN cd /home/$USER_ID/data/ && git clone https://github.com/luispedro/BuildingMachineLearningSystemsWithPython.git
-RUN cd /home/$USER_ID/data/ && git clone https://github.com/gmonce/scikit-learn-book.git
-RUN cd /home/$USER_ID/data/ && git clone https://github.com/e9t/nsmc.git
-RUN cd /home/$USER_ID/data/ && git clone https://github.com/yhilpisch/py4fi.git
-RUN cd /home/$USER_ID/data/ && git clone https://github.com/mnielsen/neural-networks-and-deep-learning.git
-
-# RUN cd /home/$USER_ID/data/ && wget -r -nH -np "http://deeplearning.net/tutorial/code/" -P /home/$USER_ID/data/ -A "*.py" -R "robot.txt"
-
-RUN wget http://examples.oreilly.com/0636920023784/pydata-book-master.zip
-RUN unzip /home/$USER_ID/pydata-book-master.zip -d /home/$USER_ID/data/
-RUN rm -rf /home/$USER_ID/pydata-book-master.zip
+################################################################################
+# add ssh service 
+################################################################################
 
 USER root
+
+RUN mkdir /var/run/sshd
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+EXPOSE 22
 
 ################################################################################
 # Run

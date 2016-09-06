@@ -201,46 +201,44 @@ dateutil feedparser gensim ipyparallel ipython jupyter \
 matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor unidecode \
 virtualenv && \
+conda install -y -c conda-forge tensorflow && \
 conda clean -y -i -p -s && \
 rm -rf ~/downloads
 
 # Additional pip packages
 RUN \
-pip install git+https://github.com/statsmodels/statsmodels.git && \
-pip install git+https://github.com/pymc-devs/pymc3  && \
-pip install git+https://github.com/Theano/Theano  && \
-pip install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl && \
-pip install bash_kernel filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot && \
-pip install rtree shapely fiona descartes pyproj && \
-pip install FRB fred fredapi wbdata wbpy Quandl zipline pandasdmx && \
-pip install hangulize regex && \
-pip install git+https://github.com/bashtage/arch.git && \
-echo
+pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
+pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
+pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
+pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
+pip install --no-cache-dir \
+bash_kernel filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot \
+rtree shapely fiona descartes pyproj \
+FRB fred fredapi wbdata wbpy Quandl zipline pandasdmx \
+hangulize regex \
+&& echo
+
+# tensorboard port
+EXPOSE 6006 
 
 # QuantLib-python
-
 RUN mkdir -p ~/downloads && cd ~/downloads && \ 
 wget http://downloads.sourceforge.net/project/quantlib/QuantLib/1.8/other%20languages/QuantLib-SWIG-1.8.tar.gz && \
 tar xzf QuantLib-SWIG-1.8.tar.gz && \
 cd QuantLib-SWIG-1.8 && \
 ./configure && make -C Python && make -C Python install && make clean
-RUN rm -rf ~/downloads/QuantLib-SWIG-1.8
+RUN rm -rf ~/downloads/
 
 # TA-Lib
-
 USER root
-
 RUN mkdir -p /downloads && cd /downloads && \
 wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
 tar xzf ta-lib-0.4.0-src.tar.gz && \
 cd ta-lib && \
 ./configure --prefix=/usr && make && make install && \
-rm -rf /downloads/ta-lib
-
+rm -rf /downloads/
 USER $USER_ID
-
-RUN pip install TA-Lib
-
+RUN pip install --no-cache-dir TA-Lib
 
 # Jupyter Notebook Settings
 ################################################################################
@@ -287,14 +285,12 @@ openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mykey.key -out mycer
 
 # upgrade MathJax
 USER root
- 
 RUN \
 cd ~/anaconda2/lib/python2.7/site-packages/notebook/static/components && \
 wget https://github.com/mathjax/MathJax/archive/master.zip && \
 unzip master.zip && \
-mv MathJax MathJax-old && \
+rm -rf MathJax && \
 mv MathJax-master MathJax
-
 USER $USER_ID
 
 ################################################################################
@@ -310,7 +306,6 @@ RUN chown $USER_ID:$USER_ID /var/log/supervisor
 # Set TLS certifates
 RUN mkdir -p /etc/pki/tls/certs/ && \
 cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
-
 USER $USER_ID
 
 ################################################################################
@@ -320,23 +315,19 @@ USER $USER_ID
 # login profile
 
 USER root
-
 COPY .bash_profile /home/$USER_ID/
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
-
 USER $USER_ID
-
-RUN echo "export PATH=$PATH:/home/$USER_ID/anaconda2/bin" | tee -a /home/$USER_ID/.bashrc 
-RUN echo "TZ='Asia/Seoul'; export TZ" | tee -a /home/$USER_ID/.bashrc 
-RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc 
-
-################################################################################
-# Additional Python Packages
-################################################################################
-
-################################################################################
-# Additional R Packages
-################################################################################
+RUN \
+echo "export PATH=$PATH:/home/$USER_ID/anaconda2/bin" | tee -a /home/$USER_ID/.bashrc  && \
+echo "set input-meta on" >> ~/.inputrc && \
+echo "set output-meta on" >> ~/.inputrc && \
+echo "set convert-meta off" >> ~/.inputrc && \
+bind -f ~/.inputrc && \
+echo "export LANGUAGE=en_US.UTF-8" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LC_ALL=en_US.UTF-8" | tee -a /home/$USER_ID/.bashrc  && \
+echo "TZ='Asia/Seoul'; export TZ" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc 
 
 ################################################################################
 # Dataset
@@ -366,8 +357,7 @@ EXPOSE 22
 ################################################################################
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
-ENV TINI_VERSION v0.6.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
 
 ADD ".docker-entrypoint.sh" "/home/$USER_ID/"

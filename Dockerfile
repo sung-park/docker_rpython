@@ -117,7 +117,7 @@ RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
 wget https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
 gdebi --n rstudio-server-0.99.903-amd64.deb && \
-rm -rf /rstudio-server-0.99.893-amd64.deb
+rm -rf /rstudio-server-0.99.903-amd64.deb
 
 # Disable app-armor
 # see https://support.rstudio.com/hc/en-us/community/posts/202190728-install-rstudio-server-error
@@ -126,8 +126,21 @@ RUN echo "server-app-armor-enabled=0" | tee -a /etc/rstudio/rserver.conf
 # Settings for RStudio-Server
 EXPOSE 8787
 
+# enable R package install
+RUN chmod a+w /usr/local/lib/R/site-library
+
 # packages
 RUN \
+echo 'install.packages(c(\"assertthat\",\"base\",\"base64enc\",\"BH\",\"bitops\",\"boot\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"car\",\"caret\",\"catools\",\"chron\",\"class\",\"cluster\",\"codetools\",\"colorspace\",\"curl\",\"data.table\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"DBI\",\"dichromat\",\"digest\",\"dplyr\",\"evaluate\",\"foreach\",\"foreign\",\"formatr\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"ggplot2\",\"gistr\",\"glmnet\",\"gtable\",\"hexbin\",\"highr\",\"htmltools\",\"htmlwidgets\",\"httpuv\",\"httr\",\"iterators\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"jsonlite\",\"kernsmooth\",\"knitr\",\"labeling\",\"lattice\",\"lazyeval\",\"lme4\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"magrittr\",\"maps\",\"markdown\",\"mass\",\"matrix\",\"matrixmodels\",\"mgcv\",\"mime\",\"minqa\",\"munsell\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"nlme\",\"nloptr\",\"nnet\",\"openssl\",\"pbdzmq\",\"pbkrtest\",\"plyr\",\"pryr\",\"quantmod\",\"quantreg\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"r6\",\"randomforest\",\"rbokeh\",\"rcolorbrewer\",\"rcpp\",\"rcppeigen\",\"recommended\",\"repr\",\"reshape2\",\"rmarkdown\",\"rpart\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"scales\",\"shiny\",\"sparsem\",\"spatial\",\"stringi\",\"stringr\",\"survival\",\"tibble\",\"tidyr\",\"ttr\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"uuid\",\"xtable\",\"xts\",\"yaml\",\"zoo\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"yaml\",\"crayon\",\"pbdZMQ\",\"devtools\",\"RJSONIO\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e  && \
@@ -137,6 +150,8 @@ echo 'install.packages(c(\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoo
 echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e && \
 echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e && \
 echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"e1071\",\"rpart\",\"igraph\",\"nnet\",\"randomForest\",\"caret\",\"kernlab\",\"glmnet\",\"ROCR\",\"gbm\",\"party\",\"tree\",\"klaR\",\"mice\",\"wordcloud\",\"C50\",\"tm\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"Deriv\",\"plot3D\"),\"/usr/lib/R/library\",repos=\"http://cran.rstudio.com\")' | xargs R --vanilla --slave -e && \
 echo
 
 ################################################################################
@@ -226,17 +241,17 @@ RUN mkdir -p ~/downloads && cd ~/downloads && \
 wget http://downloads.sourceforge.net/project/quantlib/QuantLib/1.8/other%20languages/QuantLib-SWIG-1.8.tar.gz && \
 tar xzf QuantLib-SWIG-1.8.tar.gz && \
 cd QuantLib-SWIG-1.8 && \
-./configure && make -C Python && make -C Python install && make clean
-RUN rm -rf ~/downloads/
+./configure && make -C Python && make -C Python install && make clean && rm -rf ~/downloads/
 
 # TA-Lib
 USER root
+
 RUN mkdir -p /downloads && cd /downloads && \
 wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
 tar xzf ta-lib-0.4.0-src.tar.gz && \
 cd ta-lib && \
-./configure --prefix=/usr && make && make install && \
-rm -rf /downloads/
+./configure --prefix=/usr && make && make install && rm -rf /downloads/
+
 USER $USER_ID
 RUN pip install --no-cache-dir TA-Lib
 
@@ -292,6 +307,14 @@ unzip master.zip && \
 rm -rf MathJax && \
 mv MathJax-master MathJax
 USER $USER_ID
+
+# install ipython magics
+ADD tikzmagic.py /home/$USER_ID/.ipython/extensions
+
+# enable ipyparallel
+RUN /home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel
+RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel
+RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension enable --user --py ipyparallel
 
 ################################################################################
 # Supervisor Settings
@@ -352,6 +375,11 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 
 EXPOSE 22
 
+
+################################################################################
+# Additional packages
+################################################################################
+
 ################################################################################
 # Run
 ################################################################################
@@ -362,17 +390,15 @@ RUN chmod a+x /usr/bin/tini
 
 ADD ".docker-entrypoint.sh" "/home/$USER_ID/"
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
-
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/*
+
 RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython
 RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter
 RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.local
 
-# enable ipyparallel
-USER $USER_ID
-RUN /home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension enable --user --py ipyparallel
 USER root
+
+# fix R cpp version conflict
+RUN rm -rf /usr/lib/R/site-library/Rcpp
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", ".docker-entrypoint.sh"]

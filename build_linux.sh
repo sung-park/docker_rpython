@@ -31,12 +31,12 @@ if [ -z "$USER_GID" ]; then
   USER_GID=$DEFAULT_USER_GID
 fi
 
-if read -t 5 -sp "user password: " USER_PASS; then
+if read -sp "user password: " USER_PASS; then
   echo
   if [ -z "$USER_PASS" ]; then
     USER_PASS=$DEFAULT_USER_PASS
   fi
-  if read -t 5 -sp "password (again): " USER_PASS2; then
+  if read -sp "password (again): " USER_PASS2; then
     if [ -z "$USER_PASS2" ]; then
       USER_PASS2=$DEFAULT_USER_PASS
     fi

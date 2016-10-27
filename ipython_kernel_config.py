@@ -484,4 +484,4 @@ c = get_config()
 # c.Session.username = u'username'
 
 c.InteractiveShellApp.matplotlib = "inline"
-c.InlineBackend.figure_format = 'svg'
+c.InlineBackend.figure_format = 'png'

@@ -69,13 +69,9 @@ xorg openbox xdm xauth x11-apps && \
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
 apt-get install -y -q ttf-mscorefonts-installer && \
 mkdir -p /downloads && cd /downloads && \
-wget -O NotoSansCJKkr-hinted.zip https://noto-website-2.storage.googleapis.com/pkgs/NotoSansCJKkr-hinted.zip && \
-unzip -d NotoSansCJKkr-hinted NotoSansCJKkr-hinted.zip && \
 mkdir -p /usr/share/fonts/opentype && \
-mv -fv ./NotoSansCJKkr-hinted /usr/share/fonts/opentype/NotoSansCJKkr-hinted && \
 chmod a+rwx -R /usr/share/fonts/* && \
 fc-cache -fv && \
-rm -rfv NotoSansCJKkr-hinted.zip && \
 rm -rf /downloads && \
 apt-get -y -q --purge remove tex.\*-doc$ && \
 apt-get clean
@@ -151,6 +147,7 @@ echo 'install.packages(c(\"e1071\",\"rpart\",\"igraph\",\"nnet\",\"randomForest\
 echo 'install.packages(c(\"Deriv\",\"plot3D\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"caret\"),dependencies=c(\"Depends\",\"Suggests\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"Boruta\",\"C50\",\"CHAID\",\"Cubist\",\"HDclassif\",\"HiDimDA\",\"KRLS\",\"LogicReg\",\"RRF\",\"RSNNS\",\"RWeka\",\"SDDA\",\"ada\",\"adabag\",\"adaptDA\",\"arm\",\"bartMachine\",\"binda\",\"bnclassify\",\"brnn\",\"bst\",\"caTools\",\"class\",\"deepboost\",\"deepnet\",\"earth\",\"elasticnet\",\"elmNN\",\"enpls\",\"evtree\",\"extraTrees\",\"fastAdaboost\",\"fastICA\",\"foba\",\"frbs\",\"gam\",\"glmnet\",\"gpls\",\"hda\",\"ipred\",\"kerndwd\",\"kernlab\",\"kknn\",\"klaR\",\"kohonen\",\"lars\",\"leaps\",\"logicFS\",\"mboost\",\"mda\",\"mgcv\",\"monomvn\",\"mxnet\",\"neuralnet\",\"nnet\",\"nnls\",\"nodeHarvest\",\"oblique.tree\",\"obliqueRF\",\"pamr\",\"partDSA\",\"party\",\"penalized\",\"penalizedLDA\",\"pls\",\"plsRglm\",\"roxy\",\"protoclass\",\"qrnn\",\"quantregForest\",\"rFerns\",\"rPython\",\"randomForest\",\"randomGLM\",\"relaxo\",\"robustDA\",\"rocc\",\"rotationForest\",\"rpart\",\"rqPen\",\"rrcov\",\"rrcovHD\",\"sda\",\"sdwd\",\"snn\",\"sparseLDA\",\"spikeslab\",\"spls\",\"stepPlr\",\"superpc\",\"vbmp\",\"wsrf\",\"xgboost\"),dependencies=c(\"Depends\",\"Suggests\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"h2o\",\"autoencoder\",\"darch\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e && \
 echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e && \
 echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e && \
@@ -231,7 +228,7 @@ pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
 bash_kernel filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot \
 rtree shapely fiona descartes pyproj \
-FRB fred fredapi wbdata wbpy Quandl zipline pandasdmx \
+FRB fred fredapi wbdata wbpy Quandl zipline \
 hangulize regex \
 && echo
 

@@ -1,63 +1,64 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER "Joel Kim" admin@datascienceschool.net
-
-# Set environment
-ENV TERM xterm
-ENV HOME /root
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
 
 # Replace sh with bash
 RUN cd /bin && rm sh && ln -s bash sh
 
+# Set environment
+RUN locale-gen en_US.UTF-8
+    
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ENV LC_COLLATE C
+ENV TERM xterm
+ENV HOME /root
+ENV TZ Asia/Seoul
+
 # Config for unicode input/output
-RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales && \
+RUN \
 echo "set input-meta on" >> ~/.inputrc && \
 echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
-bind -f ~/.inputrc 
+echo 
 
 ################################################################################
 # Basic Softwares
 ################################################################################
 
 # Ubuntu repository
-# ENV REPO kr.archive.ubuntu.com
-ENV REPO ftp.daum.net
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-echo "deb     http://$REPO/ubuntu/ trusty main"                                          | tee    /etc/apt/sources.list && \
-echo "deb-src http://$REPO/ubuntu/ trusty main"                                          | tee -a /etc/apt/sources.list && \
-echo "deb     http://$REPO/ubuntu/ trusty-updates main"                                  | tee -a /etc/apt/sources.list && \
-echo "deb-src http://$REPO/ubuntu/ trusty-updates main"                                  | tee -a /etc/apt/sources.list && \
-echo "deb     http://$REPO/ubuntu/ trusty universe"                                      | tee -a /etc/apt/sources.list && \
-echo "deb-src http://$REPO/ubuntu/ trusty universe"                                      | tee -a /etc/apt/sources.list && \
-echo "deb     http://$REPO/ubuntu/ trusty-updates universe"                              | tee -a /etc/apt/sources.list && \
-echo "deb-src http://$REPO/ubuntu/ trusty-updates universe"                              | tee -a /etc/apt/sources.list && \
-echo "deb     http://$REPO/ubuntu/ trusty multiverse"                                    | tee -a /etc/apt/sources.list && \
-echo "deb-src http://$REPO/ubuntu/ trusty multiverse"                                    | tee -a /etc/apt/sources.list && \
-echo "deb     http://$REPO/ubuntu/ trusty-updates multiverse"                            | tee -a /etc/apt/sources.list && \
-echo "deb-src http://$REPO/ubuntu/ trusty-updates multiverse"                            | tee -a /etc/apt/sources.list && \
-echo "deb     http://$REPO/ubuntu/ trusty-backports main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
-echo "deb-src http://$REPO/ubuntu/ trusty-backports main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
-echo "deb     http://security.ubuntu.com/ubuntu trusty-security main"                    | tee -a /etc/apt/sources.list && \
-echo "deb-src http://security.ubuntu.com/ubuntu trusty-security main"                    | tee -a /etc/apt/sources.list && \
-echo "deb     http://security.ubuntu.com/ubuntu trusty-security universe"                | tee -a /etc/apt/sources.list && \
-echo "deb-src http://security.ubuntu.com/ubuntu trusty-security universe"                | tee -a /etc/apt/sources.list && \
-echo "deb     http://security.ubuntu.com/ubuntu trusty-security multiverse"              | tee -a /etc/apt/sources.list && \
-echo "deb-src http://security.ubuntu.com/ubuntu trusty-security multiverse"              | tee -a /etc/apt/sources.list && \
+ENV REPO kr.archive.ubuntu.com/ubuntu/
+# ENV REPO ftp.daumkakao.com/ubuntu/
+
+RUN \
+echo "deb http://$REPO xenial main"                                          | tee    /etc/apt/sources.list && \
+echo "deb http://$REPO xenial-updates main"                                  | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial universe"                                      | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial-updates universe"                              | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial multiverse"                                    | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial-updates multiverse"                            | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial-backports main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial-security main"                                 | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial-security universe"                             | tee -a /etc/apt/sources.list && \
+echo "deb http://$REPO xenial-security multiverse"                           | tee -a /etc/apt/sources.list && \
 echo
 
-RUN \ 
-rm -rf /var/lib/apt/lists/* && apt-get clean && \
-apt-get update -y -q && apt-get upgrade -y -q && apt-get dist-upgrade -y -q && \
-apt-get install -y -q \
+# Ubuntu packages
+RUN \
+rm -rf /var/lib/apt/lists/* && \
+rm -rf /var/lib/apt/lists/partial/* && \
+DEBIAN_FRONTEND=noninteractive apt-get clean && \
+DEBIAN_FRONTEND=noninteractive apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends apt-utils && \
+DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
+DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
 apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git htop tmux screen ncdu dos2unix \
 gdebi-core make build-essential gfortran libtool autoconf automake pkg-config \
 software-properties-common \
-libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev \
+libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
 uuid-dev libpgm-dev libpng12-dev libpng++-dev libevent-dev \
 openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
-default-jre default-jdk openjdk-7-jdk \
+default-jre default-jdk \
 hdf5-tools hdf5-helpers libhdf5-dev \
 haskell-platform pandoc \
 graphviz imagemagick pdf2svg \ 
@@ -68,52 +69,51 @@ texlive-lang-cjk ko.tex-base ko.tex-extra-hlfont ko.tex-extra \
 xorg openbox xdm xauth x11-apps && \
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
 apt-get install -y -q ttf-mscorefonts-installer && \
-mkdir -p /downloads && cd /downloads && \
+mkdir -p /download && cd /download && \
 mkdir -p /usr/share/fonts/opentype && \
 chmod a+rwx -R /usr/share/fonts/* && \
 fc-cache -fv && \
-rm -rf /downloads && \
-apt-get -y -q --purge remove tex.\*-doc$ && \
-apt-get clean
+rm -rf /download && \
+DEBIAN_FRONTEND=noninteractive apt-get -y -q --purge remove tex.\*-doc$ && \
+DEBIAN_FRONTEND=noninteractive apt-get clean
 
 # ZMQ (master branch)
 RUN \
-mkdir -p /downloads && cd /downloads && \
+mkdir -p /download && cd /download && \
 git clone https://github.com/zeromq/libzmq.git && cd libzmq && \
 ./autogen.sh && ./configure && make && make install && ldconfig && \
-rm -rf /downloads
+rm -rf /download
 
 # QuantLib
 RUN \
-mkdir -p /downloads && cd /downloads && \
-wget -O QuantLib-1.8.tar.gz http://downloads.sourceforge.net/project/quantlib/QuantLib/1.8/QuantLib-1.8.tar.gz && \
+mkdir -p /download && cd /download && \
+wget -O QuantLib-1.8.tar.gz http://download.sourceforge.net/project/quantlib/QuantLib/1.8/QuantLib-1.8.tar.gz && \
 tar xzf QuantLib-1.8.tar.gz && \
 cd QuantLib-1.8 && \
 ./configure && make && make install && ldconfig && make clean && \
 cd /usr/local/lib && strip --strip-unneeded libQuantLib.a && \
-rm -rf /downloads
+rm -rf /download
 
 
 ################################################################################
 # R
 ################################################################################
-
 RUN \ 
 rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get update && \
 gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 && \
 gpg -a --export E084DAB9 | apt-key add - && \
-echo 'deb http://cran.rstudio.com/bin/linux/ubuntu trusty/' | tee /etc/apt/sources.list.d/R.list && \
-echo 'deb http://cran.nexr.com/bin/linux/ubuntu trusty/' | tee -a /etc/apt/sources.list.d/R.list && \
-echo 'deb http://healthstat.snu.ac.kr/CRAN/bin/linux/ubuntu trusty/' | tee -a /etc/apt/sources.list.d/R.list && \
+echo 'deb http://cran.rstudio.com/bin/linux/ubuntu xenial/' | tee /etc/apt/sources.list.d/R.list && \
+echo 'deb http://cran.nexr.com/bin/linux/ubuntu xenial/' | tee -a /etc/apt/sources.list.d/R.list && \
+echo 'deb http://healthstat.snu.ac.kr/CRAN/bin/linux/ubuntu xenial/' | tee -a /etc/apt/sources.list.d/R.list && \
 apt-get update -y -q && \
 echo
 
 # R and RStudio-server
 RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
-wget https://download2.rstudio.org/rstudio-server-0.99.903-amd64.deb && \
-gdebi --n rstudio-server-0.99.903-amd64.deb && \
-rm -rf /rstudio-server-0.99.903-amd64.deb
+wget https://download2.rstudio.org/rstudio-server-1.0.44-amd64.deb && \
+gdebi --n rstudio-server-1.0.44-amd64.deb && \
+rm -rf /rstudio-server-1.0.44-amd64.deb
 
 # Disable app-armor
 # see https://support.rstudio.com/hc/en-us/community/posts/202190728-install-rstudio-server-error
@@ -153,17 +153,19 @@ echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xarg
 echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e && \
 echo
 
+
 ################################################################################
 # Node.js
 ################################################################################
 
-RUN \
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - && \
-apt-get install -y nodejs && \
-cd $(npm root -g)/npm && \
-npm install fs-extra && \
-sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js && \
-npm install -g npm
+# Node.js
+# RUN mkdir -p /download && cd /download && \
+# wget https://deb.nodesource.com/setup_6.x && \
+# sh setup_6.x
+# cd $(npm root -g)/npm && \
+# npm install --quiet -g \
+#     npm \
+# && rm -rf /download
 
 ################################################################################
 # User
@@ -200,9 +202,9 @@ ENV HOME /home/$USER_ID
 # Anaconda2 4.2.0
 ENV PATH /home/$USER_ID/anaconda2/bin:$PATH  
 RUN \
-mkdir -p ~/downloads && cd ~/downloads && \ 
+mkdir -p ~/download && cd ~/download && \ 
 wget http://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh && \
-/bin/bash ~/downloads/Anaconda2-4.2.0-Linux-x86_64.sh -b && \
+/bin/bash ~/download/Anaconda2-4.2.0-Linux-x86_64.sh -b && \
 conda update conda && conda update anaconda && \
 pip install --upgrade pip 
 
@@ -212,12 +214,12 @@ pip install --upgrade pip
 RUN \
 conda install -y \
 dateutil feedparser gensim ipyparallel ipython jupyter \
-matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
+libgcc matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor unidecode \
 virtualenv && \
 conda install -y -c conda-forge tensorflow && \
 conda clean -y -i -p -s && \
-rm -rf ~/downloads
+rm -rf ~/download
 
 # Additional pip packages
 RUN \
@@ -226,7 +228,7 @@ pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
-bash_kernel filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot \
+awscli bash_kernel boto3 filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi wbdata wbpy Quandl zipline \
 hangulize regex \
@@ -236,20 +238,20 @@ hangulize regex \
 EXPOSE 6006 
 
 # QuantLib-python
-RUN mkdir -p ~/downloads && cd ~/downloads && \ 
-wget http://downloads.sourceforge.net/project/quantlib/QuantLib/1.8/other%20languages/QuantLib-SWIG-1.8.tar.gz && \
+RUN mkdir -p ~/download && cd ~/download && \ 
+wget http://download.sourceforge.net/project/quantlib/QuantLib/1.8/other%20languages/QuantLib-SWIG-1.8.tar.gz && \
 tar xzf QuantLib-SWIG-1.8.tar.gz && \
 cd QuantLib-SWIG-1.8 && \
-./configure && make -C Python && make -C Python install && make clean && rm -rf ~/downloads/
+./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/
 
 # TA-Lib
 USER root
 
-RUN mkdir -p /downloads && cd /downloads && \
-wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
+RUN mkdir -p /download && cd /download && \
+wget http://downloads.sourceforge.net/project/ta-lib/ta-lib/0.4.0/ta-lib-0.4.0-src.tar.gz && \
 tar xzf ta-lib-0.4.0-src.tar.gz && \
 cd ta-lib && \
-./configure --prefix=/usr && make && make install && rm -rf /downloads/
+./configure --prefix=/usr && make && make install && rm -rf /download/
 
 USER $USER_ID
 RUN pip install --no-cache-dir TA-Lib
@@ -298,13 +300,13 @@ mkdir -p /home/$USER_ID/.cert && cd /home/$USER_ID/.cert && \
 openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mykey.key -out mycert.pem -subj "/C=KR/ST=SEOUL/L=SEOUL/O=DATA SCIENCE SCHOOL/CN=datascienceschool.net" -passout pass:$USER_PASS
 
 # upgrade MathJax
-USER root
-RUN \
-cd ~/anaconda2/lib/python2.7/site-packages/notebook/static/components && \
-wget https://github.com/mathjax/MathJax/archive/master.zip && \
-unzip master.zip && \
-rm -rf MathJax && \
-mv MathJax-master MathJax
+# USER root
+# RUN \
+# cd ~/anaconda2/lib/python2.7/site-packages/notebook/static/components && \
+# wget https://github.com/mathjax/MathJax/archive/master.zip && \
+# unzip master.zip && \
+# rm -rf MathJax && \
+# mv MathJax-master MathJax
 USER $USER_ID
 
 # install ipython magics
@@ -342,15 +344,18 @@ RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
 USER $USER_ID
 RUN \
 echo "export PATH=$PATH:/home/$USER_ID/anaconda2/bin" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LANGUAGE='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LC_ALL='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LC_COLLATE='C'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export TZ='Asia/Seoul'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export TERM='xterm'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc && \
 echo "set input-meta on" >> ~/.inputrc && \
 echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
 bind -f ~/.inputrc && \
-echo "export LANGUAGE=en_US.UTF-8" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export LC_ALL=en_US.UTF-8" | tee -a /home/$USER_ID/.bashrc  && \
-echo "TZ='Asia/Seoul'; export TZ" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc 
-
+echo
+    
 ################################################################################
 # Dataset
 ################################################################################

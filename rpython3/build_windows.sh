@@ -9,7 +9,7 @@ DEFAULT_USER_UID2=$(id -u $(whoami))
 DEFAULT_USER_GID=$DEFAULT_USER_UID
 DEFAULT_USER_GID2=$(id -g $(whoami))
 DEFAULT_HTTPS_COMMENT="#"
-IMAGE_NAME="datascienceschool/rpython"
+IMAGE_NAME="datascienceschool/rpython3"
 
 read -p "tag (default \"latest\"): " TAG
 if [ -z "$TAG" ]; then

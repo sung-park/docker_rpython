@@ -1,0 +1,28 @@
+#!/bin/bash -v
+
+if hash ufw 2>/dev/null; then
+    sudo ufw delete allow 8787
+    sudo ufw delete allow 8888
+fi
+
+IMAGE_NAME="datascienceschool/rpython3"
+CONTAINER_NAME="rpython3"
+echo "IMAGE_NAME = $IMAGE_NAME"
+sudo docker ps
+
+MATCHING_IDS="$(sudo docker ps --filter "ancestor=$IMAGE_NAME" -q -a)"
+MATCHING_IDS="$(echo -e "${MATCHING_IDS}" | tr -d '[[:space:]]')"
+echo "MATCHING_IDS='$MATCHING_IDS'"
+if [ -n "$MATCHING_IDS" ]; then
+  echo "running matching container = $MATCHING_IDS"
+  MATCHING_IDS="$(sudo docker ps --filter "name=$CONTAINER_NAME" --filter "status=running" -q)"
+  MATCHING_IDS="$(echo -e "${MATCHING_IDS}" | tr -d '[[:space:]]')"
+  if [ -n "$MATCHING_IDS" ]; then
+    echo "stoping $CONTAINER_NAME ..."
+    sudo docker stop $CONTAINER_NAME
+  fi
+  echo "removing $CONTAINER_NAME ..."
+  sudo docker rm "$CONTAINER_NAME"
+fi
+
+sudo docker ps -a

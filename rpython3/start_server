@@ -1,0 +1,41 @@
+#!/bin/bash -v
+
+if hash ufw 2>/dev/null; then
+    sudo ufw allow 8787
+    sudo ufw allow 8888
+fi
+
+read -p "tag (default \"latest\"): " TAG
+if [ -z "$TAG" ]; then
+  TAG=latest
+fi
+
+read -p "username (default \"dockeruser\"): " USERNAME
+if [ -z "$USERNAME" ]; then
+  USERNAME=dockeruser
+fi
+
+IMAGE_NAME="datascienceschool/rpython3:$TAG"
+CONTAINER_NAME="rpython3"
+echo "IMAGE_NAME = $IMAGE_NAME"
+sudo docker ps
+
+MATCHING_IDS="$(sudo docker ps --filter "ancestor=$IMAGE_NAME" -q -a)"
+MATCHING_IDS="$(echo -e "${MATCHING_IDS}" | tr -d '[[:space:]]')"
+echo "MATCHING_IDS='$MATCHING_IDS'"
+if [ -n "$MATCHING_IDS" ]; then
+  echo "running matching container = $MATCHING_IDS"
+  MATCHING_IDS="$(sudo docker ps --filter "name=$CONTAINER_NAME" --filter "status=running" -q)"
+  MATCHING_IDS="$(echo -e "${MATCHING_IDS}" | tr -d '[[:space:]]')"
+  if [ -n "$MATCHING_IDS" ]; then
+    echo "stoping $CONTAINER_NAME ..."
+    sudo docker stop $CONTAINER_NAME
+  fi
+  echo "removing $CONTAINER_NAME ..."
+  sudo docker rm "$CONTAINER_NAME"
+fi
+
+echo "starting $CONTAINER_NAME ..."
+sudo docker run --name "$CONTAINER_NAME" -i -t -p 8888:8888 -p 8787:8787 -v ~/Code:/home/$USERNAME/Code $IMAGE_NAME
+sudo docker ps -a
+

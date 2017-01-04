@@ -1,5 +1,6 @@
+#!/usr/bin/env bash
 
-cd ~/data/ 
+cd ~/data/
 
 wget http://www.stat.uiowa.edu/~kchan/TSA/Datasets.zip
 mkdir -p ~/data/kchan

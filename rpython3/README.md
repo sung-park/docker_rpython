@@ -1,5 +1,5 @@
-# docker_rpython
-dockerfile for datascienceschool/rpython in https://hub.docker.com/r/datascienceschool/rpython/
+# docker_rpython3
+dockerfile for datascienceschool/rpython3 in https://hub.docker.com/r/datascienceschool/rpython3/
 
 R and Python for Data Science School
 -----------------------------------------------------
@@ -40,7 +40,7 @@ Running Docker Machine
 
 
 ```
-docker run --name=rpython -it -p 8888:8888 -p 8787:8787 -p 6006:6006 datascienceschool/rpython
+docker run --name=rpython3 -it -p 8888:8888 -p 8787:8787 -p 6006:6006 datascienceschool/rpython3
 ```
 
 

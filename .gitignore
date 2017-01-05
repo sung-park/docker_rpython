@@ -83,4 +83,5 @@ upfiles/
 _test*/
 datascienceschool.sock*
 site/upfiles
+.idea/
 

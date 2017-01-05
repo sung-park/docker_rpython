@@ -5,8 +5,8 @@ if hash ufw 2>/dev/null; then
     sudo ufw delete allow 8888
 fi
 
-IMAGE_NAME="datascienceschool/rpython2"
-CONTAINER_NAME="rpython2"
+IMAGE_NAME="datascienceschool/rpython"
+CONTAINER_NAME="rpython"
 echo "IMAGE_NAME = $IMAGE_NAME"
 sudo docker ps
 

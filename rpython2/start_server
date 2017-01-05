@@ -15,8 +15,8 @@ if [ -z "$USERNAME" ]; then
   USERNAME=dockeruser
 fi
 
-IMAGE_NAME="datascienceschool/rpython2:$TAG"
-CONTAINER_NAME="rpython2"
+IMAGE_NAME="datascienceschool/rpython:$TAG"
+CONTAINER_NAME="rpython"
 echo "IMAGE_NAME = $IMAGE_NAME"
 sudo docker ps
 

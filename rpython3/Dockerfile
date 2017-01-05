@@ -185,13 +185,13 @@ USER $USER_ID
 WORKDIR /home/$USER_ID
 ENV HOME /home/$USER_ID
 
-# Anaconda2 4.2.0
+# Anaconda3 4.2.0
 ENV PATH /home/$USER_ID/anaconda3/bin:$PATH
 RUN \
 mkdir -p ~/download && cd ~/download && \
-wget http://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh && \
-/bin/bash ~/download/Anaconda2-4.2.0-Linux-x86_64.sh -b && \
-conda update conda && conda update anaconda && \
+wget https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh && \
+/bin/bash ~/download/Anaconda3-4.2.0-Linux-x86_64.sh -b && \
+conda update conda && conda update anaconda && conda update anaconda-navigator && \
 pip install --upgrade pip
 
 # Python Packages
@@ -199,8 +199,8 @@ pip install --upgrade pip
 
 RUN \
 conda install -y \
-dateutil feedparser gensim ipyparallel ipython jupyter \
-libgcc matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
+feedparser gensim ipyparallel ipython jupyter \
+libgcc matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables python-dateutil pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor unidecode \
 virtualenv && \
 conda install -y -c conda-forge tensorflow && \

@@ -199,16 +199,18 @@ pip install --upgrade pip
 
 RUN \
 conda install -y \
-dateutil feedparser gensim ipyparallel ipython jupyter \
+anaconda-clean dateutil feedparser gensim ipyparallel ipython jupyter \
 libgcc matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
-scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor unidecode \
+scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor ujson unidecode \
 virtualenv && \
-conda install -y -c conda-forge tensorflow && \
 conda clean -y -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
+conda install -y -c conda-forge tensorflow
+
+RUN \    
 pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
@@ -216,7 +218,7 @@ pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
 awscli bash_kernel boto3 filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot \
 rtree shapely fiona descartes pyproj \
-FRB fred fredapi wbdata wbpy Quandl zipline \
+FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
 hangulize regex \
 && echo
 

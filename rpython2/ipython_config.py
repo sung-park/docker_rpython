@@ -607,6 +607,8 @@ c = get_config()
 # c.StoreMagics.autorestore = False
 
 c.InteractiveShellApp.exec_lines = [
-  'from __future__ import division',
-  'from __future__ import print_function',
+    'from __future__ import division',
+    'from __future__ import print_function',
+    "mpl.rc('font', family='NanumGothic')",
+    "mpl.rc('axes', unicode_minus=False)",
 ]

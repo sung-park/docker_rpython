@@ -7,10 +7,13 @@ import statsmodels.stats.api as sms
 import sklearn as sk
 
 import matplotlib as mpl
+mpl.rc('font', family='nanumgothic')
 mpl.use('Agg')
 import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 import seaborn as sns
 sns.set()
+sns.set_style("whitegrid")
 sns.set_color_codes()
+

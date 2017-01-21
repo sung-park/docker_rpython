@@ -3,12 +3,8 @@
 # delete password
 unset USER_PASS
 
-# disable conda extension
-jupyter nbextension disable nb_conda --py --sys-prefix
-jupyter serverextension disable nb_conda --py --sys-prefix
-
 # start supervisord
-/home/$USER_ID/anaconda2/bin/supervisord -c /etc/supervisord.conf
+/usr/bin/supervisord -c /etc/supervisord.conf
 
 # start ssh
 /usr/sbin/sshd

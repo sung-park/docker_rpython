@@ -54,14 +54,14 @@ DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
 apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git htop tmux screen ncdu dos2unix \
 gdebi-core make build-essential gfortran libtool autoconf automake pkg-config \
-software-properties-common \
+software-properties-common supervisor \
 libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
 uuid-dev libpgm-dev libpng12-dev libpng++-dev libevent-dev \
 openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
 default-jre default-jdk \
 hdf5-tools hdf5-helpers libhdf5-dev \
 haskell-platform pandoc \
-graphviz imagemagick pdf2svg \ 
+graphviz imagemagick pdf2svg wkhtmltopdf \ 
 fonts-nanum fonts-nanum-coding fonts-nanum-extra ttf-unfonts-core ttf-unfonts-extra \ 
 xzdec texlive texlive-latex-base texlive-latex3 texlive-xetex texlive-pictures \
 texlive-latex-recommended texlive-fonts-recommended \
@@ -87,9 +87,9 @@ rm -rf /download
 # QuantLib
 RUN \
 mkdir -p /download && cd /download && \
-wget -O QuantLib-1.8.tar.gz http://download.sourceforge.net/project/quantlib/QuantLib/1.8/QuantLib-1.8.tar.gz && \
-tar xzf QuantLib-1.8.tar.gz && \
-cd QuantLib-1.8 && \
+wget -O QuantLib-1.9.1.tar.gz http://download.sourceforge.net/project/quantlib/QuantLib/1.9.1/QuantLib-1.9.1.tar.gz && \
+tar xzf QuantLib-1.9.1.tar.gz && \
+cd QuantLib-1.9.1 && \
 ./configure && make && make install && ldconfig && make clean && \
 cd /usr/local/lib && strip --strip-unneeded libQuantLib.a && \
 rm -rf /download
@@ -180,13 +180,16 @@ adduser $USER_ID sudo
 # Python
 ################################################################################
 
+# add path to root account
+ENV PATH /home/$USER_ID/anaconda2/bin:$PATH
+    
 # Change user to $USER_ID
 USER $USER_ID
 WORKDIR /home/$USER_ID
 ENV HOME /home/$USER_ID
+ENV PATH /home/$USER_ID/anaconda2/bin:$PATH  
 
 # Anaconda2 4.2.0
-ENV PATH /home/$USER_ID/anaconda2/bin:$PATH  
 RUN \
 mkdir -p ~/download && cd ~/download && \ 
 wget http://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh && \
@@ -199,9 +202,9 @@ pip install --upgrade pip
 
 RUN \
 conda install -y \
-anaconda-clean dateutil feedparser gensim ipyparallel ipython jupyter \
+anaconda-clean dateutil feedparser gensim ipython jupyter \
 libgcc matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
-scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor ujson unidecode \
+scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode \
 virtualenv && \
 conda clean -y -i -p -s && \
 rm -rf ~/download
@@ -210,7 +213,8 @@ rm -rf ~/download
 RUN \
 conda install -y -c conda-forge tensorflow
 
-RUN \    
+RUN \
+pip install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
 pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
@@ -220,6 +224,7 @@ awscli bash_kernel boto3 filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb r
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
 hangulize regex \
+jupyter_contrib_nbextensions jupyter_nbextensions_configurator \    
 && echo
 
 # tensorboard port
@@ -227,9 +232,9 @@ EXPOSE 6006
 
 # QuantLib-python
 RUN mkdir -p ~/download && cd ~/download && \ 
-wget http://download.sourceforge.net/project/quantlib/QuantLib/1.8/other%20languages/QuantLib-SWIG-1.8.tar.gz && \
-tar xzf QuantLib-SWIG-1.8.tar.gz && \
-cd QuantLib-SWIG-1.8 && \
+wget http://download.sourceforge.net/project/quantlib/QuantLib/1.9/other%20languages/QuantLib-SWIG-1.9.tar.gz && \
+tar xzf QuantLib-SWIG-1.9.tar.gz && \
+cd QuantLib-SWIG-1.9 && \
 ./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/
 
 # TA-Lib
@@ -249,9 +254,33 @@ RUN pip install --no-cache-dir TA-Lib
 
 EXPOSE 8888
 
-# Bash kernel 
-RUN python -m bash_kernel.install
+USER $USER_ID
+RUN ipython profile create
+COPY ipython_config.py /home/$USER_ID/.ipython/profile_default/ipython_config.py
+COPY ipython_kernel_config.py /home/$USER_ID/.ipython/profile_default/ipython_kernel_config.py
+COPY 00.py /home/$USER_ID/.ipython/profile_default/startup/00.py
 
+RUN jupyter notebook --generate-config
+COPY jupyter_notebook_config.py /home/$USER_ID/.jupyter/jupyter_notebook_config.py
+USER root
+RUN \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter && \
+chmod -R 755 /home/$USER_ID/.jupyter
+USER $USER_ID
+RUN echo "c.NotebookApp.notebook_dir = u\"/home/$USER_ID\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
+
+# enable ipyparallel
+RUN /home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel
+RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel
+RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension enable --user --py ipyparallel
+
+# disable nb_conda
+RUN jupyter nbextension disable --user --py nb_conda
+RUN jupyter serverextension disable --user --py nb_conda
+
+# install ipython magics
+RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git
+    
 # R kernel
 USER root
 RUN \
@@ -262,44 +291,10 @@ echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs
 echo
 USER $USER_ID
 
-RUN ipython profile create 
-COPY ipython_config.py /home/$USER_ID/.ipython/profile_default/ipython_config.py
-COPY ipython_kernel_config.py /home/$USER_ID/.ipython/profile_default/ipython_kernel_config.py
-COPY 00.py /home/$USER_ID/.ipython/profile_default/startup/00.py
-USER root
-RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython/
-USER $USER_ID
-
-RUN jupyter notebook --generate-config 
-COPY jupyter_notebook_config.py /home/$USER_ID/jupyter_notebook_config.py
-RUN mv /home/$USER_ID/jupyter_notebook_config.py /home/$USER_ID/.jupyter/jupyter_notebook_config.py
-USER root
-RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter/
-USER $USER_ID
-
-RUN echo "c.NotebookApp.notebook_dir = u\"/home/$USER_ID\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
-
-# add certificate
-RUN \
-echo "${HTTPS_COMMENT}c.NotebookApp.password = u\"$(python -c "from notebook.auth import passwd; print passwd(\"$USER_PASS\")")\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py && \
-echo "${HTTPS_COMMENT}c.NotebookApp.keyfile = u\"/home/$USER_ID/.cert/mykey.key\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py && \
-echo "${HTTPS_COMMENT}c.NotebookApp.certfile = u\"/home/$USER_ID/.cert/mycert.pem\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py && \
-mkdir -p /home/$USER_ID/.cert && cd /home/$USER_ID/.cert && \
-openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mykey.key -out mycert.pem -subj "/C=KR/ST=SEOUL/L=SEOUL/O=DATA SCIENCE SCHOOL/CN=datascienceschool.net" -passout pass:$USER_PASS
-
-USER $USER_ID
-
-# install ipython magics
-RUN pip install git+git://github.com/mkrphys/ipython-tikzmagic.git
-
-# enable ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension enable --user --py ipyparallel
 
 ################################################################################
 # Supervisor Settings
-################################################################################
+ ################################################################################
 
 USER root
 COPY supervisord.conf /etc/supervisord.conf
@@ -317,7 +312,6 @@ USER $USER_ID
 ################################################################################
 
 # login profile
-
 USER root
 COPY .bash_profile /home/$USER_ID/
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
@@ -332,9 +326,8 @@ echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:
 echo "set input-meta on" >> ~/.inputrc && \
 echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
-bind -f ~/.inputrc && \
 echo
-    
+
 ################################################################################
 # Dataset
 ################################################################################
@@ -342,7 +335,7 @@ echo
 COPY download_data.sh /home/$USER_ID/data/download_data.sh
 
 ################################################################################
-# add ssh service 
+# add ssh service
 ################################################################################
 
 USER root
@@ -358,11 +351,6 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 
 EXPOSE 22
 
-
-################################################################################
-# Additional packages
-################################################################################
-
 ################################################################################
 # Run
 ################################################################################
@@ -372,18 +360,14 @@ ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
 
 ADD ".docker-entrypoint.sh" "/home/$USER_ID/"
+
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/*
-
 RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython
 RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter
 RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.local
 
 USER root
 
-# change R package ownership
-# RUN chown -R $USER_ID:$USER_ID /usr/local/lib/R/site-library
-# fix R cpp version conflict
-# RUN rm -rf /usr/lib/R/site-library/Rcpp
-
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", ".docker-entrypoint.sh"]
+

@@ -194,7 +194,7 @@ RUN \
 mkdir -p ~/download && cd ~/download && \ 
 wget http://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh && \
 /bin/bash ~/download/Anaconda2-4.2.0-Linux-x86_64.sh -b && \
-conda update conda && conda update anaconda && \
+conda update conda && conda update anaconda && conda update --all && \
 pip install --upgrade pip 
 
 # Python Packages
@@ -211,9 +211,7 @@ rm -rf ~/download
 
 # Additional pip packages
 RUN \
-conda install -y -c conda-forge tensorflow
-
-RUN \
+pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.1-cp27-none-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
 pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
@@ -267,22 +265,28 @@ RUN \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter && \
 chmod -R 755 /home/$USER_ID/.jupyter
 USER $USER_ID
-RUN echo "c.NotebookApp.notebook_dir = u\"/home/$USER_ID\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
-RUN echo "c.NotebookApp.token = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
-RUN echo "c.NotebookApp.password = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
+RUN \
+echo "c.NotebookApp.notebook_dir = u\"/home/$USER_ID\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py   && \
+echo "c.NotebookApp.token = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py   && \
+echo "c.NotebookApp.password = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
     
 # enable ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel
-RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension enable --user --py ipyparallel
+RUN \
+/home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel  && \
+/home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel  && \
+/home/$USER_ID/anaconda2/bin/jupyter nbextension enable --user --py ipyparallel
 
 # disable nb_conda
-RUN jupyter nbextension disable --user --py nb_conda
-RUN jupyter serverextension disable --user --py nb_conda
+RUN \
+jupyter nbextension disable --user --py nb_conda  && \
+jupyter serverextension disable --user --py nb_conda
 
 # install ipython magics
 RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git
-    
+
+# nbextension tab
+RUN jupyter contrib nbextension install --user && jupyter nbextensions_configurator enable --user
+            
 # R kernel
 USER root
 RUN \
@@ -293,6 +297,28 @@ echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs
 echo
 USER $USER_ID
 
+################################################################################
+# Dataset
+################################################################################
+
+USER $USER_ID
+COPY download_data.sh /home/$USER_ID/data/download_data.sh
+
+################################################################################
+# add ssh service
+################################################################################
+
+USER root
+RUN \
+mkdir /var/run/sshd  && \
+sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+EXPOSE 22
 
 ################################################################################
 # Supervisor Settings
@@ -300,14 +326,14 @@ USER $USER_ID
 
 USER root
 COPY supervisord.conf /etc/supervisor/supervisord.conf
-RUN sed -i "s/USER_ID/$USER_ID/g" /etc/supervisor/supervisord.conf
-RUN mkdir -p /var/log/supervisor
-RUN chown $USER_ID:$USER_ID /var/log/supervisor
+RUN \
+sed -i "s/USER_ID/$USER_ID/g" /etc/supervisor/supervisord.conf  && \
+mkdir -p /var/log/supervisor  && \
+chown $USER_ID:$USER_ID /var/log/supervisor
 
 # Set TLS certifates
 RUN mkdir -p /etc/pki/tls/certs/ && \
 cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
-USER $USER_ID
 
 ################################################################################
 # User Env
@@ -331,31 +357,10 @@ echo "set convert-meta off" >> ~/.inputrc && \
 echo
 
 ################################################################################
-# Dataset
-################################################################################
-
-COPY download_data.sh /home/$USER_ID/data/download_data.sh
-
-################################################################################
-# add ssh service
+# Run
 ################################################################################
 
 USER root
-
-RUN mkdir /var/run/sshd
-RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
-
-EXPOSE 22
-
-################################################################################
-# Run
-################################################################################
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /usr/bin/tini
@@ -363,13 +368,12 @@ RUN chmod a+x /usr/bin/tini
 
 ADD ".docker-entrypoint.sh" "/home/$USER_ID/"
 
-RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
-RUN chown $USER_ID:$USER_ID /home/$USER_ID/*
-RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython
-RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter
-RUN chown -R $USER_ID:$USER_ID /home/$USER_ID/.local
-
-USER root
+RUN \
+chown $USER_ID:$USER_ID /home/$USER_ID/.*  && \
+chown $USER_ID:$USER_ID /home/$USER_ID/*  && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter  && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.local
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", ".docker-entrypoint.sh"]
 

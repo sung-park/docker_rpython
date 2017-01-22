@@ -4,10 +4,10 @@
 unset USER_PASS
 
 # start supervisord
-/usr/bin/supervisord -c /etc/supervisord.conf
+service supervisor start 
 
 # start ssh
-/usr/sbin/sshd
+service ssh start
 
 # user login
 sudo -u $USER_ID -i '/bin/bash'

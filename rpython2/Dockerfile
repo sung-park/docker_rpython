@@ -261,14 +261,16 @@ COPY ipython_kernel_config.py /home/$USER_ID/.ipython/profile_default/ipython_ke
 COPY 00.py /home/$USER_ID/.ipython/profile_default/startup/00.py
 
 RUN jupyter notebook --generate-config
-COPY jupyter_notebook_config.py /home/$USER_ID/.jupyter/jupyter_notebook_config.py
 USER root
+COPY jupyter_notebook_config.py.bak /home/$USER_ID/.jupyter/jupyter_notebook_config.py.bak
 RUN \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter && \
 chmod -R 755 /home/$USER_ID/.jupyter
 USER $USER_ID
 RUN echo "c.NotebookApp.notebook_dir = u\"/home/$USER_ID\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
-
+RUN echo "c.NotebookApp.token = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
+RUN echo "c.NotebookApp.password = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py 
+    
 # enable ipyparallel
 RUN /home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel
 RUN /home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel
@@ -297,8 +299,8 @@ USER $USER_ID
  ################################################################################
 
 USER root
-COPY supervisord.conf /etc/supervisord.conf
-RUN echo "user=$USER_ID" | tee -a /etc/supervisord.conf
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+RUN sed -i "s/USER_ID/$USER_ID/g" /etc/supervisor/supervisord.conf
 RUN mkdir -p /var/log/supervisor
 RUN chown $USER_ID:$USER_ID /var/log/supervisor
 

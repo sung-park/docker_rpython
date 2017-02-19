@@ -1,55 +1,10 @@
 c = get_config()
 
-# Configuration file for ipython-kernel.
+# Configuration file for ipython.
 
 #------------------------------------------------------------------------------
 # Configurable configuration
 #------------------------------------------------------------------------------
-
-#------------------------------------------------------------------------------
-# LoggingConfigurable configuration
-#------------------------------------------------------------------------------
-
-# A parent class for Configurables that log.
-#
-# Subclasses have a log trait, and the default behavior is to get the logger
-# from the currently running Application.
-
-#------------------------------------------------------------------------------
-# ConnectionFileMixin configuration
-#------------------------------------------------------------------------------
-
-# Mixin for configurable classes that work with connection files
-
-# JSON file in which to store connection info [default: kernel-<pid>.json]
-#
-# This file will contain the IP, ports, and authentication key needed to connect
-# clients to this kernel. By default, this file will be created in the security
-# dir of the current profile, but can be specified by absolute path.
-# c.ConnectionFileMixin.connection_file = ''
-
-# set the control (ROUTER) port [default: random]
-# c.ConnectionFileMixin.control_port = 0
-
-# set the heartbeat port [default: random]
-# c.ConnectionFileMixin.hb_port = 0
-
-# set the iopub (PUB) port [default: random]
-# c.ConnectionFileMixin.iopub_port = 0
-
-# Set the kernel's IP address [default localhost]. If the IP address is
-# something other than localhost, then Consoles on other machines will be able
-# to connect to the Kernel, so be careful!
-# c.ConnectionFileMixin.ip = u''
-
-# set the shell (ROUTER) port [default: random]
-# c.ConnectionFileMixin.shell_port = 0
-
-# set the stdin (ROUTER) port [default: random]
-# c.ConnectionFileMixin.stdin_port = 0
-
-#
-# c.ConnectionFileMixin.transport = 'tcp'
 
 #------------------------------------------------------------------------------
 # InteractiveShellApp configuration
@@ -119,6 +74,15 @@ c = get_config()
 # c.InteractiveShellApp.reraise_ipython_extension_failures = False
 
 #------------------------------------------------------------------------------
+# LoggingConfigurable configuration
+#------------------------------------------------------------------------------
+
+# A parent class for Configurables that log.
+#
+# Subclasses have a log trait, and the default behavior is to get the logger
+# from the currently running Application.
+
+#------------------------------------------------------------------------------
 # SingletonConfigurable configuration
 #------------------------------------------------------------------------------
 
@@ -180,54 +144,18 @@ c = get_config()
 # c.BaseIPythonApplication.verbose_crash = False
 
 #------------------------------------------------------------------------------
-# IPKernelApp configuration
+# TerminalIPythonApp configuration
 #------------------------------------------------------------------------------
 
-# IPython: an enhanced interactive Python shell.
+# Whether to display a banner upon starting IPython.
+# c.TerminalIPythonApp.display_banner = True
 
-# The importstring for the DisplayHook factory
-# c.IPKernelApp.displayhook_class = 'ipykernel.displayhook.ZMQDisplayHook'
+# If a command or file is given via the command-line, e.g. 'ipython foo.py',
+# start an interactive shell after executing the file or command.
+# c.TerminalIPythonApp.force_interact = False
 
-# ONLY USED ON WINDOWS Interrupt this process when the parent is signaled.
-# c.IPKernelApp.interrupt = 0
-
-# The Kernel subclass to be used.
-#
-# This should allow easy re-use of the IPKernelApp entry point to configure and
-# launch kernels other than IPython's own.
-# c.IPKernelApp.kernel_class = 'ipykernel.ipkernel.IPythonKernel'
-
-# redirect stderr to the null device
-# c.IPKernelApp.no_stderr = False
-
-# redirect stdout to the null device
-# c.IPKernelApp.no_stdout = False
-
-# The importstring for the OutStream factory
-# c.IPKernelApp.outstream_class = 'ipykernel.iostream.OutStream'
-
-# kill this process if its parent dies.  On Windows, the argument specifies the
-# HANDLE of the parent process, otherwise it is simply boolean.
-# c.IPKernelApp.parent_handle = 0
-
-#------------------------------------------------------------------------------
-# Kernel configuration
-#------------------------------------------------------------------------------
-
-# Whether to use appnope for compatiblity with OS X App Nap.
-#
-# Only affects OS X >= 10.9.
-# c.Kernel._darwin_app_nap = True
-
-#
-# c.Kernel._execute_sleep = 0.0005
-
-#
-# c.Kernel._poll_interval = 0.05
-
-#------------------------------------------------------------------------------
-# IPythonKernel configuration
-#------------------------------------------------------------------------------
+# Start IPython quickly by skipping the loading of config files.
+# c.TerminalIPythonApp.quick = False
 
 #------------------------------------------------------------------------------
 # InteractiveShell configuration
@@ -374,10 +302,110 @@ c = get_config()
 # c.InteractiveShell.xmode = 'Context'
 
 #------------------------------------------------------------------------------
-# ZMQInteractiveShell configuration
+# TerminalInteractiveShell configuration
 #------------------------------------------------------------------------------
 
-# A subclass of InteractiveShell for ZMQ.
+# auto editing of files with syntax errors.
+# c.TerminalInteractiveShell.autoedit_syntax = False
+
+# Set to confirm when you try to exit IPython with an EOF (Control-D in Unix,
+# Control-Z/Enter in Windows). By typing 'exit' or 'quit', you can force a
+# direct exit without any confirmation.
+# c.TerminalInteractiveShell.confirm_exit = True
+
+# Set the editor used by IPython (default to $EDITOR/vi/notepad).
+# c.TerminalInteractiveShell.editor = 'vi'
+
+# The shell program to be used for paging.
+# c.TerminalInteractiveShell.pager = 'less'
+
+# Number of lines of your screen, used to control printing of very long strings.
+# Strings longer than this number of lines will be sent through a pager instead
+# of directly printed.  The default value for this is 0, which means IPython
+# will auto-detect your screen size every time it needs to print certain
+# potentially long strings (this doesn't change the behavior of the 'print'
+# keyword, it's only triggered internally). If for some reason this isn't
+# working well (it needs curses support), specify it yourself. Otherwise don't
+# change the default.
+# c.TerminalInteractiveShell.screen_length = 0
+
+# Enable auto setting the terminal title.
+# c.TerminalInteractiveShell.term_title = False
+
+#------------------------------------------------------------------------------
+# PromptManager configuration
+#------------------------------------------------------------------------------
+
+# This is the primary interface for producing IPython's prompts.
+
+#
+# c.PromptManager.color_scheme = 'Linux'
+
+# Continuation prompt.
+# c.PromptManager.in2_template = '   .\\D.: '
+
+# Input prompt.  '\#' will be transformed to the prompt number
+# c.PromptManager.in_template = 'In [\\#]: '
+
+# If True (default), each prompt will be right-aligned with the preceding one.
+# c.PromptManager.justify = True
+
+# Output prompt. '\#' will be transformed to the prompt number
+# c.PromptManager.out_template = 'Out[\\#]: '
+
+#------------------------------------------------------------------------------
+# HistoryAccessorBase configuration
+#------------------------------------------------------------------------------
+
+# An abstract class for History Accessors
+
+#------------------------------------------------------------------------------
+# HistoryAccessor configuration
+#------------------------------------------------------------------------------
+
+# Access the history database without adding to it.
+#
+# This is intended for use by standalone history tools. IPython shells use
+# HistoryManager, below, which is a subclass of this.
+
+# Options for configuring the SQLite connection
+#
+# These options are passed as keyword args to sqlite3.connect when establishing
+# database conenctions.
+# c.HistoryAccessor.connection_options = {}
+
+# enable the SQLite history
+#
+# set enabled=False to disable the SQLite history, in which case there will be
+# no stored history, no SQLite connection, and no background saving thread.
+# This may be necessary in some threaded environments where IPython is embedded.
+# c.HistoryAccessor.enabled = True
+
+# Path to file to use for SQLite history database.
+#
+# By default, IPython will put the history database in the IPython profile
+# directory.  If you would rather share one history among profiles, you can set
+# this value in each, so that they are consistent.
+#
+# Due to an issue with fcntl, SQLite is known to misbehave on some NFS mounts.
+# If you see IPython hanging, try setting this to something on a local disk,
+# e.g::
+#
+#     ipython --HistoryManager.hist_file=/tmp/ipython_hist.sqlite
+# c.HistoryAccessor.hist_file = u''
+
+#------------------------------------------------------------------------------
+# HistoryManager configuration
+#------------------------------------------------------------------------------
+
+# A class to organize all history-related functionality in one place.
+
+# Write to database every x commands (higher values save disk access & power).
+# Values of 1 or less effectively disable caching.
+# c.HistoryManager.db_cache_size = 0
+
+# Should the history database include output? (default: no)
+# c.HistoryManager.db_log_output = False
 
 #------------------------------------------------------------------------------
 # ProfileDir configuration
@@ -396,92 +424,191 @@ c = get_config()
 # c.ProfileDir.location = u''
 
 #------------------------------------------------------------------------------
-# Session configuration
+# BaseFormatter configuration
 #------------------------------------------------------------------------------
 
-# Object for handling serialization and sending of messages.
+# A base formatter class that is configurable.
 #
-# The Session object handles building messages and sending them with ZMQ sockets
-# or ZMQStream objects.  Objects can communicate with each other over the
-# network via Session objects, and only need to work with the dict-based IPython
-# message spec. The Session will handle serialization/deserialization, security,
-# and metadata.
+# This formatter should usually be used as the base class of all formatters. It
+# is a traited :class:`Configurable` class and includes an extensible API for
+# users to determine how their objects are formatted. The following logic is
+# used to find a function to format an given object.
 #
-# Sessions support configurable serialization via packer/unpacker traits, and
-# signing with HMAC digests via the key/keyfile traits.
+# 1. The object is introspected to see if it has a method with the name
+#    :attr:`print_method`. If is does, that object is passed to that method
+#    for formatting.
+# 2. If no print method is found, three internal dictionaries are consulted
+#    to find print method: :attr:`singleton_printers`, :attr:`type_printers`
+#    and :attr:`deferred_printers`.
 #
-# Parameters ----------
+# Users should use these dictionaries to register functions that will be used to
+# compute the format data for their objects (if those objects don't have the
+# special print methods). The easiest way of using these dictionaries is through
+# the :meth:`for_type` and :meth:`for_type_by_name` methods.
 #
-# debug : bool
-#     whether to trigger extra debugging statements
-# packer/unpacker : str : 'json', 'pickle' or import_string
-#     importstrings for methods to serialize message parts.  If just
-#     'json' or 'pickle', predefined JSON and pickle packers will be used.
-#     Otherwise, the entire importstring must be used.
+# If no function/callable is found to compute the format data, ``None`` is
+# returned and this format type is not used.
+
 #
-#     The functions must accept at least valid JSON input, and output *bytes*.
+# c.BaseFormatter.deferred_printers = {}
+
 #
-#     For example, to use msgpack:
-#     packer = 'msgpack.packb', unpacker='msgpack.unpackb'
-# pack/unpack : callables
-#     You can also set the pack/unpack callables for serialization directly.
-# session : bytes
-#     the ID of this Session object.  The default is to generate a new UUID.
-# username : unicode
-#     username added to message headers.  The default is to ask the OS.
-# key : bytes
-#     The key used to initialize an HMAC signature.  If unset, messages
-#     will not be signed or checked.
-# keyfile : filepath
-#     The file containing a key.  If this is set, `key` will be initialized
-#     to the contents of the file.
+# c.BaseFormatter.enabled = True
 
-# Threshold (in bytes) beyond which an object's buffer should be extracted to
-# avoid pickling.
-# c.Session.buffer_threshold = 1024
-
-# Threshold (in bytes) beyond which a buffer should be sent without copying.
-# c.Session.copy_threshold = 65536
-
-# Debug output in the Session
-# c.Session.debug = False
-
-# The maximum number of digests to remember.
 #
-# The digest history will be culled when it exceeds this value.
-# c.Session.digest_history_size = 65536
+# c.BaseFormatter.singleton_printers = {}
 
-# The maximum number of items for a container to be introspected for custom
-# serialization. Containers larger than this are pickled outright.
-# c.Session.item_threshold = 64
+#
+# c.BaseFormatter.type_printers = {}
 
-# execution key, for signing messages.
-# c.Session.key = ''
+#------------------------------------------------------------------------------
+# PlainTextFormatter configuration
+#------------------------------------------------------------------------------
 
-# path to file containing execution key.
-# c.Session.keyfile = ''
+# The default pretty-printer.
+#
+# This uses :mod:`IPython.lib.pretty` to compute the format data of the object.
+# If the object cannot be pretty printed, :func:`repr` is used. See the
+# documentation of :mod:`IPython.lib.pretty` for details on how to write pretty
+# printers.  Here is a simple example::
+#
+#     def dtype_pprinter(obj, p, cycle):
+#         if cycle:
+#             return p.text('dtype(...)')
+#         if hasattr(obj, 'fields'):
+#             if obj.fields is None:
+#                 p.text(repr(obj))
+#             else:
+#                 p.begin_group(7, 'dtype([')
+#                 for i, field in enumerate(obj.descr):
+#                     if i > 0:
+#                         p.text(',')
+#                         p.breakable()
+#                     p.pretty(field)
+#                 p.end_group(7, '])')
 
-# Metadata dictionary, which serves as the default top-level metadata dict for
-# each message.
-# c.Session.metadata = {}
+#
+# c.PlainTextFormatter.float_precision = ''
 
-# The name of the packer for serializing messages. Should be one of 'json',
-# 'pickle', or an import name for a custom callable serializer.
-# c.Session.packer = 'json'
+# Truncate large collections (lists, dicts, tuples, sets) to this size.
+#
+# Set to 0 to disable truncation.
+# c.PlainTextFormatter.max_seq_length = 1000
 
-# The UUID identifying this session.
-# c.Session.session = u''
+#
+# c.PlainTextFormatter.max_width = 79
 
-# The digest scheme used to construct the message signatures. Must have the form
-# 'hmac-HASH'.
-# c.Session.signature_scheme = 'hmac-sha256'
+#
+# c.PlainTextFormatter.newline = '\n'
 
-# The name of the unpacker for unserializing messages. Only used with custom
-# functions for `packer`.
-# c.Session.unpacker = 'json'
+#
+# c.PlainTextFormatter.pprint = True
 
-# Username for the Session. Default is your system username.
-# c.Session.username = u'username'
+#
+# c.PlainTextFormatter.verbose = False
 
-c.InteractiveShellApp.matplotlib = "inline"
-c.InlineBackend.figure_format = 'svg'
+#------------------------------------------------------------------------------
+# Completer configuration
+#------------------------------------------------------------------------------
+
+# Activate greedy completion
+#
+# This will enable completion on elements of lists, results of function calls,
+# etc., but can be unsafe because the code is actually evaluated on TAB.
+# c.Completer.greedy = False
+
+#------------------------------------------------------------------------------
+# IPCompleter configuration
+#------------------------------------------------------------------------------
+
+# Extension of the completer class with IPython-specific features
+
+# Instruct the completer to use __all__ for the completion
+#
+# Specifically, when completing on ``object.<tab>``.
+#
+# When True: only those names in obj.__all__ will be included.
+#
+# When False [default]: the __all__ attribute is ignored
+# c.IPCompleter.limit_to__all__ = False
+
+# Whether to merge completion results into a single list
+#
+# If False, only the completion results from the first non-empty completer will
+# be returned.
+# c.IPCompleter.merge_completions = True
+
+# Instruct the completer to omit private method names
+#
+# Specifically, when completing on ``object.<tab>``.
+#
+# When 2 [default]: all names that start with '_' will be excluded.
+#
+# When 1: all 'magic' names (``__foo__``) will be excluded.
+#
+# When 0: nothing will be excluded.
+# c.IPCompleter.omit__names = 2
+
+#------------------------------------------------------------------------------
+# Magics configuration
+#------------------------------------------------------------------------------
+
+# Base class for implementing magic functions.
+#
+# Shell functions which can be reached as %function_name. All magic functions
+# should accept a string, which they can parse for their own needs. This can
+# make some functions easier to type, eg `%cd ../` vs. `%cd("../")`
+#
+# Classes providing magic functions need to subclass this class, and they MUST:
+#
+# - Use the method decorators `@line_magic` and `@cell_magic` to decorate
+#   individual methods as magic functions, AND
+#
+# - Use the class decorator `@magics_class` to ensure that the magic
+#   methods are properly registered at the instance level upon instance
+#   initialization.
+#
+# See :mod:`magic_functions` for examples of actual implementation classes.
+
+#------------------------------------------------------------------------------
+# ScriptMagics configuration
+#------------------------------------------------------------------------------
+
+# Magics for talking to scripts
+#
+# This defines a base `%%script` cell magic for running a cell with a program in
+# a subprocess, and registers a few top-level magics that call %%script with
+# common interpreters.
+
+# Extra script cell magics to define
+#
+# This generates simple wrappers of `%%script foo` as `%%foo`.
+#
+# If you want to add script magics that aren't on your path, specify them in
+# script_paths
+# c.ScriptMagics.script_magics = []
+
+# Dict mapping short 'ruby' names to full paths, such as '/opt/secret/bin/ruby'
+#
+# Only necessary for items in script_magics where the default path will not find
+# the right interpreter.
+# c.ScriptMagics.script_paths = {}
+
+#------------------------------------------------------------------------------
+# StoreMagics configuration
+#------------------------------------------------------------------------------
+
+# Lightweight persistence for python variables.
+#
+# Provides the %store magic.
+
+# If True, any %store-d variables will be automatically restored when IPython
+# starts.
+# c.StoreMagics.autorestore = False
+
+c.InteractiveShellApp.exec_lines = [
+    'from __future__ import division',
+    'from __future__ import print_function',
+    "mpl.rc('font', family='NanumGothic')",
+    "mpl.rc('axes', unicode_minus=False)",
+]

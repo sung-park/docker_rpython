@@ -7,6 +7,7 @@ import statsmodels.stats.api as sms
 import sklearn as sk
 
 import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pylab as plt
 from mpl_toolkits.mplot3d import Axes3D
 

@@ -18,7 +18,7 @@ fi
 IMAGE_NAME="datascienceschool/rpython:$TAG"
 CONTAINER_NAME="rpython"
 echo "IMAGE_NAME = $IMAGE_NAME"
-sudo docker ps 
+sudo docker ps
 
 MATCHING_IDS="$(sudo docker ps --filter "ancestor=$IMAGE_NAME" -q -a)"
 MATCHING_IDS="$(echo -e "${MATCHING_IDS}" | tr -d '[[:space:]]')"
@@ -27,7 +27,7 @@ if [ -n "$MATCHING_IDS" ]; then
   echo "running matching container = $MATCHING_IDS"
   MATCHING_IDS="$(sudo docker ps --filter "name=$CONTAINER_NAME" --filter "status=running" -q)"
   MATCHING_IDS="$(echo -e "${MATCHING_IDS}" | tr -d '[[:space:]]')"
-  if [ -n "$MATCHING_IDS" ]; then 
+  if [ -n "$MATCHING_IDS" ]; then
     echo "stoping $CONTAINER_NAME ..."
     sudo docker stop $CONTAINER_NAME
   fi

@@ -606,7 +606,5 @@ c = get_config()
 # starts.
 # c.StoreMagics.autorestore = False
 
-c.InteractiveShellApp.exec_lines = [
-  'from __future__ import division',
-  'from __future__ import print_function',
-]
+c.InteractiveShellApp.exec_lines = []
+

@@ -56,7 +56,7 @@ gdebi-core make build-essential gfortran libtool autoconf automake pkg-config \
 software-properties-common \
 libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev \
 uuid-dev libpgm-dev libpng12-dev libpng++-dev libevent-dev \
-openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
+openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev net-tools \
 default-jre default-jdk openjdk-7-jdk \
 hdf5-tools hdf5-helpers libhdf5-dev \
 haskell-platform pandoc \
@@ -201,12 +201,12 @@ dateutil feedparser gensim ipyparallel ipython jupyter \
 matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools supervisor unidecode \
 virtualenv && \
-conda install -y -c conda-forge tensorflow && \
 conda clean -y -i -p -s && \
 rm -rf ~/downloads
 
 # Additional pip packages
 RUN \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.0.0-cp34-cp34m-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \

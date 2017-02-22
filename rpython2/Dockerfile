@@ -52,7 +52,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends apt
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git htop tmux screen ncdu dos2unix \
+apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git htop tmux screen ncdu dos2unix rsyslog \
 gdebi-core make build-essential gfortran libtool autoconf automake pkg-config \
 software-properties-common supervisor \
 libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
@@ -211,14 +211,14 @@ rm -rf ~/download
 
 # Additional pip packages
 RUN \
-pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.1-cp27-none-linux_x86_64.whl && \
+pip install --no-cache-dir tensorflow && \
 pip install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
 pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
-awscli bash_kernel boto3 filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot \
+awscli bash_kernel boto3 filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
 hangulize regex \
@@ -260,7 +260,6 @@ COPY 00.py /home/$USER_ID/.ipython/profile_default/startup/00.py
 
 RUN jupyter notebook --generate-config
 USER root
-COPY jupyter_notebook_config.py.bak /home/$USER_ID/.jupyter/jupyter_notebook_config.py.bak
 RUN \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter && \
 chmod -R 755 /home/$USER_ID/.jupyter
@@ -322,7 +321,7 @@ EXPOSE 22
 
 ################################################################################
 # Supervisor Settings
- ################################################################################
+################################################################################
 
 USER root
 COPY supervisord.conf /etc/supervisor/supervisord.conf

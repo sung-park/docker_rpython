@@ -345,6 +345,7 @@ RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
 USER $USER_ID
 RUN \
 echo "export PATH=$PATH:/home/$USER_ID/anaconda2/bin" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LANG='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export LANGUAGE='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export LC_ALL='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export TZ='Asia/Seoul'" | tee -a /home/$USER_ID/.bashrc  && \

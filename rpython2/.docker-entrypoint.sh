@@ -10,8 +10,7 @@ service rsyslog start
 service ssh start
 
 # start supervisord
-#service supervisor start 
-su --login dockeruser -c "/usr/bin/supervisord"
+sudo -u $USER_ID -i '/usr/bin/supervisord'
 
 # user login
 sudo -u $USER_ID -i '/bin/bash'

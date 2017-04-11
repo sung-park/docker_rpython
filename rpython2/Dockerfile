@@ -405,10 +405,11 @@ EXPOSE 5432
 
 USER root
 RUN \
+mkdir -p /data/db && \
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 && \
 echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.4.list && \
-apt-get update && \
-apt-get install -y mongodb-org
+DEBIAN_FRONTEND=noninteractive apt-get update -y -q && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q mongodb-org
 
 EXPOSE 27017 28017
 

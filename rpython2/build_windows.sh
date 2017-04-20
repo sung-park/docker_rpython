@@ -68,7 +68,7 @@ else
   fi
 fi
 
-COMMAND="sudo docker build --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID --build-arg USER_PASS=$USER_PASS --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID --build-arg HTTPS_COMMENT=$HTTPS_COMMENT . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
+COMMAND="docker build --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID --build-arg USER_PASS=$USER_PASS --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID --build-arg HTTPS_COMMENT=$HTTPS_COMMENT . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
 
 # for windows =====================================================
 

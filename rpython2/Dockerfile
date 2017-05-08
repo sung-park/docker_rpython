@@ -246,17 +246,18 @@ conda update --all
 ################################################################################
 
 RUN \
-conda install -y \
+conda install --yes \
 anaconda-clean dateutil feedparser gensim ipython jupyter \
 libgcc matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode \
 virtualenv && \
+conda install --yes pytorch torchvision -c soumith && \
 conda clean -y -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
-pip install --no-cache-dir tensorflow && \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.1.0-cp27-none-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
 pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \

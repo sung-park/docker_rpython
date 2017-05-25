@@ -345,6 +345,10 @@ curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
 apt-get install nodejs && \
 rm -rf nodesource_setup.sh
 
+# Node.js kernel
+RUN npm install -g ijavascript
+USER $USER_ID
+RUN ijsinstall
 
 ################################################################################
 # Supervisor Settings

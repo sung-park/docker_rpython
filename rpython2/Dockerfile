@@ -69,7 +69,7 @@ fonts-nanum fonts-nanum-coding fonts-nanum-extra ttf-unfonts-core ttf-unfonts-ex
 xzdec texlive texlive-latex-base texlive-latex3 texlive-xetex texlive-pictures \
 texlive-latex-recommended texlive-fonts-recommended \
 texlive-lang-cjk ko.tex-base ko.tex-extra-hlfont ko.tex-extra \
-xorg openbox xdm xauth x11-apps && \
+xorg openbox xdm xauth x11-apps xvfb && \
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
 apt-get install -y -q ttf-mscorefonts-installer && \
 mkdir -p /download && cd /download && \
@@ -248,7 +248,7 @@ conda update --all
 RUN \
 conda install --yes \
 anaconda-clean dateutil feedparser gensim ipython jupyter \
-libgcc matplotlib notebook numpy pandas pip pydot-ng pymc pymongo pytables pyzmq requests \
+libgcc matplotlib notebook numpy pandas pip psycopg2 pydot-ng pymc pymongo pytables pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode \
 virtualenv && \
 conda install --yes pytorch torchvision -c soumith && \
@@ -264,7 +264,7 @@ pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
-awscli bash_kernel boto3 filterpy fysom hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
+awscli bash_kernel boto3 filterpy fysom graphviz hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
 hangulize regex \

@@ -65,7 +65,7 @@ default-jre default-jdk \
 hdf5-tools hdf5-helpers libhdf5-dev \
 haskell-platform pandoc \
 graphviz imagemagick pdf2svg wkhtmltopdf \
-fonts-nanum fonts-nanum-coding fonts-nanum-extra ttf-unfonts-core ttf-unfonts-extra \
+fonts-humor-sans fonts-nanum fonts-nanum-coding fonts-nanum-extra ttf-unfonts-core ttf-unfonts-extra \
 xzdec texlive texlive-latex-base texlive-latex3 texlive-xetex texlive-pictures \
 texlive-latex-recommended texlive-fonts-recommended \
 texlive-lang-cjk ko.tex-base ko.tex-extra-hlfont ko.tex-extra \
@@ -264,7 +264,7 @@ pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
-awscli bash_kernel boto3 filterpy fysom graphviz hmmlearn JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
+awscli bash_kernel boto3 filterpy fysom graphviz hmmlearn ipywidgets JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
 hangulize regex \
@@ -322,9 +322,12 @@ RUN \
 # install ipython magics
 RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git
 
-# nbextension tab
-RUN jupyter contrib nbextension install --user && jupyter nbextensions_configurator enable --user
-
+# nbextensions
+RUN \
+jupyter contrib nbextension install --user && \
+jupyter nbextensions_configurator enable --user && \
+jupyter nbextension enable --py widgetsnbextension
+    
 # R kernel
 USER root
 RUN \

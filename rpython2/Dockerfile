@@ -54,11 +54,12 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends apt
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
+apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
 gdebi-core make build-essential gfortran libtool autoconf automake pkg-config \
 software-properties-common supervisor \
 libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
-uuid-dev libjpeg-dev libpq-dev libpgm-dev libpng-dev libpng12-dev libpng++-dev libtiff5-dev libevent-dev \
+libgoogle-glog-dev libprotobuf-dev protobuf-compiler libgflags-dev libgtest-dev libiomp-dev libleveldb-dev liblmdb-dev \
+uuid-dev libjpeg-dev libpq-dev libpgm-dev libpng-dev libpng12-dev libpng++-dev libopencv-dev libtiff5-dev libevent-dev \
 openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
 nginx memcached postgresql postgresql-contrib \
 default-jre default-jdk \
@@ -248,7 +249,7 @@ conda update --all
 RUN \
 conda install --yes \
 anaconda-clean dateutil feedparser gensim ipython jupyter \
-libgcc matplotlib notebook numpy pandas pip psycopg2 pydot-ng pymc pymongo pytables pyzmq requests \
+libgcc matplotlib notebook numpy pandas pip protobuf psycopg2 pydot-ng pymc pymongo pytables pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode \
 virtualenv && \
 conda install --yes pytorch torchvision -c soumith && \
@@ -264,7 +265,7 @@ pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
-awscli bash_kernel boto3 filterpy fysom graphviz hmmlearn ipywidgets JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
+awscli bash_kernel boto3 chainer filterpy fysom graphviz hmmlearn ipywidgets JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
 hangulize regex \

@@ -55,7 +55,7 @@ DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
 apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
-gdebi-core make build-essential gfortran libtool autoconf automake pkg-config \
+gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config \
 software-properties-common supervisor \
 libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
 libgoogle-glog-dev libprotobuf-dev protobuf-compiler libgflags-dev libgtest-dev libiomp-dev libleveldb-dev liblmdb-dev \
@@ -293,6 +293,17 @@ cd ta-lib && \
 
 USER $USER_ID
 RUN pip install --no-cache-dir TA-Lib
+
+# DyNet
+RUN mkdir -p /home/$USER_ID/src && cd /home/$USER_ID/src && \
+mkdir -p dynet-base && cd dynet-base && \
+git clone https://github.com/clab/dynet.git && \
+hg clone https://bitbucket.org/eigen/eigen -r 346ecdb && \
+cd dynet && mkdir build && cd build && \
+cmake .. -DEIGEN3_INCLUDE_DIR=../../eigen -DPYTHON="/home/$USER_ID/anaconda2/bin/python" && \
+make -j 1 && cd python && \
+/home/$USER_ID/anaconda2/bin/python setup.py install --user && \
+echo "export DYLD_LIBRARY_PATH=/home/$USER_ID/src/dynet-base/dynet/:$DYLD_LIBRARY_PATH" | tee -a /home/$USER_ID/.bashrc
 
 # Jupyter Notebook Settings
 EXPOSE 8888

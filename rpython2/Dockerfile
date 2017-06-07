@@ -233,8 +233,8 @@ echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
 echo
 
-# Anaconda2 4.3.1
-ENV ANACONDA Anaconda2-4.3.1-Linux-x86_64.sh
+# Anaconda2 4.4.0
+ENV ANACONDA Anaconda2-4.4.0-Linux-x86_64.sh
 RUN \
 mkdir -p ~/download && cd ~/download && \
 wget http://repo.continuum.io/archive/$ANACONDA && \

@@ -253,6 +253,7 @@ libgcc matplotlib notebook numpy pandas pip protobuf psycopg2 pydot-ng pymc pymo
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode \
 virtualenv && \
 conda install --yes pytorch torchvision -c soumith && \
+conda install --yes xgboost=0.6a2 -c conda-forge && \
 conda clean -y -i -p -s && \
 rm -rf ~/download
 

@@ -4,8 +4,32 @@ MAINTAINER "Joel Kim" admin@datascienceschool.net
 # Replace sh with bash
 RUN cd /bin && rm sh && ln -s bash sh
 
+# Ubuntu repository
+ENV REPO http://kr.archive.ubuntu.com/ubuntu/
+# ENV REPO http://ftp.neowiz.com/ubuntu/
+
+RUN \
+echo "deb $REPO xenial main"                                          | tee    /etc/apt/sources.list && \
+echo "deb $REPO xenial-updates main"                                  | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial universe"                                      | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial-updates universe"                              | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial multiverse"                                    | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial-updates multiverse"                            | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial-backports main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial-security main"                                 | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial-security universe"                             | tee -a /etc/apt/sources.list && \
+echo "deb $REPO xenial-security multiverse"                           | tee -a /etc/apt/sources.list && \
+echo
+
 # Set environment
-RUN locale-gen en_US.UTF-8
+RUN \
+rm -rf /var/lib/apt/lists/* && \
+rm -rf /var/lib/apt/lists/partial/* && \
+DEBIAN_FRONTEND=noninteractive apt-get update -y -q && \
+DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q locales && \
+locale-gen en_US.UTF-8
+
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 ENV LC_COLLATE C
@@ -27,23 +51,6 @@ RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01
 # Basic Softwares
 ################################################################################
 
-# Ubuntu repository
-ENV REPO kr.archive.ubuntu.com/ubuntu/
-# ENV REPO ftp.daumkakao.com/ubuntu/
-
-RUN \
-echo "deb http://$REPO xenial main"                                          | tee    /etc/apt/sources.list && \
-echo "deb http://$REPO xenial-updates main"                                  | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial universe"                                      | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial-updates universe"                              | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial multiverse"                                    | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial-updates multiverse"                            | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial-backports main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial-security main"                                 | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial-security universe"                             | tee -a /etc/apt/sources.list && \
-echo "deb http://$REPO xenial-security multiverse"                           | tee -a /etc/apt/sources.list && \
-echo
-
 # Ubuntu packages
 RUN \
 rm -rf /var/lib/apt/lists/* && \
@@ -55,9 +62,9 @@ DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
 apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
-gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config \
+gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config swig \
 software-properties-common supervisor \
-libboost-all-dev libclang1 libclang-dev swig libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
+libboost-all-dev libclang1 libclang-dev libcupti-dev libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
 libgoogle-glog-dev libprotobuf-dev protobuf-compiler libgflags-dev libgtest-dev libiomp-dev libleveldb-dev liblmdb-dev \
 uuid-dev libjpeg-dev libpq-dev libpgm-dev libpng-dev libpng12-dev libpng++-dev libopencv-dev libtiff5-dev libevent-dev \
 openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
@@ -81,25 +88,31 @@ rm -rf /download && \
 DEBIAN_FRONTEND=noninteractive apt-get -y -q --purge remove tex.\*-doc$ && \
 DEBIAN_FRONTEND=noninteractive apt-get clean
 
-# ZMQ (master branch)
-RUN \
-mkdir -p /download && cd /download && \
-git clone https://github.com/zeromq/libzmq.git && cd libzmq && \
-./autogen.sh && ./configure && make && make install && ldconfig && \
-rm -rf /download
+################################################################################
+# QuantLib
+################################################################################
 
 # QuantLib
 ENV QUANTLIB QuantLib
-ENV QUANTLIBVER 1.9.2
+ENV QUANTLIBVER 1.10
 RUN \
 mkdir -p /download && cd /download && \
 wget -O $QUANTLIB-$QUANTLIBVER.tar.gz http://download.sourceforge.net/project/quantlib/QuantLib/$QUANTLIBVER/$QUANTLIB-$QUANTLIBVER.tar.gz && \
 tar xzf $QUANTLIB-$QUANTLIBVER.tar.gz && \
 cd $QUANTLIB-$QUANTLIBVER && \
 ./configure && make && make install && ldconfig && make clean && \
-cd /usr/local/lib && strip --strip-unneeded libQuantLib.a && \
-rm -rf /download
+cd /usr/local/lib && strip --strip-unneeded libQuantLib.a && rm -rf /download
 
+
+################################################################################
+# ZMQ (master branch)
+################################################################################
+
+RUN \
+mkdir -p /download && cd /download && \
+git clone https://github.com/zeromq/libzmq.git && cd libzmq && \
+./autogen.sh && ./configure && make && make install && ldconfig && \
+rm -rf /download
 
 ################################################################################
 # R
@@ -109,7 +122,6 @@ rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get update && \
 gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 && \
 gpg -a --export E084DAB9 | apt-key add - && \
 echo 'deb http://cran.rstudio.com/bin/linux/ubuntu xenial/' | tee /etc/apt/sources.list.d/R.list && \
-#echo 'deb http://cran.nexr.com/bin/linux/ubuntu xenial/' | tee -a /etc/apt/sources.list.d/R.list && \
 echo 'deb http://healthstat.snu.ac.kr/CRAN/bin/linux/ubuntu xenial/' | tee -a /etc/apt/sources.list.d/R.list && \
 apt-get update -y -q && \
 echo
@@ -206,14 +218,18 @@ adduser $USER_ID sudo
 # Python
 ################################################################################
 
+# Anaconda config
+ENV ANACONDA_PATH /home/$USER_ID/anaconda2
+ENV ANACONDA_INSTALLER Anaconda2-4.4.0-Linux-x86_64.sh
+
 # add path to root account
-ENV PATH /home/$USER_ID/anaconda2/bin:$PATH
+ENV PATH $ANACONDA_PATH/bin:$PATH
 
 # Change user to $USER_ID
 USER $USER_ID
 WORKDIR /home/$USER_ID
 ENV HOME /home/$USER_ID
-ENV PATH /home/$USER_ID/anaconda2/bin:$PATH
+ENV PATH $ANACONDA_PATH/bin:$PATH
 
 # login profile
 USER root
@@ -221,7 +237,7 @@ COPY .bash_profile /home/$USER_ID/
 RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
 USER $USER_ID
 RUN \
-echo "export PATH=$PATH:/home/$USER_ID/anaconda2/bin" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export LANG='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export LANGUAGE='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
 echo "export LC_ALL='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
@@ -233,12 +249,11 @@ echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
 echo
 
-# Anaconda2 4.4.0
-ENV ANACONDA Anaconda2-4.4.0-Linux-x86_64.sh
+# Anaconda install
 RUN \
 mkdir -p ~/download && cd ~/download && \
-wget http://repo.continuum.io/archive/$ANACONDA && \
-/bin/bash ~/download/$ANACONDA -b && \
+wget http://repo.continuum.io/archive/$ANACONDA_INSTALLER && \
+/bin/bash ~/download/$ANACONDA_INSTALLER -b && \
 conda update conda && \
 conda update anaconda && \
 conda update --all
@@ -250,23 +265,24 @@ RUN \
 conda install --yes \
 anaconda-clean dateutil feedparser gensim ipython jupyter \
 libgcc matplotlib notebook numpy pandas pip protobuf psycopg2 pydot-ng pymc pymongo pytables pyzmq requests \
-scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode \
-virtualenv && \
-conda install --yes pytorch torchvision -c soumith && \
-conda install --yes xgboost=0.6a2 -c conda-forge && \
-conda clean -y -i -p -s && \
+scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode virtualenv xarray \
+&& \
+conda install --yes -c soumith pytorch torchvision && \
+conda install --yes -c conda-forge -c ioam bokeh geoviews holoviews iris && \
+conda clean --yes -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
-pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.1.0-cp27-none-linux_x86_64.whl && \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.2.1-cp27-none-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
 pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
-awscli bash_kernel boto3 chainer filterpy fysom graphviz hmmlearn ipywidgets JPype1 keras konlpy nlpy pudb rpy2 pydot opencv-python \
+awscli bash_kernel boto3 chainer filterpy fysom graphviz hmmlearn imbalanced-learn ipywidgets JPype1 keras konlpy \
+nlpy opencv-python pudb pydot rpy2 scikit-surprise \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
 hangulize regex \
@@ -277,10 +293,13 @@ jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
 EXPOSE 6006
 
 # QuantLib-python
-RUN mkdir -p ~/download && cd ~/download && \
-wget http://download.sourceforge.net/project/quantlib/QuantLib/1.9/other%20languages/QuantLib-SWIG-1.9.tar.gz && \
-tar xzf QuantLib-SWIG-1.9.tar.gz && \
-cd QuantLib-SWIG-1.9 && \
+ENV QUANTLIBSWIG QuantLib-SWIG
+ENV QUANTLIBSWIGVER 1.10
+RUN \
+mkdir -p ~/download && cd ~/download && \
+wget http://download.sourceforge.net/project/quantlib/QuantLib/1.10/other%20languages/$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
+tar xzf $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
+cd $QUANTLIBSWIG-$QUANTLIBSWIGVER && \
 ./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/
 
 # TA-Lib
@@ -301,9 +320,9 @@ mkdir -p dynet-base && cd dynet-base && \
 git clone https://github.com/clab/dynet.git && \
 hg clone https://bitbucket.org/eigen/eigen -r 346ecdb && \
 cd dynet && mkdir build && cd build && \
-cmake .. -DEIGEN3_INCLUDE_DIR=../../eigen -DPYTHON="/home/$USER_ID/anaconda2/bin/python" && \
+cmake .. -DEIGEN3_INCLUDE_DIR=../../eigen -DPYTHON="$ANACONDA_PATH/bin/python" && \
 make -j 1 && cd python && \
-/home/$USER_ID/anaconda2/bin/python setup.py install --user && \
+$ANACONDA_PATH/bin/python setup.py install --user && \
 echo "export DYLD_LIBRARY_PATH=/home/$USER_ID/src/dynet-base/dynet/:$DYLD_LIBRARY_PATH" | tee -a /home/$USER_ID/.bashrc
 
 # Jupyter Notebook Settings
@@ -328,9 +347,9 @@ echo "c.NotebookApp.password = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_n
 
 # enable ipyparallel
 RUN \
-/home/$USER_ID/anaconda2/bin/jupyter serverextension enable --user --py ipyparallel  && \
-/home/$USER_ID/anaconda2/bin/jupyter nbextension install --user --py ipyparallel  && \
-/home/$USER_ID/anaconda2/bin/jupyter nbextension enable --user --py ipyparallel
+$ANACONDA_PATH/bin/jupyter serverextension enable --user --py ipyparallel  && \
+$ANACONDA_PATH/bin/jupyter nbextension install --user --py ipyparallel  && \
+$ANACONDA_PATH/bin/jupyter nbextension enable --user --py ipyparallel
 
 # install ipython magics
 RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git

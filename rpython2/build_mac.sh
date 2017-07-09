@@ -73,20 +73,10 @@ fi
 
 COMMAND="docker build --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID --build-arg USER_PASS=$USER_PASS --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID --build-arg HTTPS_COMMENT=$HTTPS_COMMENT . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
 
-# for windows =====================================================
+# for mac =========================================================
 
-DOCKER_MACHINE="/c/Program Files/Docker Toolbox/docker-machine.exe"
-
-if [ ! -z "$VBOX_MSI_INSTALL_PATH" ]; then
-  VBOXMANAGE="${VBOX_MSI_INSTALL_PATH}VBoxManage.exe"
-else
-  VBOXMANAGE="${VBOX_INSTALL_PATH}VBoxManage.exe"
-fi
-
-if [ ! -f "${DOCKER_MACHINE}" ] || [ ! -f "${VBOXMANAGE}" ]; then
-  echo "Either VirtualBox or Docker Machine are not installed. Please re-run the Toolbox Installer and try again."
-  exit 1
-fi
+DOCKER_MACHINE="docker-machine"
+VBOXMANAGE="VBoxManage"
 
 "${VBOXMANAGE}" list vms | grep \""${VM}"\" &> /dev/null
 VM_EXISTS_CODE=$?
@@ -108,14 +98,7 @@ fi
 
 eval "$("${DOCKER_MACHINE}" env --shell=bash ${VM})"
 
-docker () {
-  MSYS_NO_PATHCONV=1 docker.exe $@
-}
-export -f docker
-
 eval ${COMMAND}
 
 unset USER_PASS
 unset USER_PASS2
-
-exec "${BASH}" --login -i

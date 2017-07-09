@@ -129,9 +129,9 @@ echo
 # R and RStudio-server
 RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
-wget https://download2.rstudio.org/rstudio-server-1.0.136-amd64.deb && \
-gdebi --n rstudio-server-1.0.136-amd64.deb && \
-rm -rf /rstudio-server-1.0.136-amd64.deb
+wget https://download1.rstudio.org/rstudio-1.0.143-amd64.deb && \
+gdebi --n rstudio-1.0.143-amd64.deb && \
+rm -rf /rstudio-1.0.143-amd64.deb
 
 # Disable app-armor
 # see https://support.rstudio.com/hc/en-us/community/posts/202190728-install-rstudio-server-error

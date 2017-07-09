@@ -133,10 +133,6 @@ wget https://download1.rstudio.org/rstudio-1.0.143-amd64.deb && \
 gdebi --n rstudio-1.0.143-amd64.deb && \
 rm -rf /rstudio-1.0.143-amd64.deb
 
-# Disable app-armor
-# see https://support.rstudio.com/hc/en-us/community/posts/202190728-install-rstudio-server-error
-RUN echo "server-app-armor-enabled=0" | tee -a /etc/rstudio/rserver.conf
-
 # Settings for RStudio-Server
 EXPOSE 8787
 

@@ -147,14 +147,14 @@ echo 'install.packages(c(\"DBI\",\"dichromat\",\"digest\",\"dplyr\",\"evaluate\"
 echo 'install.packages(c(\"ggplot2\",\"gistr\",\"glmnet\",\"gtable\",\"hexbin\",\"highr\",\"htmltools\",\"htmlwidgets\",\"httpuv\",\"httr\",\"iterators\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"jsonlite\",\"kernsmooth\",\"knitr\",\"labeling\",\"lattice\",\"lazyeval\",\"lme4\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"magrittr\",\"maps\",\"markdown\",\"mass\",\"matrix\",\"matrixmodels\",\"mgcv\",\"mime\",\"minqa\",\"munsell\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"nlme\",\"nloptr\",\"nnet\",\"openssl\",\"pbdzmq\",\"pbkrtest\",\"plyr\",\"pryr\",\"quantmod\",\"quantreg\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"nlme\",\"nloptr\",\"nnet\",\"openssl\",\"pbdzmq\",\"pbkrtest\",\"plyr\",\"quantmod\",\"quantreg\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"r6\",\"randomforest\",\"rbokeh\",\"rcolorbrewer\",\"rcpp\",\"rcppeigen\",\"recommended\",\"repr\",\"reshape2\",\"rmarkdown\",\"rpart\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"scales\",\"shiny\",\"sparsem\",\"spatial\",\"stringi\",\"stringr\",\"survival\",\"tibble\",\"tidyr\",\"ttr\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"uuid\",\"xtable\",\"xts\",\"yaml\",\"zoo\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"yaml\",\"crayon\",\"pbdZMQ\",\"devtools\",\"RJSONIO\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e  && \
-echo 'install.packages(c(\"ggplot2\",\"colorspace\",\"plyr\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"ggplot2\",\"colorspace\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"fImport\",\"fBasics\",\"fArma\",\"fGarch\",\"fNonlinear\",\"fUnitRoots\",\"fTrading\",\"fMultivar\",\"fRegression\",\"fExtremes\",\"fCopulae\",\"fBonds\",\"fOptions\",\"fExoticOptions\",\"fAsianOptions\",\"fAssets\",\"fPortfolio\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoolbox\",\"rngWELL\",\"schwartz97\",\"SkewHyperbolic\",\"VarianceGamma\",\"stabledist\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
 echo 'install.packages(c(\"e1071\",\"rpart\",\"igraph\",\"nnet\",\"randomForest\",\"caret\",\"kernlab\",\"glmnet\",\"ROCR\",\"gbm\",\"party\",\"tree\",\"klaR\",\"mice\",\"wordcloud\",\"C50\",\"tm\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
@@ -264,7 +264,7 @@ libgcc matplotlib notebook numpy pandas protobuf psycopg2 pymc pymongo pytables 
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode virtualenv xarray \
 && \
 conda install --yes -c soumith pytorch torchvision && \
-conda install --yes -c conda-forge -c ioam bokeh geoviews holoviews iris && \
+conda install --yes -c conda-forge -c ioam bokeh geoviews holoviews iris xgboost && \
 conda clean --yes -i -p -s && \
 rm -rf ~/download
 

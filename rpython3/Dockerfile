@@ -258,9 +258,9 @@ conda update --all
 ################################################################################
 
 RUN \
-conda install --yes pip3 \
-anaconda-clean dateutil feedparser gensim ipython jupyter \
-libgcc matplotlib notebook numpy pandas protobuf psycopg2 pydot-ng pymc pymongo pytables pyzmq requests \
+conda install --yes pip \
+anaconda-clean feedparser gensim ipython jupyter \
+libgcc matplotlib notebook numpy pandas protobuf psycopg2 pymc pymongo pytables python-dateutil pyzmq requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode virtualenv xarray \
 && \
 conda install --yes -c soumith pytorch torchvision && \
@@ -270,13 +270,13 @@ rm -rf ~/download
 
 # Additional pip packages
 RUN \
-pip3 install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.2.1-cp27-none-linux_x86_64.whl && \
-pip3 install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
-pip3 install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
-pip3 install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
-pip3 install --no-cache-dir git+https://github.com/Theano/Theano  && \
-pip3 install --no-cache-dir git+https://github.com/bashtage/arch.git && \
-pip3 install --no-cache-dir \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.2.1-cp36-cp36m-linux_x86_64.whl && \
+pip install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
+pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
+pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
+pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
+pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
+pip install --no-cache-dir \
 awscli bash_kernel boto3 chainer filterpy fysom graphviz hmmlearn imbalanced-learn ipywidgets JPype1 keras konlpy \
 nlpy opencv-python pudb pydot rpy2 scikit-surprise \
 rtree shapely fiona descartes pyproj \
@@ -308,7 +308,7 @@ cd ta-lib && \
 ./configure --prefix=/usr && make && make install && rm -rf /download/
 
 USER $USER_ID
-RUN pip3 install --no-cache-dir TA-Lib
+RUN pip install --no-cache-dir TA-Lib
 
 # DyNet
 RUN mkdir -p /home/$USER_ID/src && cd /home/$USER_ID/src && \
@@ -348,7 +348,7 @@ $ANACONDA_PATH/bin/jupyter nbextension install --user --py ipyparallel  && \
 $ANACONDA_PATH/bin/jupyter nbextension enable --user --py ipyparallel
 
 # install ipython magics
-RUN pip3 install git+git://github.com/joelkim/ipython-tikzmagic.git
+RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git
 
 # nbextensions
 RUN \

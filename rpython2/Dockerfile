@@ -259,28 +259,28 @@ conda update --all
 
 RUN \
 conda install --yes \
-anaconda-clean dateutil feedparser gensim ipython jupyter \
-libgcc matplotlib notebook numpy pandas pip protobuf psycopg2 pydot-ng pymc pymongo pytables pyzmq requests \
-scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools ujson unidecode virtualenv xarray \
+anaconda-clean blaze bleach bokeh boto boto3 coverage datashader distributed docopt feedparser gensim graphviz \
+holoviews ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
+pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl requests \
+scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
+pydot-ng \
 && \
 conda install --yes -c soumith pytorch torchvision && \
-conda install --yes -c conda-forge -c ioam bokeh geoviews holoviews iris xgboost && \
+conda install --yes -c conda-forge -c ioam geoviews iris xgboost && \
 conda clean --yes -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.2.1-cp27-none-linux_x86_64.whl && \
-pip install --no-cache-dir git+https://github.com/ipython/ipyparallel.git && \
-pip install --no-cache-dir git+https://github.com/statsmodels/statsmodels.git && \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir \
-awscli bash_kernel boto3 chainer filterpy fysom graphviz hmmlearn imbalanced-learn ipywidgets JPype1 keras konlpy \
-nlpy opencv-python pudb pydot rpy2 scikit-surprise \
+awscli bash_kernel chainer filterpy fysom hmmlearn imbalanced-learn JPype1 keras konlpy \
+nlpy opencv-python pgmpy pudb pydot rpy2 scikit-surprise \
 rtree shapely fiona descartes pyproj \
-FRB fred fredapi pandas-datareader wbdata wbpy Quandl zipline \
+FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \
 jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
 && echo

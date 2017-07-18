@@ -129,9 +129,10 @@ echo
 # R and RStudio-server
 RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
-wget https://download1.rstudio.org/rstudio-1.0.143-amd64.deb && \
-gdebi --n rstudio-1.0.143-amd64.deb && \
-rm -rf /rstudio-1.0.143-amd64.deb
+mkdir -p /download && cd /download && \
+wget https://download2.rstudio.org/rstudio-server-1.0.143-amd64.deb && \
+gdebi --n rstudio-server-1.0.143-amd64.deb && \
+rm -rf /download
 
 # Settings for RStudio-Server
 EXPOSE 8787

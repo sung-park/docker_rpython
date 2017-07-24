@@ -276,9 +276,10 @@ RUN \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.2.1-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
+pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir \
 awscli bash_kernel chainer filterpy fysom hmmlearn imbalanced-learn JPype1 keras konlpy \
-nlpy opencv-python pgmpy pudb pydot rpy2 scikit-surprise \
+nlpy opencv-python pudb pydot rpy2 scikit-surprise \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \

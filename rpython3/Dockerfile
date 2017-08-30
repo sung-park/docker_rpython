@@ -127,11 +127,12 @@ apt-get update -y -q && \
 echo
 
 # R and RStudio-server
+ENV RSTUDIOSERVER_VERSION 1.0.153
 RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
 mkdir -p /download && cd /download && \
-wget https://download2.rstudio.org/rstudio-server-1.0.143-amd64.deb && \
-gdebi --n rstudio-server-1.0.143-amd64.deb && \
+wget https://download2.rstudio.org/rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
+gdebi --n rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
 rm -rf /download
 
 # Settings for RStudio-Server
@@ -268,18 +269,20 @@ pymc3 python-graphviz \
 && \
 conda install --yes -c soumith pytorch torchvision && \
 conda install --yes -c conda-forge -c ioam geoviews iris xgboost && \
+conda install --yes -c menpo opencv && \
+conda install --yes -c conda-forge librosa && \
 conda clean --yes -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
-pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.2.1-cp36-cp36m-linux_x86_64.whl && \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir \
 awscli bash_kernel chainer filterpy fysom hmmlearn imbalanced-learn JPype1 keras konlpy \
-nlpy opencv-python pudb pydot rpy2 scikit-surprise \
+nlpy pudb pydot rpy2 scikit-surprise \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \
@@ -356,7 +359,7 @@ RUN \
 jupyter contrib nbextension install --user && \
 jupyter nbextensions_configurator enable --user && \
 jupyter nbextension enable --py widgetsnbextension
-    
+
 # R kernel
 USER root
 RUN \

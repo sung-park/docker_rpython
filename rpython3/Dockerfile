@@ -321,8 +321,7 @@ git clone https://github.com/clab/dynet.git && \
 hg clone https://bitbucket.org/eigen/eigen -r 346ecdb && \
 cd dynet && mkdir build && cd build && \
 cmake .. -DEIGEN3_INCLUDE_DIR=../../eigen -DPYTHON="$ANACONDA_PATH/bin/python" && \
-make -j 1 && cd python && \
-$ANACONDA_PATH/bin/python setup.py install --user && \
+make -j 1 && \
 echo "export DYLD_LIBRARY_PATH=/home/$USER_ID/src/dynet-base/dynet/:$DYLD_LIBRARY_PATH" | tee -a /home/$USER_ID/.bashrc
 
 # Jupyter Notebook Settings

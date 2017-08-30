@@ -277,7 +277,7 @@ RUN \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3 && \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp27-none-linux_x86_64.whl && \
 pip install --no-cache-dir opencv-contrib-python && \
-pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
+pip install --no-cache-dir git+https://github.com/Theano/Theano && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir \

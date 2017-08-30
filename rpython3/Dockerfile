@@ -276,7 +276,7 @@ rm -rf ~/download
 RUN \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir opencv-contrib-python && \
-pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
+pip install --no-cache-dir git+https://github.com/Theano/Theano && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir \
@@ -286,7 +286,7 @@ rtree shapely fiona descartes pyproj \
 FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \
 jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
-rpy2
+rpy2 \
 && echo
 
 # tensorboard port

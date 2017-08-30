@@ -343,7 +343,7 @@ RUN \
 echo "c.NotebookApp.notebook_dir = u\"/home/$USER_ID\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py && \
 echo "c.NotebookApp.token = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py && \
 echo "c.NotebookApp.password = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py && \
-echo "c.NotebookApp.iopub_data_rate_limit = 10000000\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py
+echo "c.NotebookApp.iopub_data_rate_limit = 10000000" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py
 
 # enable ipyparallel
 RUN \

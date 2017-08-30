@@ -268,22 +268,21 @@ scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools stats
 pydot-ng \
 && \
 conda install --yes -c soumith pytorch torchvision && \
-conda install --yes -c conda-forge -c ioam geoviews iris xgboost && \
-conda install --yes -c menpo opencv && \
-conda install --yes -c conda-forge librosa && \
+conda install --yes -c conda-forge -c ioam geoviews iris librosa xgboost && \
 conda clean --yes -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
+pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3 && \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp27-none-linux_x86_64.whl && \
-pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3  && \
+pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano  && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir \
 awscli bash_kernel chainer filterpy fysom hmmlearn imbalanced-learn JPype1 keras konlpy \
-nlpy pudb pydot rpy2 scikit-surprise \
+nlpy pudb pydot scikit-surprise \
 rtree shapely fiona descartes pyproj \
 FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \

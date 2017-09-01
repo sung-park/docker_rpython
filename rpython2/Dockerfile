@@ -265,7 +265,7 @@ anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage datashader distri
 holoviews ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
 pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
-pydot-ng \
+future pydot-ng \
 && \
 conda install --yes -c soumith pytorch torchvision && \
 conda install --yes -c conda-forge -c ioam geoviews iris librosa xgboost && \

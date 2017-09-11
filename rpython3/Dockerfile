@@ -352,7 +352,7 @@ $ANACONDA_PATH/bin/jupyter nbextension install --user --py ipyparallel  && \
 $ANACONDA_PATH/bin/jupyter nbextension enable --user --py ipyparallel
 
 # install ipython magics
-RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git
+RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git && echo
 
 # nbextensions
 RUN \
@@ -452,6 +452,11 @@ DEBIAN_FRONTEND=noninteractive apt-get update -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q mongodb-org
 
 EXPOSE 27017 28017
+
+################################################################################
+# Update packages
+################################################################################
+RUN pip install git+https://github.com/hmmlearn/hmmlearn.git
 
 ################################################################################
 # Run

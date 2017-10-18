@@ -433,7 +433,7 @@ chown $USER_ID:$USER_ID /var/log/supervisor
 # Set TLS certifates
 RUN mkdir -p /etc/pki/tls/certs/ && \
 cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
-    
+
 ################################################################################
 # Run
 ################################################################################
@@ -456,4 +456,3 @@ ADD https://github.com/krallin/tini/releases/download/v0.16.1/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", ".docker-entrypoint.sh"]
-

@@ -5,14 +5,14 @@ This images has the components:
 
 * Ubuntu 16.04
 
-* Python 2.7 (Anaconda2-4.4.0)
+* Python 2.7 (Anaconda2-5.0.0)
  - ipython, numpy, scipy, pandas, matplotlib, seaborn, pymc3
  - jupyter qtconsole, ipyparallel, notebook
- - scikit-learn, nlpy, gensim, theano, tensorflow, keras
+ - scikit-learn, nlpy, gensim, theano, tensorflow, keras, pytorch
  - other 250 packages
 
-* R-3.3.2
- - rstudio-server-1.0.153
+* R-3.4.2
+ - rstudio-server-1.1.383
 
 * Libraries
  - ZeroMQ, Boost, Open-JDK, QuantLib, HDF5

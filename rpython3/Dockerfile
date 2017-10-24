@@ -323,6 +323,7 @@ pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-da
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
 pymc3 python-graphviz \
 && \
+conda install --yes -c menpo opencv && \
 conda install --yes -c soumith pytorch torchvision && \
 conda install --yes -c conda-forge -c ioam geoviews iris librosa xgboost && \
 conda clean --yes -i -p -s && \

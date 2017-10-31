@@ -340,7 +340,7 @@ pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir \
 awscli bash_kernel chainer filterpy fysom imbalanced-learn JPype1 keras konlpy \
 nlpy pudb pydot scikit-surprise \
-rtree shapely fiona descartes pyproj \
+descartes fiona geojson pyproj rtree shapely \
 FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \
 jupyter_contrib_nbextensions jupyter_nbextensions_configurator \

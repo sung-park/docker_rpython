@@ -69,7 +69,15 @@ else
   fi
 fi
 
-COMMAND="sudo docker build --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID --build-arg USER_PASS=$USER_PASS --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID --build-arg HTTPS_COMMENT=$HTTPS_COMMENT . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
+read -p "build using cache (default \"y\"): " BUILD_CACHE
+if [[ ${BUILD_CACHE} == 'n' ]]; then
+    BUILD_CACHE="--no-cache"
+else
+    BUILD_CACHE=""
+fi
+echo $BUILD_CACHE
+
+COMMAND="sudo docker build $BUILD_CACHE --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID --build-arg USER_PASS=$USER_PASS --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID --build-arg HTTPS_COMMENT=$HTTPS_COMMENT . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
 
 eval ${COMMAND}
 

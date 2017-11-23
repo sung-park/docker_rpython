@@ -317,7 +317,8 @@ conda update --all
 # Python Packages
 RUN \
 conda install --yes \
-anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage datashader distributed docopt feedparser gcc_linux-64 gensim graphviz \
+anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage CVXcanon cvxopt datashader dill distributed docopt \
+ecos feedparser gcc_linux-64 gensim graphviz \
 holoviews ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
 pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
@@ -338,7 +339,7 @@ pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir \
-awscli bash_kernel chainer filterpy fysom imbalanced-learn JPype1 keras konlpy \
+awscli bash_kernel chainer cvxpy filterpy fysom imbalanced-learn JPype1 keras konlpy \
 nlpy pudb pydot scikit-surprise \
 descartes fiona geojson pyproj rtree shapely \
 FRB fred fredapi wbdata wbpy zipline \

@@ -339,7 +339,7 @@ pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir \
-awscli bash_kernel chainer cvxpy filterpy fysom imbalanced-learn JPype1 keras konlpy \
+autopep8 awscli bash_kernel chainer cvxpy filterpy fysom imbalanced-learn JPype1 keras konlpy \
 nlpy pudb pydot scikit-surprise \
 descartes fiona geojson pyproj rtree shapely \
 FRB fred fredapi wbdata wbpy zipline \

@@ -61,7 +61,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends apt
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools \
+apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools wireshark \
 gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config swig \
 software-properties-common supervisor \
 libboost-all-dev libclang1 libclang-dev libcupti-dev libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \

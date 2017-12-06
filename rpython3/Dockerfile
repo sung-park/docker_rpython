@@ -4,9 +4,11 @@ MAINTAINER "Joel Kim" admin@datascienceschool.net
 # Replace sh with bash
 RUN cd /bin && rm sh && ln -s bash sh
 
-# Ubuntu repository
+# Ubuntu repository in Korea
 ENV REPO http://kr.archive.ubuntu.com/ubuntu/
 # ENV REPO http://ftp.neowiz.com/ubuntu/
+# in China,
+# ENV REPO http://mirrors.aliyun.com/ubuntu/
 
 RUN \
 echo "deb $REPO xenial main"                                          | tee    /etc/apt/sources.list && \
@@ -27,7 +29,8 @@ rm -rf /var/lib/apt/lists/* && \
 rm -rf /var/lib/apt/lists/partial/* && \
 DEBIAN_FRONTEND=noninteractive apt-get update -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y -q locales && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends apt-utils && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q locales sudo wget && \
 locale-gen en_US.UTF-8
 
 ENV LANG en_US.UTF-8
@@ -44,11 +47,11 @@ echo "set output-meta on" >> ~/.inputrc && \
 echo "set convert-meta off" >> ~/.inputrc && \
 echo
 
-# Environment
+# Console colors
 RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /root/.bashrc
 
 ################################################################################
-# Basic Softwares
+# Ubuntu Packages and Libraries
 ################################################################################
 
 # Ubuntu packages
@@ -57,9 +60,7 @@ rm -rf /var/lib/apt/lists/* && \
 rm -rf /var/lib/apt/lists/partial/* && \
 DEBIAN_FRONTEND=noninteractive apt-get clean && \
 DEBIAN_FRONTEND=noninteractive apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends apt-utils && \
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
-DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
 apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools wireshark \
 gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config swig \
@@ -169,11 +170,11 @@ echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vani
 echo
 
 ################################################################################
-# add ssh service
+# SSH service
 ################################################################################
 
 RUN \
-mkdir /var/run/sshd  && \
+mkdir -p /var/run/sshd  && \
 sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
@@ -187,7 +188,7 @@ echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_dsa_key -C '
 EXPOSE 22
 
 ################################################################################
-# User
+# User Account
 ################################################################################
 
 # Create user
@@ -210,6 +211,22 @@ cp /etc/skel/.bashrc /home/$USER_ID/.bashrc && source /home/$USER_ID/.bashrc && 
 cp /etc/skel/.profile /home/$USER_ID/.profile && source /home/$USER_ID/.profile && \
 chown $USER_ID:$USER_ID /home/$USER_ID/.*  && \
 adduser $USER_ID sudo
+
+# login profile
+COPY .bash_profile /home/$USER_ID/
+RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
+
+USER $USER_ID
+RUN \
+echo "export LANG='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LANGUAGE='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export LC_ALL='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export TZ='Asia/Seoul'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "export TERM='xterm'" | tee -a /home/$USER_ID/.bashrc  && \
+echo "set input-meta on" >> /home/$USER_ID/.inputrc && \
+echo "set output-meta on" >> /home/$USER_ID/.inputrc && \
+echo "set convert-meta off" >> /home/$USER_ID/.inputrc && \
+echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc
 
 ################################################################################
 # Redis
@@ -257,22 +274,20 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -q mongodb-org
 EXPOSE 27017 28017
 
 ################################################################################
-# node.js
+# Node.js
 ################################################################################
 
 USER root
 RUN \
 curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
 /bin/bash nodesource_setup.sh && \
-apt-get install nodejs && \
-rm -rf nodesource_setup.sh
-
+DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs && \
+rm -rf nodesource_setup.sh && \
+npm install npm@latest -g
 
 ################################################################################
 # Python
 ################################################################################
-
-USER $USER_ID
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
@@ -286,24 +301,8 @@ USER $USER_ID
 WORKDIR /home/$USER_ID
 ENV HOME /home/$USER_ID
 ENV PATH $ANACONDA_PATH/bin:$PATH
-
-# login profile
-USER root
-COPY .bash_profile /home/$USER_ID/
-RUN chown $USER_ID:$USER_ID /home/$USER_ID/.*
-USER $USER_ID
 RUN \
-echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export LANG='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export LANGUAGE='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export LC_ALL='en_US.UTF-8'" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export TZ='Asia/Seoul'" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export TERM='xterm'" | tee -a /home/$USER_ID/.bashrc  && \
-echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'" | tee -a /home/$USER_ID/.bashrc && \
-echo "set input-meta on" >> ~/.inputrc && \
-echo "set output-meta on" >> ~/.inputrc && \
-echo "set convert-meta off" >> ~/.inputrc && \
-echo
+echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc
 
 # Anaconda install
 RUN \
@@ -314,7 +313,10 @@ conda update conda && \
 conda update anaconda && \
 conda update --all
 
+################################################################################
 # Python Packages
+################################################################################
+
 RUN \
 conda install --yes \
 anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage CVXcanon cvxopt datashader dill distributed docopt \
@@ -372,7 +374,10 @@ cd ta-lib && \
 USER $USER_ID
 RUN pip install --no-cache-dir TA-Lib
 
+################################################################################
 # Jupyter Notebook Settings
+################################################################################
+
 EXPOSE 8888
 
 RUN ipython profile create
@@ -385,6 +390,7 @@ USER root
 RUN \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter && \
 chmod -R 755 /home/$USER_ID/.jupyter
+
 USER $USER_ID
 RUN \
 echo "c.NotebookApp.notebook_dir = u\"/home/$USER_ID\"" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py && \
@@ -393,6 +399,7 @@ echo "c.NotebookApp.password = u\"\"" | tee -a /home/$USER_ID/.jupyter/jupyter_n
 echo "c.NotebookApp.iopub_data_rate_limit = 10000000" | tee -a /home/$USER_ID/.jupyter/jupyter_notebook_config.py
 
 # enable ipyparallel
+USER $USER_ID
 RUN \
 $ANACONDA_PATH/bin/jupyter serverextension enable --user --py ipyparallel  && \
 $ANACONDA_PATH/bin/jupyter nbextension install --user --py ipyparallel  && \
@@ -407,6 +414,11 @@ jupyter contrib nbextension install --user && \
 jupyter nbextensions_configurator enable --user && \
 jupyter nbextension enable --py widgetsnbextension
 
+# Node.js kernel
+RUN npm install -g ijavascript
+USER $USER_ID
+RUN ijsinstall
+
 # R kernel
 USER root
 RUN \
@@ -416,10 +428,12 @@ echo 'library("devtools");install_github(\"IRkernel/IRkernel\")' | xargs R --van
 echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 
-# Node.js kernel
-RUN npm install -g ijavascript
-USER $USER_ID
-RUN ijsinstall
+################################################################################
+# Set TLS certifates
+################################################################################
+
+RUN mkdir -p /etc/pki/tls/certs/ && \
+cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
 ################################################################################
 # Supervisor Settings
@@ -431,10 +445,6 @@ RUN \
 sed -i "s/USER_ID/$USER_ID/g" /etc/supervisor/supervisord.conf  && \
 mkdir -p /var/log/supervisor  && \
 chown $USER_ID:$USER_ID /var/log/supervisor
-
-# Set TLS certifates
-RUN mkdir -p /etc/pki/tls/certs/ && \
-cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
 ################################################################################
 # Run

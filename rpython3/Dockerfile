@@ -233,7 +233,17 @@ echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:
 ################################################################################
 
 USER root
+COPY ./6379-docker.conf /etc/redis/6379.conf
+ENV REDIS_PORT=6379
+ENV REDIS_CONFIG_FILE=/etc/redis/6379.conf
+ENV REDIS_LOG_FILE=/var/log/redis_6379.log
+ENV REDIS_DATA_DIR=/var/lib/redis/6379
+ENV REDIS_EXECUTABLE='command -v redis-server'
 RUN \
+mkdir -p /etc/redis && \
+mkdir -p /var/log/redis && \
+touch /var/log/redis_6379.log && \
+mkdir -p /var/lib/redis/6379 && \
 mkdir -p ~/temp && \
 cd ~/temp && \
 wget http://download.redis.io/redis-stable.tar.gz && \
@@ -241,12 +251,8 @@ tar xvzf redis-stable.tar.gz && \
 cd redis-stable && \
 make && \
 make install && \
-mkdir -p /etc/redis && \
-mkdir -p /var/redis && \
-mkdir -p /var/redis/6379 && \
-cp utils/redis_init_script /etc/init.d/redis_6379 && \
+./utils/install_server.sh && \
 rm -rf ~/temp
-COPY ./6379-docker.conf /etc/redis/6379.conf
 
 EXPOSE 6379
 
@@ -293,7 +299,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-5.0.0-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-5.0.1-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH

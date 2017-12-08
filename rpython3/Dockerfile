@@ -283,7 +283,9 @@ curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
 /bin/bash nodesource_setup.sh && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs && \
 rm -rf nodesource_setup.sh && \
-npm install npm@latest -g
+npm install -g npm@latest && \
+npm install -g --unsafe-perm ijavascript && \
+echo ""
 
 ################################################################################
 # Python
@@ -415,8 +417,6 @@ jupyter nbextensions_configurator enable --user && \
 jupyter nbextension enable --py widgetsnbextension
 
 # Node.js kernel
-RUN npm install -g ijavascript
-USER $USER_ID
 RUN ijsinstall
 
 # R kernel

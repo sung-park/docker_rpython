@@ -6,6 +6,7 @@ unset USER_PASS
 # start services
 service rsyslog start
 service ssh start
+service redis stop
 
 # postgres setup
 service postgresql start

@@ -3,9 +3,10 @@
 # delete password
 unset USER_PASS
 
-# start services
+# start and stop services
 service rsyslog start
 service ssh start
+service redis stop
 
 # postgres setup
 service postgresql start

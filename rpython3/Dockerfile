@@ -472,10 +472,10 @@ echo ""
 # remove kernerls
 RUN \
 mkdir -p /home/$USER_ID/.kernels && \
-mv $ANACONDA_PATH/share/jupyter/.kernels/cling-cpp11 /home/$USER_ID/kernels/ && \
-mv $ANACONDA_PATH/share/jupyter/.kernels/cling-cpp14 /home/$USER_ID/kernels/ && \
-mv $ANACONDA_PATH/share/jupyter/.kernels/cling-cpp17 /home/$USER_ID/kernels/ && \
-mv $ANACONDA_PATH/share/jupyter/.kernels/xeus-cling-cpp14 /home/$USER_ID/kernels/ && \
+mv $ANACONDA_PATH/share/jupyter/kernels/cling-cpp11 /home/$USER_ID/.kernels/ && \
+mv $ANACONDA_PATH/share/jupyter/kernels/cling-cpp14 /home/$USER_ID/.kernels/ && \
+mv $ANACONDA_PATH/share/jupyter/kernels/cling-cpp17 /home/$USER_ID/.kernels/ && \
+mv $ANACONDA_PATH/share/jupyter/kernels/xeus-cling-cpp14 /home/$USER_ID/.kernels/ && \
 echo
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.

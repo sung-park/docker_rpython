@@ -325,13 +325,14 @@ pymc3 python-graphviz \
 && \
 conda install --yes -c menpo opencv && \
 conda install --yes -c soumith pytorch torchvision && \
-conda install --yes -c conda-forge -c ioam geoviews iris librosa xgboost && \
+conda install --yes -c conda-forge -c ioam geopandas geoviews iris librosa xgboost && \
+conda install --yes -c conda-forge -c QuantStack cling notebook widgetsnbextension xeus xeus-cling xtensor xtensor-python xwidgets
 conda clean --yes -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
-pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp36-cp36m-linux_x86_64.whl && \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.4.0-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \

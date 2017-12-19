@@ -325,8 +325,8 @@ pymc3 python-graphviz \
 && \
 conda install --yes -c menpo opencv && \
 conda install --yes -c soumith pytorch torchvision && \
-conda install --yes -c conda-forge -c ioam geopandas geoviews iris librosa xgboost && \
-conda install --yes -c conda-forge -c QuantStack cling notebook widgetsnbextension xeus xeus-cling xtensor xtensor-python xwidgets
+conda install --yes -c conda-forge -c ioam geoviews iris librosa xgboost && \
+conda install --yes -c conda-forge -c QuantStack cling notebook widgetsnbextension xeus xeus-cling xtensor xtensor-python xwidgets && \
 conda clean --yes -i -p -s && \
 rm -rf ~/download
 
@@ -341,7 +341,7 @@ pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir \
 autopep8 awscli bash_kernel chainer cvxpy filterpy fysom imbalanced-learn JPype1 keras konlpy \
 nlpy pudb pydot scikit-surprise \
-descartes fiona geojson pyproj rtree shapely \
+descartes fiona geojson geopandas geopy pyproj rtree shapely \
 FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \
 jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
@@ -468,6 +468,15 @@ chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.local && \
 echo ""
+
+# remove kernerls
+RUN \
+mkdir -p /home/$USER_ID/.kernels && \
+mv $ANACONDA_PATH/share/jupyter/.kernels/cling-cpp11 /home/$USER_ID/kernels/ && \
+mv $ANACONDA_PATH/share/jupyter/.kernels/cling-cpp14 /home/$USER_ID/kernels/ && \
+mv $ANACONDA_PATH/share/jupyter/.kernels/cling-cpp17 /home/$USER_ID/kernels/ && \
+mv $ANACONDA_PATH/share/jupyter/.kernels/xeus-cling-cpp14 /home/$USER_ID/kernels/ && \
+echo
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ADD https://github.com/krallin/tini/releases/download/v0.16.1/tini /usr/bin/tini

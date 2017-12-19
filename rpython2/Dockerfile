@@ -93,7 +93,6 @@ DEBIAN_FRONTEND=noninteractive apt-get clean
 # QuantLib
 ################################################################################
 
-# QuantLib
 ENV QUANTLIB QuantLib
 ENV QUANTLIBVER 1.11
 RUN \
@@ -242,7 +241,6 @@ ENV REDIS_EXECUTABLE='command -v redis-server'
 RUN \
 mkdir -p /etc/redis && \
 mkdir -p /var/log/redis && \
-touch /var/log/redis_6379.log && \
 mkdir -p /var/lib/redis/6379 && \
 mkdir -p ~/temp && \
 cd ~/temp && \

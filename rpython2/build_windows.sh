@@ -75,6 +75,8 @@ COMMAND="docker build --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID
 
 # for windows =====================================================
 
+dos2unix.exe ./.bash_profile ./.docker-entrypoint.sh ./.postgres_db_setup.sql ./6379-docker.conf ./supervisord.conf
+
 DOCKER_MACHINE="/c/Program Files/Docker Toolbox/docker-machine.exe"
 
 if [ ! -z "$VBOX_MSI_INSTALL_PATH" ]; then

@@ -5,7 +5,7 @@ This images has the components:
 
 * Ubuntu 16.04
 
-* Python 3.6 (Anaconda3-5.0.0)
+* Python 3.6 (Anaconda3-5.0.1)
  - ipython, numpy, scipy, pandas, matplotlib, seaborn, pymc3
  - jupyter qtconsole, ipyparallel, notebook
  - scikit-learn, nlpy, gensim, theano, tensorflow, keras, pytorch

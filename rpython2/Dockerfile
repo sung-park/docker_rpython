@@ -126,7 +126,7 @@ apt-get update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.1.383
+ENV RSTUDIOSERVER_VERSION 1.1.419
 RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
 mkdir -p /download && cd /download && \
@@ -317,11 +317,11 @@ conda update --all
 RUN \
 conda install --yes \
 anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage CVXcanon cvxopt datashader dill distributed docopt \
-ecos feedparser gcc_linux-64 gensim graphviz \
-holoviews ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
+ecos feedparser future gcc_linux-64 gensim graphviz \
+holoviews html5lib ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
 pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
-future pydot-ng \
+pydot-ng \
 && \
 conda install --yes -c menpo opencv && \
 conda install --yes -c soumith pytorch torchvision && \
@@ -333,7 +333,7 @@ rm -rf ~/download
 # Additional pip packages
 RUN \
 pip install --no-cache-dir git+https://github.com/pymc-devs/pymc3 && \
-pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.3.0-cp27-none-linux_x86_64.whl && \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.4.1-cp27-none-linux_x86_64.whl && \
 pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
@@ -341,7 +341,7 @@ pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir \
 autopep8 awscli bash_kernel chainer cvxpy filterpy fysom imbalanced-learn JPype1 keras konlpy \
-nlpy pudb pydot scikit-surprise \
+nlpy pudb pydot scikit-surprise tangent \
 descartes fiona geojson geopandas geopy pyproj rtree shapely \
 FRB fred fredapi wbdata wbpy zipline \
 hangulize regex \

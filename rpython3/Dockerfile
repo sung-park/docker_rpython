@@ -94,10 +94,10 @@ DEBIAN_FRONTEND=noninteractive apt-get clean
 ################################################################################
 
 ENV QUANTLIB QuantLib
-ENV QUANTLIBVER 1.11
+ENV QUANTLIBVER 1.12
 RUN \
 mkdir -p /download && cd /download && \
-wget -O $QUANTLIB-$QUANTLIBVER.tar.gz http://download.sourceforge.net/project/quantlib/QuantLib/$QUANTLIBVER/$QUANTLIB-$QUANTLIBVER.tar.gz && \
+wget -O $QUANTLIB-$QUANTLIBVER.tar.gz https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIB-$QUANTLIBVER.tar.gz && \
 tar xzf $QUANTLIB-$QUANTLIBVER.tar.gz && \
 cd $QUANTLIB-$QUANTLIBVER && \
 ./configure && make && make install && ldconfig && make clean && \
@@ -126,7 +126,7 @@ apt-get update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.1.419
+ENV RSTUDIOSERVER_VERSION 1.1.423
 RUN \
 apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
 mkdir -p /download && cd /download && \
@@ -288,7 +288,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-5.0.1-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-5.1.0-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH
@@ -319,7 +319,7 @@ conda install --yes \
 anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage CVXcanon cvxopt datashader dill distributed docopt \
 ecos feedparser future gcc_linux-64 gensim graphviz \
 holoviews html5lib ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
-pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl requests \
+pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl quiver_engine requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
 pymc3 python-graphviz \
 && \
@@ -332,7 +332,7 @@ rm -rf ~/download
 
 # Additional pip packages
 RUN \
-pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.4.1-cp36-cp36m-linux_x86_64.whl && \
+pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir git+https://github.com/Theano/Theano && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
@@ -352,10 +352,10 @@ EXPOSE 6006
 
 # QuantLib-python
 ENV QUANTLIBSWIG QuantLib-SWIG
-ENV QUANTLIBSWIGVER 1.11
+ENV QUANTLIBSWIGVER 1.12
 RUN \
 mkdir -p ~/download && cd ~/download && \
-wget http://download.sourceforge.net/project/quantlib/QuantLib/$QUANTLIBSWIGVER/other%20languages/$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
+wget https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
 tar xzf $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
 cd $QUANTLIBSWIG-$QUANTLIBSWIGVER && \
 ./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/

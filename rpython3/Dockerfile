@@ -117,7 +117,6 @@ rm -rf /download
 # R
 ################################################################################
 RUN \
-rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get update && \
 gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 && \
 gpg -a --export E084DAB9 | apt-key add - && \
 echo 'deb http://cran.rstudio.com/bin/linux/ubuntu xenial/' | tee /etc/apt/sources.list.d/R.list && \
@@ -128,7 +127,7 @@ echo
 # R and RStudio-server
 ENV RSTUDIOSERVER_VERSION 1.1.423
 RUN \
-apt-get install -y -q r-base r-base-dev r-cran-rcpp && \
+apt-get install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
 wget https://download2.rstudio.org/rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
 gdebi --n rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
@@ -306,9 +305,9 @@ RUN \
 mkdir -p ~/download && cd ~/download && \
 wget http://repo.continuum.io/archive/$ANACONDA_INSTALLER && \
 /bin/bash ~/download/$ANACONDA_INSTALLER -b && \
-conda update conda && \
-conda update anaconda && \
-conda update --all
+conda update --yes conda && \
+conda update --yes anaconda && \
+conda update --yes --all
 
 ################################################################################
 # Python Packages
@@ -318,7 +317,7 @@ RUN \
 conda install --yes \
 anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage CVXcanon cvxopt datashader dill distributed docopt \
 ecos feedparser future gcc_linux-64 gensim graphviz \
-holoviews html5lib ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
+holoviews html5lib>=1.0 ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
 pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl quiver_engine requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
 pymc3 python-graphviz \
@@ -355,7 +354,7 @@ ENV QUANTLIBSWIG QuantLib-SWIG
 ENV QUANTLIBSWIGVER 1.12
 RUN \
 mkdir -p ~/download && cd ~/download && \
-wget https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
+wget -O $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
 tar xzf $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
 cd $QUANTLIBSWIG-$QUANTLIBSWIGVER && \
 ./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/
@@ -383,6 +382,9 @@ COPY ipython_config.py /home/$USER_ID/.ipython/profile_default/ipython_config.py
 COPY ipython_kernel_config.py /home/$USER_ID/.ipython/profile_default/ipython_kernel_config.py
 COPY 00.py /home/$USER_ID/.ipython/profile_default/startup/00.py
 
+# temporary bug fix: https://github.com/ipython/ipython/issues/8374#issuecomment-371232658
+RUN conda install --yes tornado=4.5.3
+
 RUN jupyter notebook --generate-config
 USER root
 RUN \
@@ -408,6 +410,8 @@ RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git && echo
 
 # nbextensions
 RUN \
+pip uninstall --yes html5lib && \
+conda install --yes html5lib=0.9999999 && \
 jupyter contrib nbextension install --user && \
 jupyter nbextensions_configurator enable --user && \
 jupyter nbextension enable --py widgetsnbextension

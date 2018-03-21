@@ -315,35 +315,54 @@ conda update --yes --all
 
 RUN \
 conda install --yes \
-anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage CVXcanon cvxopt datashader dill distributed docopt \
-ecos feedparser future gcc_linux-64 gensim graphviz \
-holoviews html5lib ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
-pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl quiver_engine requests \
-scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
-pymc3 python-graphviz \
+anaconda anaconda-client anaconda-clean \
+binstar blaze bleach bokeh boto boto3 \
+chainer coverage CVXcanon cvxopt \
+datashader dill distributed docopt \
+ecos \
+feedparser fiona future \
+gcc_linux-64 gensim geopandas graphviz \
+holoviews html5lib \
+ipyparallel ipython ipywidgets \
+jupyter \
+keras \
+libgcc \
+matplotlib \
+notebook numpy \
+pandas pandas-datareader pillow pip protobuf psycopg2 \
+pydot pymc3 pymongo pyproj pytables python-dateutil python-graphviz pyzmq \
+quandl quiver_engine \
+regex requests rtree \
+scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools shapely statsmodels \
+theano tqdm \
+ujson unidecode \
+virtualenv \
+xarray \
 && \
+conda install --yes -c conda-forge \
+autopep8 descartes filterpy geojson geopy imbalanced-learn iris \
+JPype1 jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
+librosa pudb scikit-surprise xgboost && \
+conda install --yes -c cogsci pygame && \
+conda install --yes -c ioam geoviews && \
 conda install --yes -c menpo opencv && \
+conda install --yes -c QuantStack cling notebook widgetsnbextension xeus xeus-cling xtensor xtensor-python xwidgets && \
 conda install --yes -c soumith pytorch torchvision && \
-conda install --yes -c conda-forge -c ioam geoviews iris librosa xgboost && \
-conda install --yes -c conda-forge -c QuantStack cling notebook widgetsnbextension xeus xeus-cling xtensor xtensor-python xwidgets && \
 conda clean --yes -i -p -s && \
 rm -rf ~/download
 
 # Additional pip packages
 RUN \
+pip install --no-cache-dir \
+awscli bash_kernel cvxpy FRB fred fredapi fysom hangulize konlpy nlpy picklable_itertools q tangent wbdata wbpy zipline && \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir opencv-contrib-python && \
-pip install --no-cache-dir git+https://github.com/Theano/Theano && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
-pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
-pip install --no-cache-dir \
-autopep8 awscli bash_kernel chainer cvxpy filterpy fysom imbalanced-learn JPype1 keras konlpy \
-nlpy pudb pydot scikit-surprise tangent \
-descartes fiona geojson geopandas geopy pyproj rtree shapely \
-FRB fred fredapi wbdata wbpy zipline \
-hangulize regex \
-jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
+pip install --no-cache-dir git+https://github.com/openai/gym.git && \
+pip install --no-cache-dir git+https://github.com/keras-team/keras-contrib.git && \
+pip install --no-cache-dir git+https://github.com/munich-ai-labs/keras2-wavenet.git && \
+pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
 && echo
 
 # tensorboard port

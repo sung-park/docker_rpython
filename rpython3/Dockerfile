@@ -317,7 +317,7 @@ RUN \
 conda install --yes \
 anaconda anaconda-clean blaze bleach bokeh boto boto3 coverage CVXcanon cvxopt datashader dill distributed docopt \
 ecos feedparser future gcc_linux-64 gensim graphviz \
-holoviews html5lib>=1.0 ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
+holoviews html5lib ipyparallel ipython ipywidgets jupyter libgcc matplotlib notebook numpy \
 pandas pandas-datareader pillow pip protobuf psycopg2 pymongo pytables python-dateutil pyzmq quandl quiver_engine requests \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools statsmodels ujson unidecode virtualenv xarray \
 pymc3 python-graphviz \

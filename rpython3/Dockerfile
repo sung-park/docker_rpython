@@ -316,7 +316,7 @@ conda update --yes --all
 RUN \
 conda install --yes \
 anaconda anaconda-client anaconda-clean \
-binstar blaze bleach bokeh boto boto3 \
+blaze bleach bokeh boto boto3 \
 chainer coverage CVXcanon cvxopt \
 datashader dill distributed docopt \
 ecos \
@@ -331,7 +331,7 @@ matplotlib \
 notebook numpy \
 pandas pandas-datareader pillow pip protobuf psycopg2 \
 pydot pymc3 pymongo pyproj pytables python-dateutil python-graphviz pyzmq \
-quandl quiver_engine \
+quandl \
 regex requests rtree \
 scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools shapely statsmodels \
 theano tqdm \
@@ -342,28 +342,28 @@ xarray \
 conda install --yes -c conda-forge \
 autopep8 descartes filterpy geojson geopy imbalanced-learn iris \
 JPype1 jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
-librosa pudb scikit-surprise xgboost && \
-conda install --yes -c cogsci pygame && \
+librosa pudb pysoundfile scikit-plot scikit-surprise widgetsnbextension xgboost \
+&& \
 conda install --yes -c ioam geoviews && \
-conda install --yes -c menpo opencv && \
-conda install --yes -c QuantStack cling notebook widgetsnbextension xeus xeus-cling xtensor xtensor-python xwidgets && \
 conda install --yes -c soumith pytorch torchvision && \
-conda clean --yes -i -p -s && \
-rm -rf ~/download
-
-# Additional pip packages
-RUN \
+# conda install --yes -c menpo opencv && \
+pip install --upgrade pip && \
+# pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir \
-awscli bash_kernel cvxpy FRB fred fredapi fysom hangulize konlpy nlpy picklable_itertools q tangent wbdata wbpy zipline && \
+awscli cvxpy FRB fred fredapi hangulize konlpy nlpy picklable_itertools q wbdata wbpy zipline && \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl && \
-pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir git+https://github.com/openai/gym.git && \
+pip install --no-cache-dir git+https://github.com/bstriner/keras-adversarial.git && \
 pip install --no-cache-dir git+https://github.com/keras-team/keras-contrib.git && \
-pip install --no-cache-dir git+https://github.com/munich-ai-labs/keras2-wavenet.git && \
-pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy && \
-&& echo
+pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy.git && \
+# pip install --no-cache-dir git+https://github.com/keplr-io/quiver.git && \
+pip install --no-cache-dir git+https://github.com/google/tangent.git && \
+conda update --yes conda && \
+conda update --yes --all && \
+conda clean --yes -i -p -s && \
+rm -rf ~/download
 
 # tensorboard port
 EXPOSE 6006
@@ -419,21 +419,9 @@ echo "c.NotebookApp.iopub_data_rate_limit = 10000000" | tee -a /home/$USER_ID/.j
 
 # enable ipyparallel
 USER $USER_ID
-RUN \
-$ANACONDA_PATH/bin/jupyter serverextension enable --user --py ipyparallel  && \
-$ANACONDA_PATH/bin/jupyter nbextension install --user --py ipyparallel  && \
-$ANACONDA_PATH/bin/jupyter nbextension enable --user --py ipyparallel
 
 # install ipython magics
 RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git && echo
-
-# nbextensions
-RUN \
-pip uninstall --yes html5lib && \
-conda install --yes html5lib=0.9999999 && \
-jupyter contrib nbextension install --user && \
-jupyter nbextensions_configurator enable --user && \
-jupyter nbextension enable --py widgetsnbextension
 
 # Node.js kernel
 RUN ijsinstall
@@ -447,10 +435,26 @@ echo 'library("devtools");install_github(\"IRkernel/IRkernel\")' | xargs R --van
 echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 
+# RUN \
+# jupyter serverextension enable --user --py ipyparallel  && \
+# jupyter nbextension install --user --py ipyparallel  && \
+# jupyter nbextension enable --user --py ipyparallel
+
+# nbextensions
+USER $USER_ID
+# RUN \
+# pip uninstall --yes html5lib && \
+# conda install --yes html5lib=0.9999999 && \
+# jupyter contrib nbextension install --user && \
+# jupyter nbextensions_configurator enable --user && \
+# jupyter nbextension enable --py widgetsnbextension && \
+# echo
+
 ################################################################################
 # Set TLS certifates
 ################################################################################
 
+USER root
 RUN mkdir -p /etc/pki/tls/certs/ && \
 cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
@@ -474,6 +478,35 @@ sed -i "s/USER_ID/$USER_ID/g" /etc/supervisor/supervisord.conf  && \
 mkdir -p /var/log/supervisor  && \
 chown $USER_ID:$USER_ID /var/log/supervisor
 
+# opencv install
+# RUN \
+# cd "/home/$USER_ID" && \
+# wget -O opencv.zip https://github.com/opencv/opencv/archive/3.4.1.zip && \
+# unzip opencv.zip && \
+# wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.4.1.zip && \
+# unzip opencv_contrib.zip && \
+# cd "/home/$USER_ID/opencv-3.4.1" && \
+# mkdir -p "/home/$USER_ID/opencv-3.4.1/build" && \
+# cd "/home/$USER_ID/opencv-3.4.1/build" && \
+# cmake \
+#   -DCMAKE_BUILD_TYPE=RELEASE \
+#   -DOPENCV_EXTRA_MODULES_PATH="/home/$USER_ID/opencv_contrib-3.4.1/modules" \
+#   -DWITH_TBB=ON \
+#   -DBUILD_NEW_PYTHON_SUPPORT=ON \
+#   -DINSTALL_C_EXAMPLES=ON \
+#   -DINSTALL_PYTHON_EXAMPLES=ON \
+#   -DBUILD_EXAMPLES=ON \
+#   -DWITH_CUDA=OFF \
+#   -DBUILD_TIFF=ON \
+#   -DCMAKE_INSTALL_PREFIX=$(python -c "import sys; print(sys.prefix)") \
+#   -DPYTHON_EXECUTABLE=$(which python) \
+#   -DPYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
+#   -DPYTHON_PACKAGES_PATH=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. && \
+# make -j1 && \
+# make install && \
+# sudo ldconfig && \
+# echo
+
 ################################################################################
 # Run
 ################################################################################
@@ -491,15 +524,6 @@ chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.local && \
 echo ""
-
-# remove kernerls
-RUN \
-mkdir -p /home/$USER_ID/.kernels && \
-mv $ANACONDA_PATH/share/jupyter/kernels/cling-cpp11 /home/$USER_ID/.kernels/ && \
-mv $ANACONDA_PATH/share/jupyter/kernels/cling-cpp14 /home/$USER_ID/.kernels/ && \
-mv $ANACONDA_PATH/share/jupyter/kernels/cling-cpp17 /home/$USER_ID/.kernels/ && \
-mv $ANACONDA_PATH/share/jupyter/kernels/xeus-cling-cpp14 /home/$USER_ID/.kernels/ && \
-echo
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ADD https://github.com/krallin/tini/releases/download/v0.16.1/tini /usr/bin/tini

@@ -598,10 +598,12 @@ echo 'library("devtools");install_github(\"IRkernel/IRkernel\")' | xargs R --van
 echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 
+USER $USER_ID
 RUN \
 jupyter serverextension enable --user --py ipyparallel  && \
 jupyter nbextension install --user --py ipyparallel  && \
-jupyter nbextension enable --user --py ipyparallel
+jupyter nbextension enable --user --py ipyparallel && \
+ipcluster nbextension enable --user
 
 # nbextensions
 USER $USER_ID

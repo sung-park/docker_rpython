@@ -62,23 +62,114 @@ DEBIAN_FRONTEND=noninteractive apt-get clean && \
 DEBIAN_FRONTEND=noninteractive apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-apt-file sudo man ed vim emacs24 curl wget zip unzip bzip2 git mercurial htop tmux screen ncdu dos2unix gettext rsyslog net-tools wireshark \
-gdebi-core make cmake build-essential gfortran libtool autoconf automake pkg-config swig \
-software-properties-common supervisor \
-libboost-all-dev libclang1 libclang-dev libcupti-dev libcurl4-gnutls-dev libspatialindex-dev libgeos-dev libgdal-dev libspatialindex-dev \
-libgoogle-glog-dev libprotobuf-dev protobuf-compiler libgflags-dev libgtest-dev libiomp-dev libleveldb-dev liblmdb-dev \
-uuid-dev libjpeg-dev libpq-dev libpgm-dev libpng-dev libpng12-dev libpng++-dev libopencv-dev libtiff5-dev libevent-dev \
-openssh-server apparmor libapparmor1 libssh2-1-dev openssl libssl-dev \
-nginx memcached postgresql postgresql-contrib \
-default-jre default-jdk \
-hdf5-tools hdf5-helpers libhdf5-dev \
-haskell-platform pandoc \
-graphviz imagemagick pdf2svg wkhtmltopdf \
-fonts-humor-sans fonts-nanum fonts-nanum-coding fonts-nanum-extra ttf-unfonts-core ttf-unfonts-extra \
-xzdec texlive texlive-latex-base texlive-latex3 texlive-xetex texlive-pictures \
-texlive-latex-recommended texlive-fonts-recommended \
-texlive-lang-cjk ko.tex-base ko.tex-extra-hlfont ko.tex-extra \
-xorg openbox xdm xauth x11-apps xvfb && \
+apparmor \
+apt-file \
+autoconf \
+automake \
+build-essential \
+bzip2 \
+cmake \
+curl \
+default-jdk \
+default-jre \
+dos2unix \
+ed \
+emacs24 \
+fonts-humor-sans \
+fonts-nanum \
+fonts-nanum-coding \
+fonts-nanum-extra \
+gdebi-core \
+gettext \
+gfortran \
+git \
+graphviz \
+haskell-platform \
+hdf5-helpers \
+hdf5-tools \
+htop \
+imagemagick \
+julia \
+ko.tex-base \
+ko.tex-extra \
+ko.tex-extra-hlfont \
+libapparmor1 \
+libboost-all-dev \
+libclang-dev \
+libclang1 \
+libcupti-dev \
+libcurl4-gnutls-dev \
+libevent-dev \
+libgdal-dev \
+libgeos-dev \
+libgflags-dev \
+libgoogle-glog-dev \
+libgtest-dev \
+libhdf5-dev \
+libiomp-dev \
+libjpeg-dev \
+libleveldb-dev \
+liblmdb-dev \
+libopencv-dev \
+libpgm-dev \
+libpng++-dev \
+libpng-dev \
+libpng12-dev \
+libpq-dev \
+libprotobuf-dev \
+libspatialindex-dev \
+libspatialindex-dev \
+libssh2-1-dev \
+libssl-dev \
+libtiff5-dev \
+libtool \
+make \
+man \
+memcached \
+mercurial \
+ncdu \
+net-tools \
+nginx \
+openbox \
+openssh-server \
+openssl \
+pandoc \
+pdf2svg \
+pkg-config \
+postgresql \
+postgresql-contrib \
+protobuf-compiler \
+rsyslog \
+screen \
+software-properties-common \
+sudo \
+supervisor \
+swig \
+texlive \
+texlive-fonts-recommended \
+texlive-lang-cjk \
+texlive-latex-base \
+texlive-latex-recommended \
+texlive-latex3 \
+texlive-pictures \
+texlive-xetex \
+tmux \
+ttf-unfonts-core \
+ttf-unfonts-extra \
+unzip \
+uuid-dev \
+vim \
+wget \
+wireshark \
+wkhtmltopdf \
+x11-apps \
+xauth \
+xdm \
+xorg \
+xvfb \
+xzdec \
+zip \
+&& \
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
 apt-get install -y -q ttf-mscorefonts-installer && \
 mkdir -p /download && cd /download && \
@@ -125,7 +216,7 @@ apt-get update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.1.423
+ENV RSTUDIOSERVER_VERSION 1.1.442
 RUN \
 apt-get install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
@@ -315,34 +406,93 @@ conda update --yes --all
 
 RUN \
 conda install --yes \
-anaconda anaconda-client anaconda-clean \
-blaze bleach bokeh boto boto3 \
-chainer coverage CVXcanon cvxopt \
-datashader dill distributed docopt \
+anaconda \
+anaconda-client \
+anaconda-clean \
+blaze \
+bleach \
+bokeh \
+boto \
+boto3 \
+chainer \
+coverage \
+CVXcanon \
+cvxopt \
+datashader \
+dill \
+distributed \
+docopt \
 ecos \
-feedparser fiona future \
-gcc_linux-64 gensim geopandas graphviz \
-holoviews html5lib \
-ipyparallel ipython ipywidgets \
+feedparser \
+fiona \
+future \
+gcc_linux-64 \
+gensim \
+geopandas \
+graphviz \
+holoviews \
+html5lib \
+ipyparallel \
+ipython \
+ipywidgets \
 jupyter \
 keras \
 libgcc \
 matplotlib \
-notebook numpy \
-pandas pandas-datareader pillow pip protobuf psycopg2 \
-pydot pymc3 pymongo pyproj pytables python-dateutil python-graphviz pyzmq \
+notebook=5.4.0 \
+numpy \
+pandas \
+pandas-datareader \
+pillow \
+pip \
+protobuf \
+psycopg2 \
+pydot \
+pymc3 \
+pymongo \
+pyproj \
+pytables \
+python-dateutil \
+python-graphviz \
+pyzmq \
 quandl \
-regex requests rtree \
-scipy scikit-image scikit-learn scrapy seaborn service_identity setuptools shapely statsmodels \
-theano tqdm \
-ujson unidecode \
+regex \
+requests \
+rtree \
+scipy \
+scikit-image \
+scikit-learn \
+scrapy \
+seaborn \
+service_identity \
+setuptools \
+shapely \
+statsmodels \
+theano \
+tqdm \
+ujson \
+unidecode \
 virtualenv \
 xarray \
 && \
 conda install --yes -c conda-forge \
-autopep8 descartes filterpy geojson geopy imbalanced-learn iris \
-JPype1 jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
-librosa pudb pysoundfile scikit-plot scikit-surprise widgetsnbextension xgboost \
+autopep8 \
+descartes \
+filterpy \
+geojson \
+geopy \
+imbalanced-learn \
+iris \
+JPype1 \
+jupyter_contrib_nbextensions \
+jupyter_nbextensions_configurator \
+librosa \
+pudb \
+pysoundfile \
+scikit-plot \
+scikit-surprise \
+widgetsnbextension \
+xgboost \
 && \
 conda install --yes -c ioam geoviews && \
 conda install --yes -c soumith pytorch torchvision && \
@@ -350,7 +500,20 @@ conda install --yes -c soumith pytorch torchvision && \
 pip install --upgrade pip && \
 # pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir \
-awscli cvxpy FRB fred fredapi hangulize konlpy nlpy picklable_itertools q wbdata wbpy zipline && \
+awscli \
+cvxpy \
+FRB \
+fred \
+fredapi \
+hangulize \
+konlpy \
+nlpy \
+picklable_itertools \
+q \
+wbdata \
+wbpy \
+zipline \
+&& \
 pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
@@ -435,20 +598,36 @@ echo 'library("devtools");install_github(\"IRkernel/IRkernel\")' | xargs R --van
 echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 
-# RUN \
-# jupyter serverextension enable --user --py ipyparallel  && \
-# jupyter nbextension install --user --py ipyparallel  && \
-# jupyter nbextension enable --user --py ipyparallel
+RUN \
+jupyter serverextension enable --user --py ipyparallel  && \
+jupyter nbextension install --user --py ipyparallel  && \
+jupyter nbextension enable --user --py ipyparallel
 
 # nbextensions
 USER $USER_ID
-# RUN \
-# pip uninstall --yes html5lib && \
-# conda install --yes html5lib=0.9999999 && \
-# jupyter contrib nbextension install --user && \
-# jupyter nbextensions_configurator enable --user && \
-# jupyter nbextension enable --py widgetsnbextension && \
-# echo
+RUN \
+jupyter contrib nbextension install --user && \
+jupyter nbextensions_configurator enable --user && \
+jupyter nbextension enable --py widgetsnbextension && \
+echo
+
+################################################################################
+# Julia
+################################################################################
+ENV JULIA_VER 0.6
+ENV JULIA_TAR julia-0.6.2-linux-x86_64.tar.gz
+RUN \
+cd /home/$USER_ID/ && \
+wget https://julialang-s3.julialang.org/bin/linux/x64/$JULIA_VER/$JULIA_TAR && \
+tar xzf $JULIA_TAR && \
+mv julia-d386e40c17 juila
+
+# add path
+ENV PATH $PATH:/home/$USER_ID/juila/bin
+echo "export PATH=$PATH:/home/$USER_ID/juila/bin" | tee -a /home/$USER_ID/.bashrc
+
+# IJulia
+RUN julia -e 'Pkg.update(); Pkg.add("IJulia")'
 
 ################################################################################
 # Set TLS certifates
@@ -477,35 +656,6 @@ RUN \
 sed -i "s/USER_ID/$USER_ID/g" /etc/supervisor/supervisord.conf  && \
 mkdir -p /var/log/supervisor  && \
 chown $USER_ID:$USER_ID /var/log/supervisor
-
-# opencv install
-# RUN \
-# cd "/home/$USER_ID" && \
-# wget -O opencv.zip https://github.com/opencv/opencv/archive/3.4.1.zip && \
-# unzip opencv.zip && \
-# wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.4.1.zip && \
-# unzip opencv_contrib.zip && \
-# cd "/home/$USER_ID/opencv-3.4.1" && \
-# mkdir -p "/home/$USER_ID/opencv-3.4.1/build" && \
-# cd "/home/$USER_ID/opencv-3.4.1/build" && \
-# cmake \
-#   -DCMAKE_BUILD_TYPE=RELEASE \
-#   -DOPENCV_EXTRA_MODULES_PATH="/home/$USER_ID/opencv_contrib-3.4.1/modules" \
-#   -DWITH_TBB=ON \
-#   -DBUILD_NEW_PYTHON_SUPPORT=ON \
-#   -DINSTALL_C_EXAMPLES=ON \
-#   -DINSTALL_PYTHON_EXAMPLES=ON \
-#   -DBUILD_EXAMPLES=ON \
-#   -DWITH_CUDA=OFF \
-#   -DBUILD_TIFF=ON \
-#   -DCMAKE_INSTALL_PREFIX=$(python -c "import sys; print(sys.prefix)") \
-#   -DPYTHON_EXECUTABLE=$(which python) \
-#   -DPYTHON_INCLUDE_DIR=$(python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
-#   -DPYTHON_PACKAGES_PATH=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") .. && \
-# make -j1 && \
-# make install && \
-# sudo ldconfig && \
-# echo
 
 ################################################################################
 # Run

@@ -89,7 +89,6 @@ hdf5-helpers \
 hdf5-tools \
 htop \
 imagemagick \
-julia \
 ko.tex-base \
 ko.tex-extra \
 ko.tex-extra-hlfont \
@@ -626,10 +625,10 @@ mv julia-d386e40c17 juila
 
 # add path
 ENV PATH $PATH:/home/$USER_ID/juila/bin
-echo "export PATH=$PATH:/home/$USER_ID/juila/bin" | tee -a /home/$USER_ID/.bashrc
+RUN echo "export PATH=$PATH:/home/$USER_ID/juila/bin" | tee -a /home/$USER_ID/.bashrc
 
 # IJulia
-RUN julia -e 'ENV["PYTHON"] = "$ANACONDA_PATH/bin/python"; Pkg.update(); Pkg.add("IJulia")'
+RUN julia -e "ENV[\"PYTHON\"] = \"$ANACONDA_PATH/bin/python\"; Pkg.update(); Pkg.add(\"IJulia\")"
 
 ################################################################################
 # Set TLS certifates

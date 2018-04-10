@@ -467,6 +467,8 @@ service_identity \
 setuptools \
 shapely \
 statsmodels \
+tensorboard \
+tensorflow \
 theano \
 tqdm \
 ujson \
@@ -495,9 +497,7 @@ xgboost \
 && \
 conda install --yes -c ioam geoviews && \
 conda install --yes -c soumith pytorch torchvision && \
-# conda install --yes -c menpo opencv && \
 pip install --upgrade pip && \
-# pip install --no-cache-dir opencv-contrib-python && \
 pip install --no-cache-dir \
 awscli \
 cvxpy \
@@ -513,15 +513,11 @@ wbdata \
 wbpy \
 zipline \
 && \
-pip install --no-cache-dir --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir git+https://github.com/openai/gym.git && \
-pip install --no-cache-dir git+https://github.com/bstriner/keras-adversarial.git && \
 pip install --no-cache-dir git+https://github.com/keras-team/keras-contrib.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy.git && \
-# pip install --no-cache-dir git+https://github.com/keplr-io/quiver.git && \
-pip install --no-cache-dir git+https://github.com/google/tangent.git && \
 conda update --yes conda && \
 conda update --yes --all && \
 conda clean --yes -i -p -s && \
@@ -621,7 +617,8 @@ RUN \
 cd /home/$USER_ID/ && \
 wget https://julialang-s3.julialang.org/bin/linux/x64/$JULIA_VER/$JULIA_TAR && \
 tar xzf $JULIA_TAR && \
-mv julia-d386e40c17 juila
+mv julia-d386e40c17 juila && \
+rm -rf $JULIA_TAR
 
 # add path
 ENV PATH $PATH:/home/$USER_ID/juila/bin
@@ -677,7 +674,7 @@ chown -R $USER_ID:$USER_ID /home/$USER_ID/.local && \
 echo ""
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
-ADD https://github.com/krallin/tini/releases/download/v0.16.1/tini /usr/bin/tini
+ADD https://github.com/krallin/tini/releases/download/v0.17.0/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", ".docker-entrypoint.sh"]

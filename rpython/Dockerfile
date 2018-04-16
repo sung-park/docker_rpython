@@ -559,9 +559,6 @@ COPY ipython_config.py /home/$USER_ID/.ipython/profile_default/ipython_config.py
 COPY ipython_kernel_config.py /home/$USER_ID/.ipython/profile_default/ipython_kernel_config.py
 COPY 00.py /home/$USER_ID/.ipython/profile_default/startup/00.py
 
-# temporary bug fix: https://github.com/ipython/ipython/issues/8374#issuecomment-371232658
-RUN conda install --yes tornado=4.5.3
-
 RUN jupyter notebook --generate-config
 USER root
 RUN \
@@ -654,6 +651,16 @@ RUN \
 sed -i "s/USER_ID/$USER_ID/g" /etc/supervisor/supervisord.conf  && \
 mkdir -p /var/log/supervisor  && \
 chown $USER_ID:$USER_ID /var/log/supervisor
+
+################################################################################
+# Fixture
+################################################################################
+
+# temporary bug fix: https://github.com/ipython/ipython/issues/8374#issuecomment-371232658
+RUN conda install --yes tornado=4.5.3
+
+# temponary fix for ipyparallel-notebook bug
+RUN conda install --yes notebook=5.4.0
 
 ################################################################################
 # Run

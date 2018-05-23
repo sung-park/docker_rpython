@@ -663,6 +663,7 @@ chown $USER_ID:$USER_ID /home/$USER_ID/*  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.local && \
+chown -R $USER_ID:$USER_ID $ANACONDA_PATH && \
 echo ""
 
 # Jupyter notebook extension setting
@@ -670,12 +671,12 @@ USER $USER_ID
 RUN \
 jupyter nbextension install --user --py ipyparallel  && \
 jupyter nbextension enable --user --py ipyparallel && \
-jupyter serverextension enable --user --py ipyparallel  && \
+jupyter serverextension enable --user --py ipyparallel && \
 ipcluster nbextension enable --user && \
 jupyter contrib nbextension install --user && \
 jupyter nbextensions_configurator enable --user && \
 jupyter nbextension enable --py widgetsnbextension && \
-echo
+jupyter serverextension enable ipyparallel.nbextension
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 USER root

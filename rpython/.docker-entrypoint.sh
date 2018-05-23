@@ -6,7 +6,7 @@ unset USER_PASS
 # start and stop services
 service rsyslog start
 service ssh start
-if [ -f /var/run/redis_6379.pid ]; then
+if [ -e /var/run/redis_6379.pid ]; then
    /etc/init.d/redis_6379 stop
    rm /var/run/redis_6379.pid
 fi

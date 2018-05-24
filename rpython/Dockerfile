@@ -204,6 +204,27 @@ git clone https://github.com/zeromq/libzmq.git && cd libzmq && \
 rm -rf /download
 
 ################################################################################
+# SSH service
+################################################################################
+
+ARG HTTPS_COMMENT=#
+ENV HTTPS_COMMENT $HTTPS_COMMENT
+
+RUN \
+mkdir -p /var/run/sshd  && \
+sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+ENV NOTVISIBLE "in users profile"
+RUN \
+sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+echo "export VISIBLE=now" >> /etc/profile && \
+echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -C '' -N ''  && \
+echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_dsa_key -C '' -N ''
+
+EXPOSE 22
+
+################################################################################
 # R
 ################################################################################
 RUN \
@@ -258,24 +279,6 @@ echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vani
 echo
 
 ################################################################################
-# SSH service
-################################################################################
-
-RUN \
-mkdir -p /var/run/sshd  && \
-sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-ENV NOTVISIBLE "in users profile"
-RUN \
-sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-echo "export VISIBLE=now" >> /etc/profile && \
-echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -C '' -N ''  && \
-echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_dsa_key -C '' -N ''
-
-EXPOSE 22
-
-################################################################################
 # User Account
 ################################################################################
 
@@ -288,8 +291,6 @@ ARG USER_UID=1999
 ENV USER_UID $USER_UID
 ARG USER_GID=1999
 ENV USER_GID $USER_GID
-ARG HTTPS_COMMENT=#
-ENV HTTPS_COMMENT $HTTPS_COMMENT
 
 RUN \
 groupadd --system -r $USER_ID -g $USER_GID && \
@@ -518,9 +519,7 @@ pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
 pip install --no-cache-dir git+https://github.com/openai/gym.git && \
 pip install --no-cache-dir git+https://github.com/keras-team/keras-contrib.git && \
 pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy.git && \
-conda update --yes conda && \
-conda update --yes --all && \
-conda clean --yes -i -p -s && \
+conda clean --yes --all && \
 rm -rf ~/download
 
 # tensorboard port
@@ -546,7 +545,8 @@ cd ta-lib && \
 ./configure --prefix=/usr && make && make install && rm -rf /download/
 
 USER $USER_ID
-RUN pip install --no-cache-dir TA-Lib
+# temporary block for numpy error
+# RUN pip install --no-cache-dir TA-Lib
 
 ################################################################################
 # Jupyter Notebook Settings

@@ -28,32 +28,32 @@ EXPOSE 8787
 RUN chmod a+w /usr/local/lib/R/site-library
 
 # packages
-RUN \
-echo 'install.packages(c(\"assertthat\",\"base\",\"base64enc\",\"BH\",\"bitops\",\"boot\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"car\",\"caret\",\"catools\",\"chron\",\"class\",\"cluster\",\"codetools\",\"colorspace\",\"curl\",\"data.table\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"DBI\",\"dichromat\",\"digest\",\"dplyr\",\"evaluate\",\"foreach\",\"foreign\",\"formatr\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"ggplot2\",\"gistr\",\"glmnet\",\"gtable\",\"hexbin\",\"highr\",\"htmltools\",\"htmlwidgets\",\"httpuv\",\"httr\",\"iterators\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"jsonlite\",\"kernsmooth\",\"knitr\",\"labeling\",\"lattice\",\"lazyeval\",\"lme4\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"magrittr\",\"maps\",\"markdown\",\"mass\",\"matrix\",\"matrixmodels\",\"mgcv\",\"mime\",\"minqa\",\"munsell\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"nlme\",\"nloptr\",\"nnet\",\"openssl\",\"pbdzmq\",\"pbkrtest\",\"plyr\",\"quantmod\",\"quantreg\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"r6\",\"randomforest\",\"rbokeh\",\"rcolorbrewer\",\"rcpp\",\"rcppeigen\",\"recommended\",\"repr\",\"reshape2\",\"rmarkdown\",\"rpart\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"scales\",\"shiny\",\"sparsem\",\"spatial\",\"stringi\",\"stringr\",\"survival\",\"tibble\",\"tidyr\",\"ttr\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"uuid\",\"xtable\",\"xts\",\"yaml\",\"zoo\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"yaml\",\"crayon\",\"pbdZMQ\",\"devtools\",\"RJSONIO\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e  && \
-echo 'install.packages(c(\"ggplot2\",\"colorspace\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"fImport\",\"fBasics\",\"fArma\",\"fGarch\",\"fNonlinear\",\"fUnitRoots\",\"fTrading\",\"fMultivar\",\"fRegression\",\"fExtremes\",\"fCopulae\",\"fBonds\",\"fOptions\",\"fExoticOptions\",\"fAsianOptions\",\"fAssets\",\"fPortfolio\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoolbox\",\"rngWELL\",\"schwartz97\",\"SkewHyperbolic\",\"VarianceGamma\",\"stabledist\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"e1071\",\"rpart\",\"igraph\",\"nnet\",\"randomForest\",\"caret\",\"kernlab\",\"glmnet\",\"ROCR\",\"gbm\",\"party\",\"tree\",\"klaR\",\"mice\",\"wordcloud\",\"C50\",\"tm\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"Deriv\",\"plot3D\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"caret\"),dependencies=c(\"Depends\",\"Suggests\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"Boruta\",\"C50\",\"CHAID\",\"Cubist\",\"HDclassif\",\"HiDimDA\",\"KRLS\",\"LogicReg\",\"RRF\",\"RSNNS\",\"RWeka\",\"SDDA\",\"ada\",\"adabag\",\"adaptDA\",\"arm\",\"bartMachine\",\"binda\",\"bnclassify\",\"brnn\",\"bst\",\"caTools\",\"class\",\"deepboost\",\"deepnet\",\"earth\",\"elasticnet\",\"elmNN\",\"enpls\",\"evtree\",\"extraTrees\",\"fastAdaboost\",\"fastICA\",\"foba\",\"frbs\",\"gam\",\"glmnet\",\"gpls\",\"hda\",\"ipred\",\"kerndwd\",\"kernlab\",\"kknn\",\"klaR\",\"kohonen\",\"lars\",\"leaps\",\"logicFS\",\"mboost\",\"mda\",\"mgcv\",\"monomvn\",\"mxnet\",\"neuralnet\",\"nnet\",\"nnls\",\"nodeHarvest\",\"oblique.tree\",\"obliqueRF\",\"pamr\",\"partDSA\",\"party\",\"penalized\",\"penalizedLDA\",\"pls\",\"plsRglm\",\"roxy\",\"protoclass\",\"qrnn\",\"quantregForest\",\"rFerns\",\"rPython\",\"randomForest\",\"randomGLM\",\"relaxo\",\"robustDA\",\"rocc\",\"rotationForest\",\"rpart\",\"rqPen\",\"rrcov\",\"rrcovHD\",\"sda\",\"sdwd\",\"snn\",\"sparseLDA\",\"spikeslab\",\"spls\",\"stepPlr\",\"superpc\",\"vbmp\",\"wsrf\",\"xgboost\"),dependencies=c(\"Depends\",\"Suggests\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'install.packages(c(\"h2o\",\"autoencoder\",\"darch\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
-echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e && \
-echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e && \
-echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e && \
-echo
+#RUN \
+#echo 'install.packages(c(\"assertthat\",\"base\",\"base64enc\",\"BH\",\"bitops\",\"boot\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"car\",\"caret\",\"catools\",\"chron\",\"class\",\"cluster\",\"codetools\",\"colorspace\",\"curl\",\"data.table\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"DBI\",\"dichromat\",\"digest\",\"dplyr\",\"evaluate\",\"foreach\",\"foreign\",\"formatr\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"ggplot2\",\"gistr\",\"glmnet\",\"gtable\",\"hexbin\",\"highr\",\"htmltools\",\"htmlwidgets\",\"httpuv\",\"httr\",\"iterators\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"jsonlite\",\"kernsmooth\",\"knitr\",\"labeling\",\"lattice\",\"lazyeval\",\"lme4\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"magrittr\",\"maps\",\"markdown\",\"mass\",\"matrix\",\"matrixmodels\",\"mgcv\",\"mime\",\"minqa\",\"munsell\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"nlme\",\"nloptr\",\"nnet\",\"openssl\",\"pbdzmq\",\"pbkrtest\",\"plyr\",\"quantmod\",\"quantreg\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"r6\",\"randomforest\",\"rbokeh\",\"rcolorbrewer\",\"rcpp\",\"rcppeigen\",\"recommended\",\"repr\",\"reshape2\",\"rmarkdown\",\"rpart\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"scales\",\"shiny\",\"sparsem\",\"spatial\",\"stringi\",\"stringr\",\"survival\",\"tibble\",\"tidyr\",\"ttr\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"uuid\",\"xtable\",\"xts\",\"yaml\",\"zoo\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"yaml\",\"crayon\",\"pbdZMQ\",\"devtools\",\"RJSONIO\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"chron\",\"libridate\",\"mondate\",\"timeDate\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"knitr\",\"extrafont\",\"DMwR\",\"nortest\",\"tseries\",\"faraway\",\"car\",\"lmtest\",\"dlm\",\"forecast\",\"timeSeries\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e  && \
+#echo 'install.packages(c(\"ggplot2\",\"colorspace\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"fImport\",\"fBasics\",\"fArma\",\"fGarch\",\"fNonlinear\",\"fUnitRoots\",\"fTrading\",\"fMultivar\",\"fRegression\",\"fExtremes\",\"fCopulae\",\"fBonds\",\"fOptions\",\"fExoticOptions\",\"fAsianOptions\",\"fAssets\",\"fPortfolio\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"BLCOP\",\"FKF\",\"ghyp\",\"HyperbolicDist\",\"randtoolbox\",\"rngWELL\",\"schwartz97\",\"SkewHyperbolic\",\"VarianceGamma\",\"stabledist\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"e1071\",\"rpart\",\"igraph\",\"nnet\",\"randomForest\",\"caret\",\"kernlab\",\"glmnet\",\"ROCR\",\"gbm\",\"party\",\"tree\",\"klaR\",\"mice\",\"wordcloud\",\"C50\",\"tm\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"Deriv\",\"plot3D\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"caret\"),dependencies=c(\"Depends\",\"Suggests\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"Boruta\",\"C50\",\"CHAID\",\"Cubist\",\"HDclassif\",\"HiDimDA\",\"KRLS\",\"LogicReg\",\"RRF\",\"RSNNS\",\"RWeka\",\"SDDA\",\"ada\",\"adabag\",\"adaptDA\",\"arm\",\"bartMachine\",\"binda\",\"bnclassify\",\"brnn\",\"bst\",\"caTools\",\"class\",\"deepboost\",\"deepnet\",\"earth\",\"elasticnet\",\"elmNN\",\"enpls\",\"evtree\",\"extraTrees\",\"fastAdaboost\",\"fastICA\",\"foba\",\"frbs\",\"gam\",\"glmnet\",\"gpls\",\"hda\",\"ipred\",\"kerndwd\",\"kernlab\",\"kknn\",\"klaR\",\"kohonen\",\"lars\",\"leaps\",\"logicFS\",\"mboost\",\"mda\",\"mgcv\",\"monomvn\",\"mxnet\",\"neuralnet\",\"nnet\",\"nnls\",\"nodeHarvest\",\"oblique.tree\",\"obliqueRF\",\"pamr\",\"partDSA\",\"party\",\"penalized\",\"penalizedLDA\",\"pls\",\"plsRglm\",\"roxy\",\"protoclass\",\"qrnn\",\"quantregForest\",\"rFerns\",\"rPython\",\"randomForest\",\"randomGLM\",\"relaxo\",\"robustDA\",\"rocc\",\"rotationForest\",\"rpart\",\"rqPen\",\"rrcov\",\"rrcovHD\",\"sda\",\"sdwd\",\"snn\",\"sparseLDA\",\"spikeslab\",\"spls\",\"stepPlr\",\"superpc\",\"vbmp\",\"wsrf\",\"xgboost\"),dependencies=c(\"Depends\",\"Suggests\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'install.packages(c(\"h2o\",\"autoencoder\",\"darch\"),repos=\"http://cran.rstudio.com\",clean=TRUE)' | xargs R --vanilla --slave -e && \
+#echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"zlibbioc\")' | xargs R --vanilla --slave -e && \
+#echo 'source(\"http://bioconductor.org/biocLite.R\");biocLite(\"rhdf5\")' | xargs R --vanilla --slave -e && \
+#echo 'library("devtools");install_github(\"ramnathv/rCharts\")' | xargs R --vanilla --slave -e && \
+#echo
 
 ################################################################################
 # User Account

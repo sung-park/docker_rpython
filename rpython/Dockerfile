@@ -320,10 +320,10 @@ RUN ijsinstall
 # R kernel
 USER root
 RUN \
-echo 'install.packages(c(\"rzmq\",\"repr\",\"IRdisplay\"),repos=c(\"http://irkernel.github.io\",\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
-echo 'install.packages(\"IRkernel\",repos=c(\"http://irkernel.github.io\",\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
-echo 'library("devtools");install_github(\"IRkernel/IRkernel\")' | xargs R --vanilla --slave -e && \
-echo 'IRkernel::installspec(name=\"ir33\",displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
+echo 'install.packages(c(\"repr\",\"IRdisplay\",\"pbdZMQ\",\"devtools\"),repos=c(\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
+echo 'install.packages(\"IRkernel/IRkernel\",repos=c(\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
+echo 'devtools::install_github(\"IRkernel/IRkernel\")' | xargs R --vanilla --slave -e && \
+echo 'IRkernel::installspec(displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 
 ################################################################################

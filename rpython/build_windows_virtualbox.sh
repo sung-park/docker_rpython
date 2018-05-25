@@ -58,20 +58,7 @@ else
   exit 1
 fi
 
-read -p "https (y/n) (default n): " HTTPS_COMMENT
-if [ -z "$HTTPS_COMMENT" ]; then
-  HTTPS_COMMENT=${DEFAULT_HTTPS_COMMENT}
-else
-  if [[ ${HTTPS_COMMENT} == 'y' ]]; then
-    HTTPS_COMMENT=""
-    echo "HTTPS_COMMENT unset"
-  else
-    HTTPS_COMMENT=${DEFAULT_HTTPS_COMMENT}
-    echo "HTTPS_COMMENT set to $DEFAULT_HTTPS_COMMENT"
-  fi
-fi
-
-COMMAND="docker build --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID --build-arg USER_PASS=$USER_PASS --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID --build-arg HTTPS_COMMENT=$HTTPS_COMMENT . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
+COMMAND="docker build --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID --build-arg USER_PASS=$USER_PASS --build-arg USER_UID=$USER_UID --build-arg USER_GID=$USER_GID . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
 
 # for windows =====================================================
 

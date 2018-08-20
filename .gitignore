@@ -84,4 +84,5 @@ _test*/
 datascienceschool.sock*
 site/upfiles
 .idea/
-
+# .DS_Store
+.DS_Store

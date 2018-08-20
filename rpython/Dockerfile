@@ -176,8 +176,6 @@ service_identity \
 setuptools \
 shapely \
 statsmodels \
-tensorboard \
-tensorflow \
 theano \
 tqdm \
 ujson \
@@ -221,6 +219,9 @@ q \
 wbdata \
 wbpy \
 zipline \
+tangent \
+tensorboard \ 
+tensorflow \ 
 && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
@@ -234,14 +235,14 @@ rm -rf ~/download
 EXPOSE 6006
 
 # QuantLib-python
-ENV QUANTLIBSWIG QuantLib-SWIG
-ENV QUANTLIBSWIGVER 1.12
-RUN \
-mkdir -p ~/download && cd ~/download && \
-wget -O $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
-tar xzf $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
-cd $QUANTLIBSWIG-$QUANTLIBSWIGVER && \
-./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/
+#ENV QUANTLIBSWIG QuantLib-SWIG
+#ENV QUANTLIBSWIGVER 1.12
+#RUN \
+#mkdir -p ~/download && cd ~/download && \
+#wget -O $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
+#tar xzf $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
+#cd $QUANTLIBSWIG-$QUANTLIBSWIGVER && \
+#./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/
 
 # TA-Lib
 USER root

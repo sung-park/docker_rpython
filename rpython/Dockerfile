@@ -234,16 +234,6 @@ rm -rf ~/download
 # tensorboard port
 EXPOSE 6006
 
-# QuantLib-python
-#ENV QUANTLIBSWIG QuantLib-SWIG
-#ENV QUANTLIBSWIGVER 1.12
-#RUN \
-#mkdir -p ~/download && cd ~/download && \
-#wget -O $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
-#tar xzf $QUANTLIBSWIG-$QUANTLIBSWIGVER.tar.gz && \
-#cd $QUANTLIBSWIG-$QUANTLIBSWIGVER && \
-#./configure && make -C Python && make -C Python install && make clean && rm -rf ~/download/
-
 # TA-Lib
 USER root
 

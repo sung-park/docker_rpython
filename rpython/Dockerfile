@@ -1,4 +1,4 @@
-FROM datascienceschool/ubuntu_nosql:latest
+FROM datascienceschool/ubuntu:latest
 MAINTAINER "Joel Kim" admin@datascienceschool.net
 
 ################################################################################

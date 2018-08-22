@@ -181,30 +181,6 @@ DEBIAN_FRONTEND=noninteractive apt-get -y -q --purge remove tex.\*-doc$ && \
 DEBIAN_FRONTEND=noninteractive apt-get clean
 
 ################################################################################
-# QuantLib
-################################################################################
-
-ENV QUANTLIB QuantLib
-ENV QUANTLIBVER 1.12
-RUN \
-mkdir -p /download && cd /download && \
-wget -O $QUANTLIB-$QUANTLIBVER.tar.gz https://bintray.com/quantlib/releases/download_file?file_path=$QUANTLIB-$QUANTLIBVER.tar.gz && \
-tar xzf $QUANTLIB-$QUANTLIBVER.tar.gz && \
-cd $QUANTLIB-$QUANTLIBVER && \
-./configure && make && make install && ldconfig && make clean && \
-cd /usr/local/lib && strip --strip-unneeded libQuantLib.a && rm -rf /download
-
-################################################################################
-# ZMQ (master branch)
-################################################################################
-
-RUN \
-mkdir -p /download && cd /download && \
-git clone https://github.com/zeromq/libzmq.git && cd libzmq && \
-./autogen.sh && ./configure && make && make install && ldconfig && \
-rm -rf /download
-
-################################################################################
 # SSH service
 ################################################################################
 

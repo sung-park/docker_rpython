@@ -1,5 +1,5 @@
 import warnings
-warnings.simplefilter('default')
+warnings.simplefilter('ignore')
 
 import numpy as np
 import scipy as sp

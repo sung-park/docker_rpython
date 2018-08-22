@@ -203,7 +203,7 @@ widgetsnbextension \
 xgboost \
 && \
 conda install --yes -c ioam geoviews && \
-conda install --yes -c soumith pytorch torchvision && \
+conda install --yes -c pytorch pytorch torchvision && \
 pip install --upgrade pip && \
 pip install --no-cache-dir \
 awscli \

@@ -84,4 +84,5 @@ _test*/
 datascienceschool.sock*
 site/upfiles
 .idea/
-
+# Mac OS
+.DS_Store

@@ -315,17 +315,6 @@ mkdir -p /var/log/supervisor  && \
 chown $USER_ID:$USER_ID /var/log/supervisor
 
 ################################################################################
-# Fixture
-################################################################################
-
-RUN \
-# temporary bug fix: https://github.com/ipython/ipython/issues/8374#issuecomment-371232658
-conda install --yes tornado=4.5.3 && \
-# temponary fix for ipyparallel-notebook bug \
-conda install --yes notebook=5.4.0 && \
-conda clean --yes --all
-
-################################################################################
 # Run
 ################################################################################
 

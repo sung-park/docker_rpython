@@ -7,3 +7,6 @@ fi
 if [[ $- == *i* && -f ~/.bashrc ]]; then
     . ~/.bashrc
 fi
+
+# https://github.com/ipython/ipython/issues/10627
+export QT_QPA_PLATFORM='offscreen'

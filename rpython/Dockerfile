@@ -334,7 +334,7 @@ jupyter serverextension enable ipyparallel.nbextension
 
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 USER root
-ADD https://github.com/krallin/tini/releases/download/v0.17.0/tini /usr/bin/tini
+ADD https://github.com/krallin/tini/releases/download/v0.18.0/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", ".docker-entrypoint.sh"]

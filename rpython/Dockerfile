@@ -234,19 +234,6 @@ rm -rf ~/download
 # tensorboard port
 EXPOSE 6006
 
-# TA-Lib
-USER root
-
-RUN mkdir -p /download && cd /download && \
-wget http://downloads.sourceforge.net/project/ta-lib/ta-lib/0.4.0/ta-lib-0.4.0-src.tar.gz && \
-tar xzf ta-lib-0.4.0-src.tar.gz && \
-cd ta-lib && \
-./configure --prefix=/usr && make && make install && rm -rf /download/
-
-USER $USER_ID
-# temporary block for numpy error
-# RUN pip install --no-cache-dir TA-Lib
-
 ################################################################################
 # Jupyter Notebook Settings
 ################################################################################

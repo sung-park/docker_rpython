@@ -187,6 +187,7 @@ xarray \
 && \
 conda install --yes -c conda-forge \
 autopep8 \
+coincbc \
 filterpy \
 geojson \
 geopy \

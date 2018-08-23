@@ -13,7 +13,7 @@ apt-get update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.1.453
+ENV RSTUDIOSERVER_VERSION 1.1.456
 RUN \
 apt-get install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
@@ -86,7 +86,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-5.1.0-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-5.2.0-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH
@@ -127,6 +127,7 @@ coverage \
 CVXcanon \
 cvxopt \
 datashader \
+descartes \
 dill \
 distributed \
 docopt \
@@ -181,11 +182,11 @@ tqdm \
 ujson \
 unidecode \
 virtualenv \
+widgetsnbextension \
 xarray \
 && \
 conda install --yes -c conda-forge \
 autopep8 \
-descartes \
 filterpy \
 geojson \
 geopy \
@@ -195,11 +196,12 @@ JPype1 \
 jupyter_contrib_nbextensions \
 jupyter_nbextensions_configurator \
 librosa \
+lightgbm \
+missingno \
 pudb \
 pysoundfile \
 scikit-plot \
 scikit-surprise \
-widgetsnbextension \
 xgboost \
 && \
 conda install --yes -c ioam geoviews && \

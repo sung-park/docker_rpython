@@ -223,8 +223,8 @@ wbdata \
 wbpy \
 zipline \
 tangent \
-tensorboard \ 
-tensorflow \ 
+tensorboard \
+tensorflow \
 && \
 pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
 pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
@@ -320,7 +320,6 @@ chown $USER_ID:$USER_ID /home/$USER_ID/*  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.local && \
-chown -R $USER_ID:$USER_ID $ANACONDA_PATH && \
 echo ""
 
 # Jupyter notebook extension setting

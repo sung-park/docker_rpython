@@ -154,6 +154,7 @@ pandas \
 pandas-datareader \
 pillow \
 pip \
+pomegranate \
 protobuf \
 psycopg2 \
 pydot \

@@ -101,139 +101,27 @@ echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc
 
 # Anaconda install
 RUN \
-mkdir -p ~/download && cd ~/download && \
+mkdir -p /home/$USER_ID/download && cd /home/$USER_ID/download && \
 wget http://repo.continuum.io/archive/$ANACONDA_INSTALLER && \
 /bin/bash ~/download/$ANACONDA_INSTALLER -b && \
 conda update --yes conda && \
 conda update --yes anaconda && \
-conda update --yes --all
+conda update --yes --all && \
+conda clean --yes --all && \
+rm -rf /home/$USER_ID/download
 
 ################################################################################
 # Python Packages
 ################################################################################
 
+COPY pkgs_conda.txt        /home/$USER_ID/download/pkgs_conda.txt
+COPY pkgs_conda-forge.txt  /home/$USER_ID/download/pkgs_conda-forge.txt
+COPY pkgs_pip.txt          /home/$USER_ID/download/pkgs_pip.txt
+COPY install_pkg.sh        /home/$USER_ID/download/install_pkg.sh
+
 RUN \
-conda install --yes \
-anaconda \
-anaconda-client \
-anaconda-clean \
-blaze \
-bleach \
-bokeh \
-boto \
-boto3 \
-chainer \
-coverage \
-CVXcanon \
-cvxopt \
-datashader \
-descartes \
-dill \
-distributed \
-docopt \
-ecos \
-feedparser \
-fiona \
-future \
-gcc_linux-64 \
-gensim \
-geopandas \
-graphviz \
-holoviews \
-html5lib \
-ipyparallel \
-ipython \
-ipywidgets \
-jupyter \
-keras \
-libgcc \
-matplotlib \
-notebook=5.4.0 \
-numpy \
-pandas \
-pandas-datareader \
-pillow \
-pip \
-pomegranate \
-protobuf \
-psycopg2 \
-pydot \
-pymc3 \
-pymongo \
-pyproj \
-pytables \
-python-dateutil \
-python-graphviz \
-pyzmq \
-quandl \
-regex \
-requests \
-rtree \
-scipy \
-scikit-image \
-scikit-learn \
-scrapy \
-seaborn \
-service_identity \
-setuptools \
-shapely \
-statsmodels \
-theano \
-tqdm \
-ujson \
-unidecode \
-virtualenv \
-widgetsnbextension \
-xarray \
-&& \
-conda install --yes -c conda-forge \
-autopep8 \
-coincbc \
-filterpy \
-geojson \
-geopy \
-imbalanced-learn \
-iris \
-JPype1 \
-jupyter_contrib_nbextensions \
-jupyter_nbextensions_configurator \
-librosa \
-lightgbm \
-missingno \
-pudb \
-pysoundfile \
-scikit-plot \
-scikit-surprise \
-xgboost \
-&& \
-conda install --yes -c ioam geoviews && \
-conda install --yes -c pytorch pytorch torchvision && \
-pip install --upgrade pip && \
-pip install --no-cache-dir \
-awscli \
-cvxpy \
-FRB \
-fred \
-fredapi \
-hangulize \
-konlpy \
-nlpy \
-picklable_itertools \
-q \
-wbdata \
-wbpy \
-zipline \
-tangent \
-tensorboard \
-tensorflow \
-&& \
-pip install --no-cache-dir git+https://github.com/bashtage/arch.git && \
-pip install --no-cache-dir git+https://github.com/hmmlearn/hmmlearn.git && \
-pip install --no-cache-dir git+https://github.com/openai/gym.git && \
-pip install --no-cache-dir git+https://github.com/keras-team/keras-contrib.git && \
-pip install --no-cache-dir git+https://github.com/pgmpy/pgmpy.git && \
-conda clean --yes --all && \
-rm -rf ~/download
+cd /home/$USER_ID/download && \
+source ./install_pkg.sh
 
 # tensorboard port
 EXPOSE 6006

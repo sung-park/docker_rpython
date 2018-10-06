@@ -6,6 +6,7 @@ fredapi
 hangulize
 ipython-sql
 konlpy
+opencv-contrib-python
 picklable_itertools
 q
 wbdata

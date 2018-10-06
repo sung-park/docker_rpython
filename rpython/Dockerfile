@@ -86,7 +86,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-5.2.0-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-5.3.0-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH

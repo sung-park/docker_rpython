@@ -5,15 +5,13 @@ MAINTAINER "Joel Kim" admin@datascienceschool.net
 # R
 ################################################################################
 RUN \
-gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 && \
-gpg -a --export E084DAB9 | apt-key add - && \
-echo 'deb http://cran.rstudio.com/bin/linux/ubuntu xenial/' | tee /etc/apt/sources.list.d/R.list && \
-echo 'deb http://healthstat.snu.ac.kr/CRAN/bin/linux/ubuntu xenial/' | tee -a /etc/apt/sources.list.d/R.list && \
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
+add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/' && \
 apt-get update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.1.456
+ENV RSTUDIOSERVER_VERSION 1.1.463
 RUN \
 apt-get install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \

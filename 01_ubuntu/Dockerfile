@@ -1,26 +1,28 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER "Joel Kim" admin@datascienceschool.net
 
 # Replace sh with bash
 RUN cd /bin && rm sh && ln -s bash sh
 
 # Ubuntu repository in Korea
-ENV REPO http://kr.archive.ubuntu.com/ubuntu/
-# ENV REPO http://ftp.neowiz.com/ubuntu/
+# ENV REPO http://kr.archive.ubuntu.com/ubuntu/
+ENV REPO http://mirror.kakao.com/ubuntu
 # in China,
 # ENV REPO http://mirrors.aliyun.com/ubuntu/
 
+ENV UBUNTU bionic
+
 RUN \
-echo "deb $REPO xenial main"                                          | tee    /etc/apt/sources.list && \
-echo "deb $REPO xenial-updates main"                                  | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial universe"                                      | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial-updates universe"                              | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial multiverse"                                    | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial-updates multiverse"                            | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial-backports main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial-security main"                                 | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial-security universe"                             | tee -a /etc/apt/sources.list && \
-echo "deb $REPO xenial-security multiverse"                           | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU main"                                          | tee    /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU-updates main"                                  | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU universe"                                      | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU-updates universe"                              | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU multiverse"                                    | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU-updates multiverse"                            | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU-backports main restricted universe multiverse" | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU-security main"                                 | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU-security universe"                             | tee -a /etc/apt/sources.list && \
+echo "deb $REPO $UBUNTU-security multiverse"                           | tee -a /etc/apt/sources.list && \
 echo
 
 # Set environment
@@ -74,7 +76,7 @@ default-jdk \
 default-jre \
 dos2unix \
 ed \
-emacs24 \
+emacs \
 fonts-humor-sans \
 fonts-nanum \
 fonts-nanum-coding \
@@ -113,7 +115,6 @@ libopencv-dev \
 libpgm-dev \
 libpng++-dev \
 libpng-dev \
-libpng12-dev \
 libpq-dev \
 libprotobuf-dev \
 libspatialindex-dev \
@@ -149,13 +150,13 @@ texlive-fonts-recommended \
 texlive-lang-cjk \
 texlive-latex-base \
 texlive-latex-recommended \
-texlive-latex3 \
+texlive-latex-extra \
 texlive-pictures \
 texlive-xetex \
 tmux \
 tree \
-ttf-unfonts-core \
-ttf-unfonts-extra \
+fonts-unfonts-core \
+fonts-unfonts-extra \
 unzip \
 uuid-dev \
 vim \
@@ -190,14 +191,6 @@ ENV HTTPS_COMMENT $HTTPS_COMMENT
 RUN \
 mkdir -p /var/run/sshd  && \
 sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-ENV NOTVISIBLE "in users profile"
-RUN \
-sed 's@session\s*required\s*pam_loginuid.so@ses$HTTPS_COMMENTsion optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
-echo "export VISIBLE=now" >> /etc/profile && \
-echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -C '' -N ''  && \
-echo -e  'y\n' | /usr/bin/ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_dsa_key -C '' -N ''
 
 EXPOSE 22
 

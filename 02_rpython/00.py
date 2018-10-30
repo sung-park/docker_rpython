@@ -1,11 +1,23 @@
+# -*- coding: utf-8 -*-
+
 import warnings
 warnings.simplefilter('ignore')
 
 import matplotlib as mpl
 mpl.use('Agg')
+import matplotlib.pylab as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 import seaborn as sns
 sns.set()
 sns.set_style("whitegrid")
 sns.set_color_codes()
 
+import numpy as np
+import scipy as sp
+import pandas as pd
+import statsmodels.api as sm
+import sklearn as sk
+
+# Do not remove this line!
+plt, Axes3D, sns, np, sp, pd, sm, sk

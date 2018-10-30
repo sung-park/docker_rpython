@@ -1,4 +1,5 @@
-cat pkgs_conda.txt       | paste -sd " " - | xargs conda install --yes -c anaconda
+#!/usr/bin/env bash
+cat pkgs_conda.txt       | paste -sd " " - | xargs conda install --yes
 cat pkgs_conda-forge.txt | paste -sd " " - | xargs conda install --yes -c conda-forge
 conda install --yes -c ioam    geoviews
 conda install --yes -c pytorch pytorch torchvision

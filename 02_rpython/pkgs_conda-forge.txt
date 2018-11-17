@@ -18,4 +18,5 @@ pysoundfile
 scikit-plot
 scikit-surprise
 scs
+wordcloud
 xgboost

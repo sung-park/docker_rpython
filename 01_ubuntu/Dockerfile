@@ -81,6 +81,7 @@ fonts-humor-sans \
 fonts-nanum \
 fonts-nanum-coding \
 fonts-nanum-extra \
+gdb \
 gdebi-core \
 gettext \
 gfortran \

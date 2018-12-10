@@ -30,6 +30,7 @@ ipywidgets
 jupyter
 keras
 libgcc
+lightgbm
 matplotlib
 notebook=5.4.0
 numpy

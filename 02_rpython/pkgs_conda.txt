@@ -46,6 +46,7 @@ pymc3
 pymongo
 pyproj
 pytables
+python-crfsuite
 python-dateutil
 python-graphviz
 pyzmq

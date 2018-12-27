@@ -10,7 +10,6 @@ jupyter_contrib_nbextensions
 jupyter_nbextensions_configurator
 librosa
 lightgbm
-matplotlib-venn
 missingno
 pudb
 pyLDAvis

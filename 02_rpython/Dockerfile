@@ -221,6 +221,10 @@ jupyter serverextension enable --user --py ipyparallel && \
 ipcluster nbextension enable --user && \
 jupyter serverextension enable ipyparallel.nbextension
 
+# ImageMagick security fix
+USER root
+COPY policy.xml /etc/ImageMagick-6/policy.xml
+
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 USER root
 ADD https://github.com/krallin/tini/releases/download/v0.18.0/tini /usr/bin/tini

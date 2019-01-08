@@ -158,7 +158,7 @@ RUN ijsinstall
 USER root
 RUN \
 echo 'install.packages(c(\"repr\",\"IRdisplay\",\"pbdZMQ\",\"devtools\"),repos=c(\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
-echo 'devtools::install_github(paste0(\"IRkernel\", c(\"repr\", \"IRdisplay\", \"IRkernel\")))' | xargs R --vanilla --slave -e && \
+echo 'devtools::install_github(paste0(\"IRkernel/\",c(\"repr\",\"IRdisplay\",\"IRkernel\")))' | xargs R --vanilla --slave -e && \
 echo 'IRkernel::installspec(displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 

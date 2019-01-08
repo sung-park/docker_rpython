@@ -84,7 +84,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-5.3.0-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-2018.12-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH
@@ -158,8 +158,7 @@ RUN ijsinstall
 USER root
 RUN \
 echo 'install.packages(c(\"repr\",\"IRdisplay\",\"pbdZMQ\",\"devtools\"),repos=c(\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
-echo 'install.packages(\"IRkernel/IRkernel\",repos=c(\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
-echo 'devtools::install_github(\"IRkernel/IRkernel\")' | xargs R --vanilla --slave -e && \
+echo 'devtools::install_github(paste0(\"IRkernel/\", c(\"repr\", \"IRdisplay\", \"IRkernel\")))' | xargs R --vanilla --slave -e && \
 echo 'IRkernel::installspec(displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 

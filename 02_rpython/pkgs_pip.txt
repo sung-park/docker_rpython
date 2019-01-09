@@ -4,6 +4,7 @@ FRB
 fred
 fredapi
 hangulize
+hiddenlayer
 ipython-sql
 konlpy
 opencv-contrib-python

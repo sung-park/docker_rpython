@@ -197,7 +197,7 @@ chown $USER_ID:$USER_ID /var/log/supervisor
 USER $USER_ID
 RUN \
 mkdir -p /home/$USER_ID/data && cd /home/$USER_ID/data && \
-wget https://raw.githubusercontent.com/datascienceschool/docker_rpython/master/02_rpython/data/titanic.csv && \
+wget https://raw.githubusercontent.com/datascienceschool/docker_rpython/master/data/titanic.csv && \
 echo
 
 ################################################################################

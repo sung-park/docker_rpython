@@ -4,8 +4,6 @@ trap '[ "$?" -eq 0 ] || read -p "Looks like something went wrong... Press any ke
 
 IMAGE_NAME="datascienceschool/ubuntu_nosql"
 
-DEFAULT_HTTPS_COMMENT="#"
-
 read -p "tag (default \"latest\"): " TAG
 if [ -z "$TAG" ]; then
   TAG=latest

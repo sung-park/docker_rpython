@@ -5,6 +5,7 @@ fred
 fredapi
 hangulize
 hiddenlayer
+imutils
 ipython-sql
 konlpy
 opencv-contrib-python

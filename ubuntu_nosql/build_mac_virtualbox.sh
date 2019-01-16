@@ -6,8 +6,6 @@ VM=default
 VM_SIZE=100000
 IMAGE_NAME="datascienceschool/ubuntu_nosql"
 
-DEFAULT_HTTPS_COMMENT="#"
-
 read -p "tag (default \"latest\"): " TAG
 if [ -z "$TAG" ]; then
   TAG=latest

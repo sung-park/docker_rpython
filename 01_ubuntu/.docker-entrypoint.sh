@@ -14,8 +14,5 @@ sudo -u postgres psql postgres -q -c "CREATE ROLE admin WITH LOGIN SUPERUSER PAS
 sudo -u postgres psql postgres -q -f "/home/$USER_ID/.postgres_db_setup.sql"
 service postgresql stop
 
-# start supervisord
-sudo -u $USER_ID -i '/usr/bin/supervisord'
-
 # user login
 sudo -u $USER_ID -i '/bin/bash'

@@ -7,6 +7,7 @@ hangulize
 hiddenlayer
 imutils
 ipython-sql
+keras-tqdm
 konlpy
 opencv-contrib-python
 picklable_itertools

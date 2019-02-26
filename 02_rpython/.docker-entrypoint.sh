@@ -5,7 +5,6 @@ unset USER_PASS
 unset USER_PASS2
 
 # start and stop services
-service rsyslog start
 service ssh start
 
 # postgres setup

@@ -3,27 +3,16 @@ R and Python for Data Science School
 
 This images has the components:
 
-* Ubuntu 16.04
+* Ubuntu 18.04
+* Python 3.7 (Anaconda3-2018.12)
+* R-3.5.2 with rstudio-server 1.1.463
+* Databases: PostgreSQL, Redis
+* Tools: git, emacs, tex-live, pandoc, graphviz, imagemagick, etc.
+* Services
 
-* Python 3.6 (Anaconda3-5.0.1)
- - ipython, numpy, scipy, pandas, matplotlib, seaborn, pymc3
- - jupyter qtconsole, ipyparallel, notebook
- - scikit-learn, nlpy, gensim, theano, tensorflow, keras, pytorch
- - other 250 packages
-
-* R-3.4.2
- - rstudio-server-1.1.383
-
-* Libraries
- - ZeroMQ, Boost, Open-JDK, QuantLib, HDF5
-
-* Tools
- - git, vim, emacs, tex-live, pandoc, graphviz, imagemagick
-
-* Running Services
- - jupyter notebook (port 8888)
- - R-studio server (port 8787)
- - ssh (port 22)
+  * jupyter notebook (port 8888)
+  * R-studio server (port 8787)
+  * ssh (port 22)
 
 
 Running Docker Machine

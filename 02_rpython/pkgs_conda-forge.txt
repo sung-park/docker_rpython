@@ -5,6 +5,7 @@ filterpy
 geojson
 geopy
 imbalanced-learn
+ipython-sql
 iris
 JPype1
 jupyter_contrib_nbextensions
@@ -12,6 +13,7 @@ jupyter_nbextensions_configurator
 librosa
 lightgbm
 missingno
+pgspecial
 pudb
 pyLDAvis
 pysoundfile

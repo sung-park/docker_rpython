@@ -12,6 +12,7 @@ konlpy
 opencv-contrib-python
 picklable_itertools
 q
+quilt
 wbdata
 wbpy
 zipline

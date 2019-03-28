@@ -3,6 +3,7 @@ autopep8
 coincbc
 filterpy
 geojson
+geoplot
 geopy
 imbalanced-learn
 ipython-sql

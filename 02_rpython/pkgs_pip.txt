@@ -11,6 +11,7 @@ keras-tqdm
 konlpy
 opencv-contrib-python
 picklable_itertools
+pixiedust_node
 q
 quilt
 wbdata

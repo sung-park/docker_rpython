@@ -37,7 +37,8 @@ curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs && \
 rm -rf nodesource_setup.sh && \
 npm install -g npm@latest && \
-npm install -g --unsafe-perm ijavascript && \
+npm install -g ijavascript --unsafe-perm=true --allow-root && \
+npm install -g jp-babel --unsafe-perm=true --allow-root && \
 echo ""
 
 ################################################################################
@@ -114,7 +115,7 @@ echo "c.NotebookApp.iopub_data_rate_limit = 10000000" | tee -a /home/$USER_ID/.j
 RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git
 
 # Node.js kernel
-RUN ijsinstall
+RUN ijsinstall && jp-babel-install
 
 # R kernel
 USER root

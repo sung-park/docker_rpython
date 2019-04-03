@@ -15,6 +15,7 @@ jupyter_nbextensions_configurator
 librosa
 lightgbm
 missingno
+mlxtend
 pgspecial
 pudb
 pyLDAvis

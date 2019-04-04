@@ -179,6 +179,7 @@ chown $USER_ID:$USER_ID /home/$USER_ID/*  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.local && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.npm && \
 echo ""
 
 # Jupyter notebook extension setting

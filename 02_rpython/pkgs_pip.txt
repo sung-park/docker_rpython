@@ -26,3 +26,4 @@ git+https://github.com/openai/gym.git
 git+https://github.com/thedataincubator/ihtml.git
 git+https://github.com/keras-team/keras-contrib.git 
 git+https://github.com/pgmpy/pgmpy.git
+git+https://github.com/thedataincubator/ihtml.git

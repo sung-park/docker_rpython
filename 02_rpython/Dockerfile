@@ -16,7 +16,7 @@ ENV RSTUDIOSERVER_VERSION 1.1.463
 RUN \
 apt-get install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
-wget https://download2.rstudio.org/rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
+wget https://download2.rstudio.org/rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb -nv -q && \
 gdebi --n rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
 rm -rf /download
 
@@ -63,7 +63,7 @@ echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc
 # Anaconda install
 RUN \
 mkdir -p /home/$USER_ID/download && cd /home/$USER_ID/download && \
-wget http://repo.continuum.io/archive/$ANACONDA_INSTALLER && \
+wget http://repo.continuum.io/archive/$ANACONDA_INSTALLER -nv -q && \
 /bin/bash ~/download/$ANACONDA_INSTALLER -b && \
 conda update --yes conda && \
 conda update --yes anaconda && \

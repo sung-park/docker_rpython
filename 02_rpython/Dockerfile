@@ -32,7 +32,7 @@ RUN chmod a+w /usr/local/lib/R/site-library
 
 USER root
 RUN \
-curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh && \
+curl -sL https://deb.nodesource.com/setup_11.x -o nodesource_setup.sh && \
 /bin/bash nodesource_setup.sh && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs && \
 rm -rf nodesource_setup.sh && \

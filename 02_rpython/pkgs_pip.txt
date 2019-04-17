@@ -9,7 +9,8 @@ imutils
 ipython-sql
 keras-tqdm
 konlpy
-opencv-contrib-python
+opencv-python==3.4.2.16
+opencv-contrib-python==3.4.2.16
 picklable_itertools
 pixiedust_node
 q

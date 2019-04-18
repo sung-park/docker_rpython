@@ -18,6 +18,7 @@ missingno
 mlxtend
 pgspecial
 pudb
+pypdf2
 pyLDAvis
 pysoundfile
 scikit-plot

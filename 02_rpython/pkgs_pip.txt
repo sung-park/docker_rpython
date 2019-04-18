@@ -17,6 +17,7 @@ pipdeptree
 pixiedust_node
 q
 quilt
+Wand
 wbdata
 wbpy
 zipline

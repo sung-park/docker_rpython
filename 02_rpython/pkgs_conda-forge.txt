@@ -16,8 +16,10 @@ librosa
 lightgbm
 missingno
 mlxtend
+pdfminer.six
 pgspecial
 pudb
+pycryptodome
 pypdf2
 pyLDAvis
 pysoundfile

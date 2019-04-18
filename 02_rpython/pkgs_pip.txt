@@ -12,6 +12,7 @@ konlpy
 opencv-python==3.4.2.16
 opencv-contrib-python==3.4.2.16
 picklable_itertools
+pipdeptree
 pixiedust_node
 q
 quilt

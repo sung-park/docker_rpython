@@ -17,13 +17,13 @@ pipdeptree
 pixiedust_node
 q
 quilt
+tangent
+tensorboard
+tensorflow
 Wand
 wbdata
 wbpy
 zipline
-tangent
-tensorboard
-tensorflow
 git+https://github.com/bashtage/arch.git 
 git+https://github.com/hmmlearn/hmmlearn.git 
 git+https://github.com/openai/gym.git

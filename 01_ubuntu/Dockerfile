@@ -113,6 +113,7 @@ libiomp-dev \
 libjpeg-dev \
 libleveldb-dev \
 liblmdb-dev \
+ibmagickwand-dev \
 libopencv-dev \
 libpgm-dev \
 libpng++-dev \

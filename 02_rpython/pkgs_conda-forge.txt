@@ -19,6 +19,7 @@ mlxtend
 pdfminer.six
 pgspecial
 pudb
+pulp
 pycryptodome
 pypdf2
 pyLDAvis

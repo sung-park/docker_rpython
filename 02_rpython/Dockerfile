@@ -8,13 +8,13 @@ USER root
 RUN \
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
 add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/' && \
-apt-get update -y -q && \
+apt update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.1.463
+ENV RSTUDIOSERVER_VERSION 1.2.1335
 RUN \
-apt-get install -y -q r-base r-base-dev && \
+apt install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
 wget https://download2.rstudio.org/rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb -nv -q && \
 gdebi --n rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
@@ -32,9 +32,9 @@ RUN chmod a+w /usr/local/lib/R/site-library
 
 USER root
 RUN \
-curl -sL https://deb.nodesource.com/setup_11.x -o nodesource_setup.sh && \
+curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
 /bin/bash nodesource_setup.sh && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y -q nodejs && \
+DEBIAN_FRONTEND=noninteractive apt install -y -q nodejs && \
 rm -rf nodesource_setup.sh && \
 npm install -g npm@latest && \
 npm install -g ijavascript --unsafe-perm=true --allow-root && \
@@ -47,7 +47,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-2018.12-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-2019.03-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH
@@ -63,7 +63,7 @@ echo "export PATH=$PATH:$ANACONDA_PATH/bin" | tee -a /home/$USER_ID/.bashrc
 # Anaconda install
 RUN \
 mkdir -p /home/$USER_ID/download && cd /home/$USER_ID/download && \
-wget http://repo.continuum.io/archive/$ANACONDA_INSTALLER -nv -q && \
+wget https://repo.anaconda.com/archive/$ANACONDA_INSTALLER -nv -q && \
 /bin/bash ~/download/$ANACONDA_INSTALLER -b && \
 conda update --yes conda && \
 conda update --yes anaconda && \
@@ -160,7 +160,6 @@ chown $USER_ID:$USER_ID /var/log/supervisor
 USER $USER_ID
 RUN \
 mkdir -p /home/$USER_ID/data && cd /home/$USER_ID/data && \
-wget https://raw.githubusercontent.com/datascienceschool/docker_rpython/master/data/titanic.csv && \
 echo
 
 ################################################################################

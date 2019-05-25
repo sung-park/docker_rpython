@@ -29,10 +29,10 @@ echo
 RUN \
 rm -rf /var/lib/apt/lists/* && \
 rm -rf /var/lib/apt/lists/partial/* && \
-DEBIAN_FRONTEND=noninteractive apt-get update -y -q && \
-DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends apt-utils && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y -q locales sudo wget && \
+DEBIAN_FRONTEND=noninteractive apt update -y -q && \
+DEBIAN_FRONTEND=noninteractive apt upgrade -y -q && \
+DEBIAN_FRONTEND=noninteractive apt install -y -q --no-install-recommends apt-utils && \
+DEBIAN_FRONTEND=noninteractive apt install -y -q locales sudo wget && \
 locale-gen en_US.UTF-8
 
 ENV LANG en_US.UTF-8
@@ -61,10 +61,10 @@ RUN echo "export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01
 RUN \
 rm -rf /var/lib/apt/lists/* && \
 rm -rf /var/lib/apt/lists/partial/* && \
-DEBIAN_FRONTEND=noninteractive apt-get clean && \
-DEBIAN_FRONTEND=noninteractive apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
+DEBIAN_FRONTEND=noninteractive apt clean && \
+DEBIAN_FRONTEND=noninteractive apt update && \
+DEBIAN_FRONTEND=noninteractive apt upgrade -y -q && \
+DEBIAN_FRONTEND=noninteractive apt install -y -q \
 apparmor \
 apt-file \
 autoconf \
@@ -113,7 +113,7 @@ libiomp-dev \
 libjpeg-dev \
 libleveldb-dev \
 liblmdb-dev \
-ibmagickwand-dev \
+libmagickwand-dev \
 libopencv-dev \
 libpgm-dev \
 libpng++-dev \
@@ -175,14 +175,14 @@ xzdec \
 zip \
 && \
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
-apt-get install -y -q ttf-mscorefonts-installer && \
+apt install -y -q ttf-mscorefonts-installer && \
 mkdir -p /download && cd /download && \
 mkdir -p /usr/share/fonts/opentype && \
 chmod a+rwx -R /usr/share/fonts/* && \
 fc-cache -fv && \
 rm -rf /download && \
-DEBIAN_FRONTEND=noninteractive apt-get -y -q --purge remove tex.\*-doc$ && \
-DEBIAN_FRONTEND=noninteractive apt-get clean
+DEBIAN_FRONTEND=noninteractive apt -y -q --purge remove tex.\*-doc$ && \
+DEBIAN_FRONTEND=noninteractive apt clean
 
 
 ################################################################################

@@ -16,7 +16,7 @@ ENV RSTUDIOSERVER_VERSION 1.2.1335
 RUN \
 apt install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
-wget https://download2.rstudio.org/rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb -nv -q && \
+wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
 gdebi --n rstudio-server-${RSTUDIOSERVER_VERSION}-amd64.deb && \
 rm -rf /download
 

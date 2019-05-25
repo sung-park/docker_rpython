@@ -27,7 +27,6 @@ ipyparallel
 ipython
 ipywidgets
 jupyter
-keras
 libgcc
 lightgbm
 matplotlib

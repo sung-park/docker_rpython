@@ -8,7 +8,6 @@ hangulize
 hiddenlayer
 imutils
 ipython-sql
-keras-tqdm
 konlpy
 opencv-python==3.4.2.16
 opencv-contrib-python==3.4.2.16
@@ -19,7 +18,7 @@ q
 quilt
 tangent
 tensorboard
-tensorflow
+tensorflow==2.0.0-alpha0
 Wand
 wbdata
 wbpy

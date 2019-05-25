@@ -125,6 +125,34 @@ echo 'devtools::install_github(paste0(\"IRkernel/\",c(\"repr\",\"IRdisplay\",\"I
 echo 'IRkernel::installspec(displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 
+
+################################################################################
+# OpenCV
+################################################################################
+
+RUN \
+cd /home/$USER_ID && \
+wget https://github.com/opencv/opencv/archive/4.1.0.zip && \
+wget https://github.com/opencv/opencv_contrib/archive/4.1.0.zip && \
+unzip opencv.zip && \
+unzip opencv_contrib.zip && \
+mv opencv-4.1.0 opencv && \
+mv opencv_contrib-4.1.0 opencv_contrib && \
+cd /home/$USER_ID/opencv && \
+mkdir build && \
+cd build && \
+cmake \
+    -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D OPENCV_ENABLE_NONFREE=ON \
+    -D OPENCV_EXTRA_MODULES_PATH=/home/$USER_ID/opencv_contrib/modules \
+    -D PYTHON_EXECUTABLE=$ANACONDA_PATH/bin/python \
+    -D BUILD_EXAMPLES=ON .. && \
+make && make install && ldconfig && \
+echo
+
 ################################################################################
 # Set TLS certifates
 ################################################################################

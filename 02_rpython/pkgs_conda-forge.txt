@@ -1,4 +1,3 @@
-ansible
 astunparse
 autopep8
 coincbc
@@ -6,9 +5,9 @@ filterpy
 geojson
 geoplot
 geopy
+hmmlearn
 imbalanced-learn
 ipython-sql
-iris
 JPype1
 jupyter_contrib_nbextensions
 jupyter_nbextensions_configurator

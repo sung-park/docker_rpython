@@ -25,6 +25,6 @@ fi
 echo $BUILD_CACHE
 
 
-COMMAND="sudo docker build $BUILD_CACHE --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
+COMMAND="sudo docker build $BUILD_CACHE --build-arg CACHEBUST=$(date +%s) --rm=true -t $IMAGE_NAME:$TAG --build-arg USER_ID=$USER_ID . 2>&1 | tee $(date +"%Y%m%d-%H%M%S").log"
 
 eval ${COMMAND}

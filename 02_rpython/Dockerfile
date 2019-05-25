@@ -38,7 +38,6 @@ DEBIAN_FRONTEND=noninteractive apt install -y -q nodejs && \
 rm -rf nodesource_setup.sh && \
 npm install -g npm@latest && \
 npm install -g ijavascript --unsafe-perm=true --allow-root && \
-npm install -g jp-babel --unsafe-perm=true --allow-root && \
 echo ""
 
 ################################################################################
@@ -75,11 +74,20 @@ rm -rf /home/$USER_ID/download
 # Python Packages
 ################################################################################
 
+ARG CACHEBUST=1
 COPY pkgs_conda.txt        /home/$USER_ID/download/pkgs_conda.txt
 COPY pkgs_conda-forge.txt  /home/$USER_ID/download/pkgs_conda-forge.txt
 COPY pkgs_pip.txt          /home/$USER_ID/download/pkgs_pip.txt
 COPY install_pkg.sh        /home/$USER_ID/download/install_pkg.sh
 
+# fix ownership
+USER root
+RUN \
+mkdir -p /home/$USER_ID/.config && \
+mkdir -p /home/$USER_ID/.config/git && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.config
+
+USER $USER_ID
 RUN \
 cd /home/$USER_ID/download && \
 source ./install_pkg.sh
@@ -130,28 +138,11 @@ echo
 # OpenCV
 ################################################################################
 
-RUN \
-cd /home/$USER_ID && \
-wget https://github.com/opencv/opencv/archive/4.1.0.zip && \
-wget https://github.com/opencv/opencv_contrib/archive/4.1.0.zip && \
-unzip opencv.zip && \
-unzip opencv_contrib.zip && \
-mv opencv-4.1.0 opencv && \
-mv opencv_contrib-4.1.0 opencv_contrib && \
-cd /home/$USER_ID/opencv && \
-mkdir build && \
-cd build && \
-cmake \
-    -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
-    -D INSTALL_C_EXAMPLES=OFF \
-    -D OPENCV_ENABLE_NONFREE=ON \
-    -D OPENCV_EXTRA_MODULES_PATH=/home/$USER_ID/opencv_contrib/modules \
-    -D PYTHON_EXECUTABLE=$ANACONDA_PATH/bin/python \
-    -D BUILD_EXAMPLES=ON .. && \
-make && make install && ldconfig && \
-echo
+
+
+
+
+
 
 ################################################################################
 # Set TLS certifates

@@ -123,7 +123,7 @@ echo "c.NotebookApp.iopub_data_rate_limit = 10000000" | tee -a /home/$USER_ID/.j
 RUN pip install git+git://github.com/joelkim/ipython-tikzmagic.git
 
 # Node.js kernel
-RUN ijsinstall && jp-babel-install
+RUN ijsinstall
 
 # R kernel
 USER root
@@ -133,16 +133,41 @@ echo 'devtools::install_github(paste0(\"IRkernel/\",c(\"repr\",\"IRdisplay\",\"I
 echo 'IRkernel::installspec(displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
 echo
 
-
 ################################################################################
-# OpenCV
+# OpenCV with nonfree features
 ################################################################################
 
-
-
-
-
-
+USER root
+RUN \
+cd /home/$USER_ID && \
+wget https://github.com/opencv/opencv/archive/4.1.0.zip -O opencv.zip && \
+wget https://github.com/opencv/opencv_contrib/archive/4.1.0.zip -O opencv_contrib.zip && \
+unzip opencv.zip && \
+unzip opencv_contrib.zip && \
+mv opencv-4.1.0 opencv && \
+mv opencv_contrib-4.1.0 opencv_contrib && \
+cd /home/$USER_ID/opencv && \
+mkdir build && \
+cd build && \
+cmake \
+    -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D OPENCV_ENABLE_NONFREE=ON \
+    -D OPENCV_EXTRA_MODULES_PATH=/home/$USER_ID/opencv_contrib/modules \
+    -D PYTHON_EXECUTABLE=$ANACONDA_PATH/bin/python \
+    -D PYTHON3_EXECUTABLE=$ANACONDA_PATH/bin/python \
+    -D PYTHON_INCLUDE_DIR=$ANACONDA_PATH/include/python3.7m \
+    -D PYTHON_LIBRARY=$ANACONDA_PATH/lib/libpython3.7m.so \
+    -D OPENCV_PYTHON3_INSTALL_PATH=$ANACONDA_PATH/lib/python3.7/site-packages \
+    -D BUILD_EXAMPLES=OFF \
+    -D BUILD_TESTS=OFF \
+    .. && \
+make && make install && ldconfig && \
+cd /home/$USER_ID/opencv && \
+rm -rf opencv.zip opencv_contrib.zip opencv opencv_contrib && \
+echo
 
 ################################################################################
 # Set TLS certifates

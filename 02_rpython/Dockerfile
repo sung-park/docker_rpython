@@ -1,7 +1,10 @@
 FROM datascienceschool/ubuntu:latest
 MAINTAINER "Joel Kim" admin@datascienceschool.net
 
-################################################################################
+ARG USER_ID=dockeruser
+ENV USER_ID $USER_ID
+
+############################################################################
 # R
 ################################################################################
 USER root
@@ -71,6 +74,43 @@ conda clean --yes --all && \
 rm -rf /home/$USER_ID/download
 
 ################################################################################
+# OpenCV
+################################################################################
+
+USER root
+ENV CV_VERSION 4.1.0
+RUN \
+cd /home/$USER_ID && \
+wget https://github.com/opencv/opencv/archive/${CV_VERSION}.zip -O opencv.zip && \
+wget https://github.com/opencv/opencv_contrib/archive/${CV_VERSION}.zip -O opencv_contrib.zip && \
+unzip opencv.zip && \
+unzip opencv_contrib.zip && \
+mv opencv-${CV_VERSION} opencv && \
+mv opencv_contrib-${CV_VERSION} opencv_contrib && \
+cd /home/$USER_ID/opencv && \
+mkdir build && \
+cd build && \
+cmake \
+    -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D OPENCV_ENABLE_NONFREE=ON \
+    -D OPENCV_EXTRA_MODULES_PATH=/home/$USER_ID/opencv_contrib/modules \
+    -D PYTHON_EXECUTABLE=$ANACONDA_PATH/bin/python \
+    -D PYTHON3_EXECUTABLE=$ANACONDA_PATH/bin/python \
+    -D PYTHON_INCLUDE_DIR=$ANACONDA_PATH/include/python3.7m \
+    -D PYTHON_LIBRARY=$ANACONDA_PATH/lib/libpython3.7m.so \
+    -D OPENCV_PYTHON3_INSTALL_PATH=$ANACONDA_PATH/lib/python3.7/site-packages \
+    -D BUILD_EXAMPLES=OFF \
+    -D BUILD_TESTS=OFF \
+    .. && \
+make && make install && ldconfig && \
+cd /home/$USER_ID && \
+rm -rf opencv.zip opencv_contrib.zip opencv opencv_contrib && \
+echo
+
+################################################################################
 # Python Packages
 ################################################################################
 
@@ -131,42 +171,6 @@ RUN \
 echo 'install.packages(c(\"repr\",\"IRdisplay\",\"pbdZMQ\",\"devtools\"),repos=c(\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e && \
 echo 'devtools::install_github(paste0(\"IRkernel/\",c(\"repr\",\"IRdisplay\",\"IRkernel\")))' | xargs R --vanilla --slave -e && \
 echo 'IRkernel::installspec(displayname=\"R\",user=FALSE)' | xargs R --vanilla --slave -e && \
-echo
-
-################################################################################
-# OpenCV with nonfree features
-################################################################################
-
-USER root
-RUN \
-cd /home/$USER_ID && \
-wget https://github.com/opencv/opencv/archive/4.1.0.zip -O opencv.zip && \
-wget https://github.com/opencv/opencv_contrib/archive/4.1.0.zip -O opencv_contrib.zip && \
-unzip opencv.zip && \
-unzip opencv_contrib.zip && \
-mv opencv-4.1.0 opencv && \
-mv opencv_contrib-4.1.0 opencv_contrib && \
-cd /home/$USER_ID/opencv && \
-mkdir build && \
-cd build && \
-cmake \
-    -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
-    -D INSTALL_C_EXAMPLES=OFF \
-    -D OPENCV_ENABLE_NONFREE=ON \
-    -D OPENCV_EXTRA_MODULES_PATH=/home/$USER_ID/opencv_contrib/modules \
-    -D PYTHON_EXECUTABLE=$ANACONDA_PATH/bin/python \
-    -D PYTHON3_EXECUTABLE=$ANACONDA_PATH/bin/python \
-    -D PYTHON_INCLUDE_DIR=$ANACONDA_PATH/include/python3.7m \
-    -D PYTHON_LIBRARY=$ANACONDA_PATH/lib/libpython3.7m.so \
-    -D OPENCV_PYTHON3_INSTALL_PATH=$ANACONDA_PATH/lib/python3.7/site-packages \
-    -D BUILD_EXAMPLES=OFF \
-    -D BUILD_TESTS=OFF \
-    .. && \
-make && make install && ldconfig && \
-cd /home/$USER_ID && \
-rm -rf opencv.zip opencv_contrib.zip opencv opencv_contrib && \
 echo
 
 ################################################################################
@@ -237,11 +241,24 @@ jupyter serverextension enable --user --py ipyparallel && \
 ipcluster nbextension enable --user && \
 jupyter serverextension enable ipyparallel.nbextension
 
+################################################################################
+# Fixing
+################################################################################
+
 # ImageMagick security fix
 USER root
 COPY policy.xml /etc/ImageMagick-6/policy.xml
 
-# Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
+# statsmodels incompatibility with scipy 1.3.0
+USER $USER_ID
+RUN \
+pip install -U git+https://github.com/statsmodels/statsmodels
+
+################################################################################
+# Tini
+################################################################################
+
+# Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 USER root
 ADD https://github.com/krallin/tini/releases/download/v0.18.0/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini

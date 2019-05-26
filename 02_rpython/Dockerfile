@@ -165,7 +165,7 @@ cmake \
     -D BUILD_TESTS=OFF \
     .. && \
 make && make install && ldconfig && \
-cd /home/$USER_ID/opencv && \
+cd /home/$USER_ID && \
 rm -rf opencv.zip opencv_contrib.zip opencv opencv_contrib && \
 echo
 

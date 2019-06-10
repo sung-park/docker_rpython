@@ -12,6 +12,6 @@ picklable_itertools
 pipdeptree
 quilt
 tensorboard
-tensorflow==2.0.0-alpha0
+tensorflow==2.0.0-beta0 
 Wand
 git+https://github.com/openai/gym.git

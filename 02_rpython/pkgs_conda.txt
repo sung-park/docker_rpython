@@ -29,6 +29,7 @@ libgcc
 lightgbm
 matplotlib
 mpld3
+mxnet
 networkx
 notebook
 numpy

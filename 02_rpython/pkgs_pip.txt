@@ -13,5 +13,6 @@ pipdeptree
 quilt
 tensorboard
 tensorflow==2.0.0-beta0 
+tensorflow-datasets
 Wand
 git+https://github.com/openai/gym.git

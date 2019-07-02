@@ -46,6 +46,7 @@ pydotplus
 pymc3
 pymongo
 pyproj
+pystan
 pytables
 python=3.7
 python-crfsuite

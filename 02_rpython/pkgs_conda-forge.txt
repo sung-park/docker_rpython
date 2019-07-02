@@ -6,6 +6,7 @@ geojson
 geoplot
 geopy
 hmmlearn
+holidays
 imbalanced-learn
 ipython-sql
 JPype1

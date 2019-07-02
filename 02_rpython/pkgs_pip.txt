@@ -3,6 +3,7 @@ camelot-py
 cvxpy
 hangulize
 hiddenlayer
+fbprophet
 imutils
 ihtml
 ipython-sql

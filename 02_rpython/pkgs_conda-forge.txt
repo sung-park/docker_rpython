@@ -1,6 +1,7 @@
 astunparse
 autopep8
 coincbc
+fbprophet
 filterpy
 geojson
 geoplot

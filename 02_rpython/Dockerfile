@@ -125,7 +125,8 @@ USER root
 RUN \
 mkdir -p /home/$USER_ID/.config && \
 mkdir -p /home/$USER_ID/.config/git && \
-chown -R $USER_ID:$USER_ID /home/$USER_ID/.config
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.config && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/download
 
 USER $USER_ID
 RUN \
@@ -202,15 +203,6 @@ mkdir -p /var/log/supervisor  && \
 chown $USER_ID:$USER_ID /var/log/supervisor
 
 ################################################################################
-# Data
-################################################################################
-
-USER $USER_ID
-RUN \
-mkdir -p /home/$USER_ID/data && cd /home/$USER_ID/data && \
-echo
-
-################################################################################
 # Postprocessing
 ################################################################################
 
@@ -235,11 +227,7 @@ RUN \
 jupyter contrib nbextension install --user && \
 jupyter nbextensions_configurator enable --user && \
 jupyter nbextension enable --py widgetsnbextension && \
-jupyter nbextension install --user --py ipyparallel  && \
-jupyter nbextension enable --user --py ipyparallel && \
-jupyter serverextension enable --user --py ipyparallel && \
-ipcluster nbextension enable --user && \
-jupyter serverextension enable ipyparallel.nbextension
+ipcluster nbextension enable --user
 
 ################################################################################
 # Fixing
@@ -248,11 +236,6 @@ jupyter serverextension enable ipyparallel.nbextension
 # ImageMagick security fix
 USER root
 COPY policy.xml /etc/ImageMagick-6/policy.xml
-
-# statsmodels incompatibility with scipy 1.3.0
-USER $USER_ID
-RUN \
-pip install -U git+https://github.com/statsmodels/statsmodels
 
 ################################################################################
 # Tini

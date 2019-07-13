@@ -13,6 +13,7 @@ ipython-sql
 JPype1
 jupyter_contrib_nbextensions
 jupyter_nbextensions_configurator
+kaggle
 librosa
 lightgbm
 missingno

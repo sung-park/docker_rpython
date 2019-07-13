@@ -111,6 +111,38 @@ rm -rf opencv.zip opencv_contrib.zip opencv opencv_contrib && \
 echo
 
 ################################################################################
+# Mecab
+################################################################################
+
+ENV MECAB_KO mecab-0.996-ko-0.9.2
+ENV MECAB_KO_DIC mecab-ko-dic-2.1.1-20180720
+
+RUN \
+cd /home/$USER_ID/download && \
+curl -LO https://bitbucket.org/eunjeon/mecab-ko/downloads/${MECAB_KO}.tar.gz && \
+tar zxfv ${MECAB_KO}.tar.gz && \
+cd ${MECAB_KO} && \
+./configure && \
+make && \
+make check && \
+make install && \
+ldconfig && \
+cd /home/$USER_ID/download && \
+curl -LO https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/${MECAB_KO_DIC}.tar.gz && \
+tar -zxvf ${MECAB_KO_DIC}.tar.gz && \
+cd ${MECAB_KO_DIC} && \
+./autogen.sh && \
+./configure && \
+make && \
+make install && \
+cd /home/$USER_ID/download && \
+rm ${MECAB_KO}.tar.gz && \
+rm -rf /home/$USER_ID/download/${MECAB_KO} && \
+rm ${MECAB_KO_DIC}.tar.gz && \
+rm -rf /home/$USER_ID/download/${MECAB_KO_DIC} && \
+echo
+
+################################################################################
 # Python Packages
 ################################################################################
 

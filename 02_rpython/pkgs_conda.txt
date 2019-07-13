@@ -34,7 +34,6 @@ networkx
 notebook
 numpy
 pandas
-pandas-datareader
 pillow
 pip
 pomegranate

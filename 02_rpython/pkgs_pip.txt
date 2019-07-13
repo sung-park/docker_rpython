@@ -9,6 +9,7 @@ ihtml
 ipyparallel
 ipython-sql
 konlpy
+pandas-datareader
 pgmpy
 picklable_itertools
 pipdeptree

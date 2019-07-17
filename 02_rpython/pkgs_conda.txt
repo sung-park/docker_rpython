@@ -15,10 +15,8 @@ distributed
 docopt
 ephem
 feedparser
-fiona
 future
 gensim
-geopandas
 graphviz
 holoviews
 html5lib

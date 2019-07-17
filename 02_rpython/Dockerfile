@@ -118,6 +118,7 @@ ENV MECAB_KO mecab-0.996-ko-0.9.2
 ENV MECAB_KO_DIC mecab-ko-dic-2.1.1-20180720
 
 RUN \
+mkdir -p /home/$USER_ID/download && \
 cd /home/$USER_ID/download && \
 curl -LO https://bitbucket.org/eunjeon/mecab-ko/downloads/${MECAB_KO}.tar.gz && \
 tar zxfv ${MECAB_KO}.tar.gz && \

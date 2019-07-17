@@ -4,6 +4,8 @@ cvxpy
 dtreeviz
 factor_analyzer
 fastai
+fiona
+geopandas
 gym
 hangulize
 hiddenlayer

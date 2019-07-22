@@ -25,3 +25,4 @@ tensorflow==2.0.0-beta0
 tensorflow-datasets
 Wand
 git+https://bitbucket.org/eunjeon/mecab-python-0.996.git
+git+https://github.com/matterport/Mask_RCNN.git

@@ -18,6 +18,7 @@ pandas-datareader
 pgmpy
 picklable_itertools
 pipdeptree
+pydot
 quilt
 tensorboard
 tensorflow==2.0.0-beta0 

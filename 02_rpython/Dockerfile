@@ -252,6 +252,7 @@ chown -R $USER_ID:$USER_ID /home/$USER_ID/.ipython  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.jupyter  && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.local && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.npm && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.cache && \
 echo ""
 
 # Jupyter notebook extension setting
@@ -269,6 +270,9 @@ ipcluster nbextension enable --user
 # ImageMagick security fix
 USER root
 COPY policy.xml /etc/ImageMagick-6/policy.xml
+
+USER $USER_ID
+RUN pip uninstall --yes fiona && pip install fiona
 
 ################################################################################
 # Tini

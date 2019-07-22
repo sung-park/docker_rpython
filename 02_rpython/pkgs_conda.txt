@@ -25,6 +25,7 @@ ipywidgets
 jupyter
 libgcc
 lightgbm
+mapclassify
 matplotlib
 mpld3
 mxnet

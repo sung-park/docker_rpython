@@ -9,6 +9,7 @@ geopy
 hmmlearn
 holidays
 imbalanced-learn
+imgaug
 ipython-sql
 JPype1
 jupyter_contrib_nbextensions

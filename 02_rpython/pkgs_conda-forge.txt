@@ -24,6 +24,7 @@ pgspecial
 pudb
 pulp
 pycryptodome
+pymc3
 pypdf2
 pyLDAvis
 pysoundfile

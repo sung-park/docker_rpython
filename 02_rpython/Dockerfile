@@ -49,7 +49,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-2019.03-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-2019.07-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH
@@ -148,6 +148,13 @@ echo
 ################################################################################
 
 ARG CACHEBUST=1
+
+USER root
+RUN \
+mkdir -p $USER_ID:$USER_ID /home/$USER_ID/.cache/pip && \
+chown -R $USER_ID:$USER_ID /home/$USER_ID/.cache
+
+USER $USER_ID
 COPY pkgs_conda.txt        /home/$USER_ID/download/pkgs_conda.txt
 COPY pkgs_conda-forge.txt  /home/$USER_ID/download/pkgs_conda-forge.txt
 COPY pkgs_pip.txt          /home/$USER_ID/download/pkgs_pip.txt

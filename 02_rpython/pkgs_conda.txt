@@ -17,6 +17,7 @@ ephem
 feedparser
 future
 gensim
+geoviews
 graphviz
 holoviews
 html5lib
@@ -24,11 +25,11 @@ ipython
 ipywidgets
 jupyter
 libgcc
+libmxnet
 lightgbm
 mapclassify
 matplotlib
 mpld3
-mxnet
 networkx
 notebook
 numpy
@@ -48,6 +49,7 @@ python=3.7
 python-crfsuite
 python-dateutil
 python-graphviz
+pytorch
 pyzmq
 regex
 requests
@@ -61,7 +63,6 @@ service_identity
 setuptools
 shapely
 statsmodels
-theano
 tqdm
 ujson
 unidecode

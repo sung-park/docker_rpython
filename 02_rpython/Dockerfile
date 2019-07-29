@@ -151,7 +151,7 @@ ARG CACHEBUST=1
 
 USER root
 RUN \
-mkdir -p $USER_ID:$USER_ID /home/$USER_ID/.cache/pip && \
+mkdir -p /home/$USER_ID/.cache/pip && \
 chown -R $USER_ID:$USER_ID /home/$USER_ID/.cache
 
 USER $USER_ID

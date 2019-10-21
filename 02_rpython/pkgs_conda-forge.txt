@@ -32,6 +32,7 @@ pysoundfile
 scikit-plot
 scikit-surprise
 scs
+tensorboardx
 theano
 wordcloud
 xgboost

@@ -22,7 +22,8 @@ pipdeptree
 pydot
 quilt
 tensorboard
-tensorflow==2.0.0-rc0 
+tensorboardx
+tensorflow==2.0.0 
 tensorflow-datasets
 Wand
 git+https://bitbucket.org/eunjeon/mecab-python-0.996.git

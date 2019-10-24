@@ -15,7 +15,7 @@ apt update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.2.1335
+ENV RSTUDIOSERVER_VERSION 1.2.5001
 RUN \
 apt install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
@@ -49,7 +49,7 @@ echo ""
 
 # Anaconda config
 ENV ANACONDA_PATH /home/$USER_ID/anaconda3
-ENV ANACONDA_INSTALLER Anaconda3-2019.07-Linux-x86_64.sh
+ENV ANACONDA_INSTALLER Anaconda3-2019.10-Linux-x86_64.sh
 
 # add path to root account
 ENV PATH $ANACONDA_PATH/bin:$PATH
@@ -78,7 +78,7 @@ rm -rf /home/$USER_ID/download
 ################################################################################
 
 USER root
-ENV CV_VERSION 4.1.0
+ENV CV_VERSION 4.1.2
 RUN \
 cd /home/$USER_ID && \
 wget https://github.com/opencv/opencv/archive/${CV_VERSION}.zip -O opencv.zip && \

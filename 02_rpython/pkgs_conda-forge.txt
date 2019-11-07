@@ -20,6 +20,7 @@ librosa
 lightgbm
 missingno
 mlxtend
+opencv
 pdfminer.six
 pgspecial
 pudb

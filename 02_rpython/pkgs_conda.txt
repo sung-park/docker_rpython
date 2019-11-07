@@ -33,6 +33,7 @@ mpld3
 networkx
 notebook
 numpy
+opencv
 pandas
 pillow
 pip

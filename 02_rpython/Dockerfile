@@ -114,6 +114,7 @@ rm -rf /home/$USER_ID/download
 # Mecab
 ################################################################################
 
+USER root
 ENV MECAB_KO mecab-0.996-ko-0.9.2
 ENV MECAB_KO_DIC mecab-ko-dic-2.1.1-20180720
 

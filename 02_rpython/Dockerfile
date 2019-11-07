@@ -77,38 +77,38 @@ rm -rf /home/$USER_ID/download
 # OpenCV
 ################################################################################
 
-USER root
-ENV CV_VERSION 4.1.2
-RUN \
-cd /home/$USER_ID && \
-wget https://github.com/opencv/opencv/archive/${CV_VERSION}.zip -O opencv.zip && \
-wget https://github.com/opencv/opencv_contrib/archive/${CV_VERSION}.zip -O opencv_contrib.zip && \
-unzip opencv.zip && \
-unzip opencv_contrib.zip && \
-mv opencv-${CV_VERSION} opencv && \
-mv opencv_contrib-${CV_VERSION} opencv_contrib && \
-cd /home/$USER_ID/opencv && \
-mkdir build && \
-cd build && \
-cmake \
-    -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
-    -D INSTALL_C_EXAMPLES=OFF \
-    -D OPENCV_ENABLE_NONFREE=ON \
-    -D OPENCV_EXTRA_MODULES_PATH=/home/$USER_ID/opencv_contrib/modules \
-    -D PYTHON_EXECUTABLE=$ANACONDA_PATH/bin/python \
-    -D PYTHON3_EXECUTABLE=$ANACONDA_PATH/bin/python \
-    -D PYTHON_INCLUDE_DIR=$ANACONDA_PATH/include/python3.7m \
-    -D PYTHON_LIBRARY=$ANACONDA_PATH/lib/libpython3.7m.so \
-    -D OPENCV_PYTHON3_INSTALL_PATH=$ANACONDA_PATH/lib/python3.7/site-packages \
-    -D BUILD_EXAMPLES=OFF \
-    -D BUILD_TESTS=OFF \
-    .. && \
-make && make install && ldconfig && \
-cd /home/$USER_ID && \
-rm -rf opencv.zip opencv_contrib.zip opencv opencv_contrib && \
-echo
+#USER root
+#ENV CV_VERSION 4.1.2
+#RUN \
+#cd /home/$USER_ID && \
+#wget https://github.com/opencv/opencv/archive/${CV_VERSION}.zip -O opencv.zip && \
+#wget https://github.com/opencv/opencv_contrib/archive/${CV_VERSION}.zip -O opencv_contrib.zip && \
+#unzip opencv.zip && \
+#unzip opencv_contrib.zip && \
+#mv opencv-${CV_VERSION} opencv && \
+#mv opencv_contrib-${CV_VERSION} opencv_contrib && \
+#cd /home/$USER_ID/opencv && \
+#mkdir build && \
+#cd build && \
+#cmake \
+#    -D CMAKE_BUILD_TYPE=RELEASE \
+#    -D CMAKE_INSTALL_PREFIX=/usr/local \
+#    -D INSTALL_PYTHON_EXAMPLES=ON \
+#    -D INSTALL_C_EXAMPLES=OFF \
+#    -D OPENCV_ENABLE_NONFREE=ON \
+#    -D OPENCV_EXTRA_MODULES_PATH=/home/$USER_ID/opencv_contrib/modules \
+#    -D PYTHON_EXECUTABLE=$ANACONDA_PATH/bin/python \
+#    -D PYTHON3_EXECUTABLE=$ANACONDA_PATH/bin/python \
+#    -D PYTHON_INCLUDE_DIR=$ANACONDA_PATH/include/python3.7m \
+#    -D PYTHON_LIBRARY=$ANACONDA_PATH/lib/libpython3.7m.so \
+#    -D OPENCV_PYTHON3_INSTALL_PATH=$ANACONDA_PATH/lib/python3.7/site-packages \
+#    -D BUILD_EXAMPLES=OFF \
+#    -D BUILD_TESTS=OFF \
+#    .. && \
+#make && make install && ldconfig && \
+#cd /home/$USER_ID && \
+#rm -rf opencv.zip opencv_contrib.zip opencv opencv_contrib && \
+#echo
 
 ################################################################################
 # Mecab

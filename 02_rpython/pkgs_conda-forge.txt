@@ -29,8 +29,10 @@ pymc3
 pypdf2
 pyLDAvis
 pysoundfile
+python>=3.7
 scikit-plot
 scikit-surprise
+scipy=>1.4.1
 scs
 theano
 wordcloud

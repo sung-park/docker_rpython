@@ -4,7 +4,6 @@ blaze
 bleach
 bokeh
 boto3
-chainer
 coverage
 CVXcanon
 cvxopt
@@ -46,16 +45,14 @@ pymongo
 pyproj
 pystan
 pytables
-python=3.7
+python>=3.7
 python-crfsuite
 python-dateutil
 python-graphviz
-pytorch
 pyzmq
 regex
 requests
 rtree
-scipy
 scikit-image
 scikit-learn
 scrapy

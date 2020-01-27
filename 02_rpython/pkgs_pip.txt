@@ -1,5 +1,6 @@
 arch
 arviz
+beautifulsoup4==4.6.0
 camelot-py
 cvxpy
 dtreeviz
@@ -15,6 +16,7 @@ ihtml
 ipyparallel
 ipython-sql
 konlpy
+libarchive-c
 pandas-datareader
 pgmpy
 picklable_itertools
@@ -23,9 +25,11 @@ pydot
 quilt
 tensorboard
 tensorboardx
-tensorflow>=2.0.0 
+tensorflow>=2.0.0
 tensorflow-datasets
 tensorflow-hub
+torch
+torchvision
 Wand
 git+https://bitbucket.org/eunjeon/mecab-python-0.996.git
 git+https://github.com/matterport/Mask_RCNN.git

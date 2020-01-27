@@ -15,7 +15,7 @@ apt update -y -q && \
 echo
 
 # R and RStudio-server
-ENV RSTUDIOSERVER_VERSION 1.2.5001
+ENV RSTUDIOSERVER_VERSION 1.2.5033
 RUN \
 apt install -y -q r-base r-base-dev && \
 mkdir -p /download && cd /download && \
@@ -121,7 +121,7 @@ ENV MECAB_KO_DIC mecab-ko-dic-2.1.1-20180720
 RUN \
 mkdir -p /home/$USER_ID/download && \
 cd /home/$USER_ID/download && \
-curl -LO https://bitbucket.org/eunjeon/mecab-ko/downloads/${MECAB_KO}.tar.gz && \
+wget https://bitbucket.org/eunjeon/mecab-ko/downloads/${MECAB_KO}.tar.gz && \
 tar zxfv ${MECAB_KO}.tar.gz && \
 cd ${MECAB_KO} && \
 ./configure && \
@@ -130,7 +130,7 @@ make check && \
 make install && \
 ldconfig && \
 cd /home/$USER_ID/download && \
-curl -LO https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/${MECAB_KO_DIC}.tar.gz && \
+wget https://bitbucket.org/eunjeon/mecab-ko-dic/downloads/${MECAB_KO_DIC}.tar.gz && \
 tar -zxvf ${MECAB_KO_DIC}.tar.gz && \
 cd ${MECAB_KO_DIC} && \
 ./autogen.sh && \

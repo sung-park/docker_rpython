@@ -7,6 +7,7 @@ dockerfile for datascienceschool/rpython2 and datascienceschool/rpython
 
 ```
 git config --global core.precomposeunicode true
+git config --global core.quotepath false
 ```
 
 ## Running Docker Container with GDB Debuging Enabled

@@ -78,6 +78,7 @@ default-jre \
 dos2unix \
 ed \
 emacs \
+ffmpeg \
 fonts-humor-sans \
 fonts-nanum \
 fonts-nanum-coding \

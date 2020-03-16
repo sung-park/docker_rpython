@@ -25,6 +25,7 @@ pgspecial
 pudb
 pulp
 pycryptodome
+pydub
 pymc3
 pypdf2
 pyLDAvis

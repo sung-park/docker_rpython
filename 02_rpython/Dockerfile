@@ -291,4 +291,9 @@ USER root
 ADD https://github.com/krallin/tini/releases/download/v0.18.0/tini /usr/bin/tini
 RUN chmod a+x /usr/bin/tini
 
+# Install additional packages for data science
+USER root
+RUN \
+echo 'install.packages(c(\"dplyr\",\"ggplot2\"),repos=c(\"http://cran.rstudio.com\"))' | xargs R --vanilla --slave -e
+
 ENTRYPOINT ["/usr/bin/tini", "--", "/bin/bash", ".docker-entrypoint.sh"]
